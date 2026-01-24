@@ -2,60 +2,12 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 
 import { PageShell } from "@/components/page-shell"
 
-const steps = [
-  {
-    title: "Step 1 · Perumpamaan Rumah Kaca",
-    desc: "Bumi diibaratkan sebagai rumah kaca, sedangkan manusia, hewan, tumbuhan, dan seluruh aktivitas kehidupan di dalamnya diibaratkan sebagai tanaman yang berada di dalam rumah kaca.",
-    image: "/images/rumah-kaca-1.png",
-  },
-  {
-    title: "Step 2 · Cahaya Matahari Masuk",
-    desc: "Cahaya Matahari masuk ke Bumi seperti sinar yang menembus kaca pada rumah kaca.",
-    video: "/video/step-1.mp4",
-  },
-  {
-    title: "Step 3 · Radiasi Inframerah & Pemanasan",
-    desc: "Sebagian radiasi diserap oleh Bumi dan sebagian dipantulkan dalam bentuk radiasi inframerah. Saat radiasi inframerah ke atas akan terkena kaca; sebagian bisa keluar dan sebagian memantul kembali ke rumah kaca.",
-    video: "/video/step-2.mp4",
-  },
-  {
-    title: "Step 4 · Suhu Semakin Meningkat",
-    desc: "Hal ini terus berulang hingga suhu di dalam rumah kaca itupun semakin meningkat.",
-    video: "/video/step-3.mp4",
-  },
-  {
-    title: "Step 5 · Studi Kasus Bumi",
-    desc: "Kondisi ini sama halnya dengan yang berada di Bumi. Panas dari Matahari masuk ke atmosfer. Sebagian radiasi diserap oleh Bumi dan sebagian dipantulkan dalam bentuk radiasi inframerah. Saat radiasi inframerah ke atas akan terkena gas rumah kaca. Sebagian radiasi inframerah bisa keluar, sebagian memantul masuk kembali ke Bumi. Siklus pemantulan dan penyerapan ini terus berulang dan menyebabkan suhu Bumi meningkat.",
-    image: "/images/bumi.png",
-  },
-  {
-    title: "Step 6 · Penjelasan Gas Rumah Kaca",
-    desc: "Gas rumah kaca adalah gas-gas yang terdapat di atmosfer Bumi dan berperan dalam menahan panas Matahari agar tidak seluruhnya lepas kembali ke angkasa. Ketika sinar Matahari mencapai permukaan Bumi, sebagian energi diserap dan diubah menjadi panas, lalu dipancarkan kembali dalam bentuk radiasi inframerah. Gas rumah kaca seperti uap air, karbon dioksida (CO₂), metana (CH₄), dinitrogen oksida (N₂O), dan CFC menyerap serta memantulkan kembali radiasi inframerah tersebut ke permukaan Bumi, sehingga suhu Bumi tetap hangat dan mendukung kehidupan. Namun, jika jumlah gas rumah kaca berlebihan akibat aktivitas manusia, panas yang terperangkap menjadi terlalu banyak dan menyebabkan pemanasan global.",
-    image: "/images/gas-rumah-kaca.png",
-  },
-  {
-    title: "Step 7 · Asal Gas Rumah Kaca",
-    desc: "Gas rumah kaca berasal dari proses alami dan aktivitas manusia, seperti penguapan air, pernapasan makhluk hidup, pembakaran bahan bakar fosil, kegiatan industri, pertanian, dan penggunaan bahan kimia buatan. Gas-gas ini berperan menahan panas di atmosfer, namun jika jumlahnya berlebihan dapat meningkatkan suhu Bumi dan memicu pemanasan global.",
-    image: "/images/asal.png",
-  },
-]
-
 export default function EfekRumahKacaSimulasiPage() {
-  const [index, setIndex] = React.useState(0)
-  const current = steps[index] ?? steps[0]
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
-  const router = useRouter()
-
-  React.useEffect(() => {
-    if (index > steps.length - 1) {
-      setIndex(steps.length - 1)
-    }
-  }, [index])
 
   React.useEffect(() => {
     const handleChange = () => {
@@ -77,123 +29,175 @@ export default function EfekRumahKacaSimulasiPage() {
     await containerRef.current.requestFullscreen()
   }
 
-  const handleNext = async () => {
-    if (index >= steps.length - 1) {
-      if (document.fullscreenElement) {
-        await document.exitFullscreen()
-      }
-      router.push("/efek-rumah-kaca")
-      return
-    }
-    setIndex((prev) => Math.min(prev + 1, steps.length - 1))
-  }
-
   return (
     <PageShell title="Simulasi Efek Rumah Kaca">
-      {!current ? (
-        <div className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
-          Konten simulasi belum tersedia.
+      <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Simulasi Interaktif
+            </p>
+            <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
+              Efek Rumah Kaca
+            </h1>
+            <p className="mt-3 text-sm text-muted-foreground md:text-base">
+              Dummy text: nantinya area ini akan berisi simulasi interaktif.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleFullscreen}
+              className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+            >
+              {isFullscreen ? "Keluar Full Screen" : "Full Screen"}
+            </button>
+            <Link
+              href="/efek-rumah-kaca"
+              className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+            >
+              Kembali
+            </Link>
+          </div>
         </div>
-      ) : (
-        <>
-          <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Simulasi Efek Rumah Kaca
-          </p>
-          <h1 className="text-lg font-semibold text-foreground">
-            {current.title}
-          </h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={handleFullscreen}
-            className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
-          >
-            Full Screen
-          </button>
-          <Link
-            href="/efek-rumah-kaca"
-            className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
-          >
-            Kembali
-          </Link>
-        </div>
-      </div>
+      </section>
 
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden rounded-2xl border bg-black shadow-sm"
+        className={`relative w-full overflow-hidden bg-[#f1ecdc] shadow-sm ${
+          isFullscreen ? "rounded-none border-0" : "rounded-2xl border"
+        }`}
       >
-        <div className="relative aspect-video w-full">
-          {current.video ? (
-            <video
-              src={current.video}
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-          ) : (
-            <img
-              src={current.image}
-              alt="Simulasi efek rumah kaca"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-          <div
-            className={`absolute inset-x-0 bottom-0 flex p-5 md:p-6 ${
-              index < 4 ? "justify-start" : "justify-end"
-            }`}
-          >
-            <div
-              className={`w-full rounded-xl border border-white/10 bg-black/50 p-3 text-white shadow-md backdrop-blur-sm md:p-4 ${
-                isFullscreen ? "max-w-3xl" : "max-w-xl"
-              } ${index < 4 ? "" : "md:ml-auto"}`}
-            >
-              <h2 className="text-sm font-semibold md:text-base">
-                {current.title}
-              </h2>
-              <p className="mt-2 text-xs text-white/80 md:text-sm">
-                {current.desc}
-              </p>
+        <div
+          className={`relative w-full ${
+            isFullscreen ? "h-full" : "min-h-[60vh]"
+          }`}
+        >
+          <div className="absolute inset-0 flex flex-col gap-4 p-4 md:flex-row md:p-5">
+            <div className="relative flex-1 overflow-hidden rounded-xl border bg-gradient-to-b from-[#2c5b6e] via-[#2d8fb9] to-[#7bc5dd] shadow-sm">
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-[#98a964]" />
+              <div className="absolute inset-x-0 bottom-12 h-24 rounded-t-[70%] bg-[#7a9a5f]" />
+              <div className="absolute inset-x-0 bottom-16 h-20 rounded-t-[60%] bg-[#5f7f7f]" />
+              <div className="absolute inset-x-0 bottom-20 h-16 rounded-t-[50%] bg-[#486a78]" />
 
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIndex((prev) => Math.max(prev - 1, 0))}
-                  disabled={index === 0}
-                  className="rounded-full border border-white/40 px-3 py-1.5 text-[11px] font-semibold text-white transition hover:border-white disabled:opacity-40"
-                >
-                  Sebelumnya
-                </button>
-                <div className="flex items-center gap-2">
-                  {steps.map((_, i) => (
-                    <span
-                      key={i}
-                      className={`h-1.5 w-1.5 rounded-full ${
-                        i === index ? "bg-white" : "bg-white/40"
-                      }`}
-                    />
-                  ))}
+              <div className="absolute left-24 top-28 h-10 w-24 rounded-full bg-white/80 shadow-sm" />
+              <div className="absolute left-20 top-30 h-8 w-16 rounded-full bg-white/90 shadow-sm" />
+
+              <svg
+                className="absolute inset-0 h-full w-full"
+                viewBox="0 0 800 450"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M120 40 C 100 120, 140 200, 120 300"
+                  stroke="#d8db47"
+                  strokeWidth="6"
+                  fill="none"
+                />
+                <path
+                  d="M240 10 C 220 130, 260 210, 240 340"
+                  stroke="#d8db47"
+                  strokeWidth="6"
+                  fill="none"
+                />
+                <path
+                  d="M360 30 C 340 140, 380 230, 360 360"
+                  stroke="#d8db47"
+                  strokeWidth="6"
+                  fill="none"
+                />
+                <path
+                  d="M500 40 C 480 150, 520 230, 500 360"
+                  stroke="#d8db47"
+                  strokeWidth="6"
+                  fill="none"
+                />
+                <path
+                  d="M180 80 C 160 170, 200 250, 180 380"
+                  stroke="#d7332f"
+                  strokeWidth="5"
+                  fill="none"
+                />
+                <path
+                  d="M420 60 C 400 170, 440 260, 420 380"
+                  stroke="#d7332f"
+                  strokeWidth="5"
+                  fill="none"
+                />
+                <path
+                  d="M650 70 C 630 170, 670 260, 650 380"
+                  stroke="#d7332f"
+                  strokeWidth="5"
+                  fill="none"
+                />
+              </svg>
+
+              <div className="absolute left-5 bottom-6 flex flex-col items-center gap-2">
+                <div className="relative h-40 w-8 rounded-full border-4 border-black bg-white">
+                  <div className="absolute bottom-2 left-1/2 h-16 w-3 -translate-x-1/2 rounded-full bg-red-600" />
+                  <div className="absolute -bottom-2 left-1/2 size-10 -translate-x-1/2 rounded-full border-4 border-black bg-red-700" />
                 </div>
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-black transition hover:bg-white/90"
-                >
-                  {index >= steps.length - 1 ? "Selesai" : "Berikutnya"}
-                </button>
+                <div className="rounded-full border bg-white/90 px-3 py-1 text-xs font-semibold">
+                  3.0 °C
+                </div>
+              </div>
+
+              <div className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full border bg-white/80 px-3 py-2 text-xs font-semibold">
+                <span className="inline-flex size-4 items-center justify-center rounded-sm border bg-white" />
+                Energy Balance
+              </div>
+            </div>
+
+            <div className="flex w-full flex-col gap-3 md:w-64">
+              <div className="rounded-2xl border bg-black/90 p-4 text-white shadow-sm">
+                <h3 className="text-center text-sm font-semibold">Energy</h3>
+                <div className="mt-3 flex items-center justify-between text-xs">
+                  <span>Sunlight</span>
+                  <span className="h-1.5 w-10 rounded-full bg-[#d8db47]" />
+                </div>
+                <div className="mt-2 flex items-center justify-between text-xs">
+                  <span>Infrared</span>
+                  <span className="h-1.5 w-10 rounded-full bg-[#d7332f]" />
+                </div>
+              </div>
+
+              <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
+                <h3 className="text-sm font-semibold">
+                  Greenhouse Gas Concentration
+                </h3>
+                <div className="mt-3 flex h-36 items-center justify-center">
+                  <div className="relative h-full w-2 rounded-full bg-black/70">
+                    <div className="absolute left-1/2 top-1/2 h-6 w-8 -translate-x-1/2 -translate-y-1/2 rounded bg-[#4a90b8] shadow-sm" />
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                  <span>None</span>
+                  <span>Lots</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2">
+                  <button className="rounded-lg border bg-white/90 px-3 py-2 text-xs font-semibold">
+                    CO2
+                  </button>
+                  <button className="rounded-lg border bg-white/90 px-3 py-2 text-xs font-semibold">
+                    CH4
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
+                <div className="flex items-center justify-between text-xs font-semibold">
+                  <span>Cloud</span>
+                  <span>Aktif</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="inline-flex size-4 items-center justify-center rounded-sm border bg-white" />
+                  Tampilkan Awan
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-        </>
-      )}
     </PageShell>
   )
 }

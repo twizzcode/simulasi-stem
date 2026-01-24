@@ -24,12 +24,18 @@ export default function EfekRumahKacaPage() {
           semakin banyak. Akibatnya, suhu Bumi naik atau disebut pemanasan global
           yang berdampak pada perubahan iklim.
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <Link
-            href="/efek-rumah-kaca/simulasi"
+            href="/efek-rumah-kaca/materi"
             className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
           >
-            Mulai Simulasi
+            Perdalam Materi
+          </Link>
+          <Link
+            href="/efek-rumah-kaca/simulasi"
+            className="inline-flex items-center justify-center rounded-full border border-primary/30 bg-background px-5 py-2.5 text-sm font-semibold text-primary shadow-sm transition hover:border-primary/60 hover:text-primary/90"
+          >
+            Simulasi
           </Link>
         </div>
       </section>
