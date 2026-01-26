@@ -1,13 +1,35 @@
 "use client"
 
+import dynamic from "next/dynamic"
+
+const EnergyWaves = dynamic(() => import("@/components/energy-waves"), {
+  ssr: false,
+})
+
 import * as React from "react"
 import Link from "next/link"
 
+import { Calendar, Pause, Play, SlidersVertical } from "lucide-react"
+
 import { PageShell } from "@/components/page-shell"
+import { Slider } from "@/components/ui/slider"
+import Script from "next/script"
 
 export default function EfekRumahKacaSimulasiPage() {
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
+  const [ghgLevel, setGhgLevel] = React.useState(50)
+  const [showCloud, setShowCloud] = React.useState(false)
+  const [ghgMode, setGhgMode] = React.useState<"slider" | "calendar">("slider")
+  const [yearSelected, setYearSelected] = React.useState<
+    "1990" | "2025" | "2050"
+  >("2025")
+  const [isPlaying, setIsPlaying] = React.useState(false)
+  const yearLevels: Record<"1990" | "2025" | "2050", number> = {
+    "1990": 25,
+    "2025": 60,
+    "2050": 85,
+  }
 
   React.useEffect(() => {
     const handleChange = () => {
@@ -31,6 +53,7 @@ export default function EfekRumahKacaSimulasiPage() {
 
   return (
     <PageShell title="Simulasi Efek Rumah Kaca">
+      <Script src="/libs/paper-full.min.js" strategy="beforeInteractive" />
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -68,88 +91,42 @@ export default function EfekRumahKacaSimulasiPage() {
           isFullscreen ? "rounded-none border-0" : "rounded-2xl border"
         }`}
       >
+        {isFullscreen ? (
+          <button
+            type="button"
+            onClick={handleFullscreen}
+            className="absolute right-4 top-4 z-10 rounded-full border border-white/40 bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:border-white"
+          >
+            Keluar Full Screen
+          </button>
+        ) : null}
         <div
           className={`relative w-full ${
             isFullscreen ? "h-full" : "min-h-[60vh]"
           }`}
         >
           <div className="absolute inset-0 flex flex-col gap-4 p-4 md:flex-row md:p-5">
-            <div className="relative flex-1 overflow-hidden rounded-xl border bg-gradient-to-b from-[#2c5b6e] via-[#2d8fb9] to-[#7bc5dd] shadow-sm">
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-[#98a964]" />
-              <div className="absolute inset-x-0 bottom-12 h-24 rounded-t-[70%] bg-[#7a9a5f]" />
-              <div className="absolute inset-x-0 bottom-16 h-20 rounded-t-[60%] bg-[#5f7f7f]" />
-              <div className="absolute inset-x-0 bottom-20 h-16 rounded-t-[50%] bg-[#486a78]" />
-
-              <div className="absolute left-24 top-28 h-10 w-24 rounded-full bg-white/80 shadow-sm" />
-              <div className="absolute left-20 top-30 h-8 w-16 rounded-full bg-white/90 shadow-sm" />
-
-              <svg
-                className="absolute inset-0 h-full w-full"
-                viewBox="0 0 800 450"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M120 40 C 100 120, 140 200, 120 300"
-                  stroke="#d8db47"
-                  strokeWidth="6"
-                  fill="none"
-                />
-                <path
-                  d="M240 10 C 220 130, 260 210, 240 340"
-                  stroke="#d8db47"
-                  strokeWidth="6"
-                  fill="none"
-                />
-                <path
-                  d="M360 30 C 340 140, 380 230, 360 360"
-                  stroke="#d8db47"
-                  strokeWidth="6"
-                  fill="none"
-                />
-                <path
-                  d="M500 40 C 480 150, 520 230, 500 360"
-                  stroke="#d8db47"
-                  strokeWidth="6"
-                  fill="none"
-                />
-                <path
-                  d="M180 80 C 160 170, 200 250, 180 380"
-                  stroke="#d7332f"
-                  strokeWidth="5"
-                  fill="none"
-                />
-                <path
-                  d="M420 60 C 400 170, 440 260, 420 380"
-                  stroke="#d7332f"
-                  strokeWidth="5"
-                  fill="none"
-                />
-                <path
-                  d="M650 70 C 630 170, 670 260, 650 380"
-                  stroke="#d7332f"
-                  strokeWidth="5"
-                  fill="none"
-                />
-              </svg>
-
-              <div className="absolute left-5 bottom-6 flex flex-col items-center gap-2">
-                <div className="relative h-40 w-8 rounded-full border-4 border-black bg-white">
-                  <div className="absolute bottom-2 left-1/2 h-16 w-3 -translate-x-1/2 rounded-full bg-red-600" />
-                  <div className="absolute -bottom-2 left-1/2 size-10 -translate-x-1/2 rounded-full border-4 border-black bg-red-700" />
-                </div>
-                <div className="rounded-full border bg-white/90 px-3 py-1 text-xs font-semibold">
-                  3.0 °C
-                </div>
-              </div>
-
-              <div className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full border bg-white/80 px-3 py-2 text-xs font-semibold">
-                <span className="inline-flex size-4 items-center justify-center rounded-sm border bg-white" />
-                Energy Balance
-              </div>
+            <div className="relative overflow-hidden rounded-xl border bg-black shadow-sm md:basis-3/4 md:flex-none">
+              <img
+                src={
+                  ghgMode === "calendar"
+                    ? yearSelected === "1990"
+                      ? "/images/1.png"
+                      : yearSelected === "2025"
+                        ? "/images/2.png"
+                        : "/images/3.png"
+                    : showCloud
+                      ? "/images/5.png"
+                      : "/images/4.png"
+                }
+                alt="Simulasi efek rumah kaca"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <EnergyWaves isPlaying={isPlaying} groundPx={190} ghgLevel={ghgLevel} />
             </div>
 
-            <div className="flex w-full flex-col gap-3 md:w-64">
-              <div className="rounded-2xl border bg-black/90 p-4 text-white shadow-sm">
+            <div className="flex h-full w-full flex-col gap-3 overflow-auto md:basis-1/4 md:flex-none">
+              <div className="rounded-2xl border bg-white/80 p-4 text-foreground shadow-sm">
                 <h3 className="text-center text-sm font-semibold">Energy</h3>
                 <div className="mt-3 flex items-center justify-between text-xs">
                   <span>Sunlight</span>
@@ -165,34 +142,127 @@ export default function EfekRumahKacaSimulasiPage() {
                 <h3 className="text-sm font-semibold">
                   Greenhouse Gas Concentration
                 </h3>
-                <div className="mt-3 flex h-36 items-center justify-center">
-                  <div className="relative h-full w-2 rounded-full bg-black/70">
-                    <div className="absolute left-1/2 top-1/2 h-6 w-8 -translate-x-1/2 -translate-y-1/2 rounded bg-[#4a90b8] shadow-sm" />
-                  </div>
-                </div>
-                <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>None</span>
-                  <span>Lots</span>
-                </div>
-                <div className="mt-3 flex items-center gap-2">
-                  <button className="rounded-lg border bg-white/90 px-3 py-2 text-xs font-semibold">
-                    CO2
+                {ghgMode === "slider" ? (
+                  <>
+                    <div className="mt-3 flex h-52 flex-col items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Lots</span>
+                      <div className="flex h-36 items-center">
+                        <Slider
+                          orientation="vertical"
+                          value={[ghgLevel]}
+                          onValueChange={(value) =>
+                            setGhgLevel(value[0] ?? 0)
+                          }
+                          className="w-10 [&_[data-slot=slider-track]]:bg-black/80 [&_[data-slot=slider-range]]:bg-black/80 [&_[data-slot=slider-thumb]]:h-3 [&_[data-slot=slider-thumb]]:w-10 [&_[data-slot=slider-thumb]]:rounded-md [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:border-[#0a83a8] [&_[data-slot=slider-thumb]]:bg-[#3a86a8]"
+                        />
+                      </div>
+                      <span className="text-xs text-muted-foreground">None</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="mt-3 flex h-52 items-center justify-center gap-4">
+                      <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
+                        <span>Lots</span>
+                        <div className="relative h-36 w-8">
+                          <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 rounded-full bg-black/80" />
+                          <div
+                            className="absolute left-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black"
+                            style={{
+                              top: `${100 - yearLevels[yearSelected]}%`,
+                            }}
+                          />
+                        </div>
+                        <span>None</span>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        {(["2050", "2025", "1990"] as const).map((year) => (
+                          <button
+                            key={year}
+                            type="button"
+                            onClick={() => setYearSelected(year)}
+                            className={`rounded-lg border px-4 py-2 text-xs font-semibold transition ${
+                              yearSelected === year
+                                ? "border-primary bg-primary/10 text-primary"
+                                : "bg-white/90 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                            }`}
+                          >
+                            {year}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className="mt-3 flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setGhgMode("slider")}
+                    className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${
+                      ghgMode === "slider"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "bg-white/90 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                    }`}
+                    aria-pressed={ghgMode === "slider"}
+                  >
+                    <SlidersVertical className="inline-block h-3 w-3" />
                   </button>
-                  <button className="rounded-lg border bg-white/90 px-3 py-2 text-xs font-semibold">
-                    CH4
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGhgMode("calendar")
+                      setShowCloud(false)
+                    }}
+                    className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${
+                      ghgMode === "calendar"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "bg-white/90 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                    }`}
+                    aria-pressed={ghgMode === "calendar"}
+                  >
+                    <Calendar className="inline-block h-3 w-3" />
                   </button>
                 </div>
               </div>
 
+              {ghgMode === "slider" ? (
+                <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
+                  <div className="flex items-center justify-between text-xs font-semibold">
+                    <span>Cloud</span>
+                    <span>{showCloud ? "Aktif" : "Nonaktif"}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowCloud((prev) => !prev)}
+                    className="mt-3 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                  >
+                    <span
+                      className={`inline-flex size-4 items-center justify-center rounded-sm border ${
+                        showCloud ? "bg-primary/20 border-primary/40" : "bg-white"
+                      }`}
+                    />
+                    Tampilkan Awan
+                  </button>
+                </div>
+              ) : null}
+
               <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
                 <div className="flex items-center justify-between text-xs font-semibold">
-                  <span>Cloud</span>
-                  <span>Aktif</span>
+                  <span>Gelombang Energi</span>
+                  <span>{isPlaying ? "Berjalan" : "Berhenti"}</span>
                 </div>
-                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-                  <span className="inline-flex size-4 items-center justify-center rounded-sm border bg-white" />
-                  Tampilkan Awan
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsPlaying((prev) => !prev)}
+                  className="mt-3 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                >
+                  {isPlaying ? (
+                    <Pause className="size-3" />
+                  ) : (
+                    <Play className="size-3" />
+                  )}
+                  {isPlaying ? "Pause" : "Play"}
+                </button>
               </div>
             </div>
           </div>
