@@ -3,22 +3,36 @@ import { PageShell } from "@/components/page-shell"
 export default function AktivitasSiswaPage() {
   return (
     <PageShell title="Aktivitas Siswa">
-      <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Project Based Learning
-        </p>
-        <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-          Aktivitas Siswa: Proyek STEM–ESD
-        </h1>
-        <p className="mt-3 max-w-3xl text-sm text-muted-foreground md:text-base">
-          Pada aktivitas ini, siswa diajak untuk memahami isu-isu lingkungan dan
-          merancang solusi berkelanjutan dalam bentuk proyek. Pemahaman konsep
-          IPA yang diperoleh melalui simulasi komputer tentang pemanasan global
-          dan perubahan iklim dimanfaatkan sebagai dasar dalam merancang solusi
-          berkelanjutan dengan pendekatan STEM–ESD. Proyek dilaksanakan melalui
-          tahapan Engineering Design Process (EDP) agar siswa mampu menerapkan
-          konsep IPA secara nyata dan sistematis.
-        </p>
+      <section className="relative overflow-hidden rounded-2xl border bg-card p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:p-8 md:pt-28">
+        <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
+          <img
+            src="/images/aktivitas-1.png"
+            alt="Ikon aktivitas 1"
+            className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
+          />
+          <img
+            src="/images/aktivitas-2.png"
+            alt="Ikon aktivitas 2"
+            className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
+          />
+        </div>
+        <div className="relative">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            Project Based Learning
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
+            Aktivitas Siswa: Proyek STEM–ESD
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm text-muted-foreground md:text-base">
+            Pada aktivitas ini, siswa diajak untuk memahami isu-isu lingkungan dan
+            merancang solusi berkelanjutan dalam bentuk proyek. Pemahaman konsep
+            IPA yang diperoleh melalui simulasi komputer tentang pemanasan global
+            dan perubahan iklim dimanfaatkan sebagai dasar dalam merancang solusi
+            berkelanjutan dengan pendekatan STEM–ESD. Proyek dilaksanakan melalui
+            tahapan Engineering Design Process (EDP) agar siswa mampu menerapkan
+            konsep IPA secara nyata dan sistematis.
+          </p>
+        </div>
       </section>
 
       <section className="grid gap-6 md:grid-cols-2">

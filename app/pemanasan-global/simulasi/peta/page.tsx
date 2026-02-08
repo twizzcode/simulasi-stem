@@ -5,62 +5,66 @@ import Link from "next/link"
 
 import { PageShell } from "@/components/page-shell"
 
+import { usePetaProgress } from "./peta-progress-context"
+
 type Island = {
   id: string
   name: string
   top: number
   left: number
+  imageSrc: string
 }
 
 const islands: Island[] = [
-  { id: "a", name: "Pulau A", top: 18, left: 18 },
-  { id: "b", name: "Pulau B", top: 18, left: 60 },
-  { id: "c", name: "Pulau C", top: 45, left: 35 },
-  { id: "d", name: "Pulau D", top: 60, left: 12 },
-  { id: "e", name: "Pulau E", top: 60, left: 68 },
-  { id: "f", name: "Pulau F", top: 78, left: 40 },
+  {
+    id: "a",
+    name: "Pulau A",
+    top: 47,
+    left: 40,
+    imageSrc: "/images/pulau/p-kebakaranhutan.png",
+  },
+  {
+    id: "b",
+    name: "Pulau B",
+    top: 73,
+    left: 12,
+    imageSrc: "/images/pulau/p-petanigaram.png",
+  },
+  {
+    id: "c",
+    name: "Pulau C",
+    top: 18,
+    left: 16,
+    imageSrc: "/images/pulau/p-kutub.png",
+  },
+  {
+    id: "d",
+    name: "Pulau D",
+    top: 18,
+    left: 59,
+    imageSrc: "/images/pulau/p-banjir.png",
+  },
+  {
+    id: "e",
+    name: "Pulau E",
+    top: 34,
+    left: 86,
+    imageSrc: "/images/pulau/p-petanigagal.png",
+  },
+  {
+    id: "f",
+    name: "Pulau F",
+    top: 78,
+    left: 72,
+    imageSrc: "/images/pulau/p-polusiudara.png",
+  },
 ]
 
 export default function PemanasanGlobalPetaPage() {
   const mapRef = React.useRef<HTMLDivElement | null>(null)
-  const [userPos, setUserPos] = React.useState({ x: 50, y: 50 })
+  const { userPos, setUserPos, visitedIslands } = usePetaProgress()
   const [selectedIsland, setSelectedIsland] = React.useState<Island | null>(null)
-  const [visitedIslands, setVisitedIslands] = React.useState<Set<string>>(
-    () => new Set()
-  )
   const [showCompletion, setShowCompletion] = React.useState(false)
-
-  React.useEffect(() => {
-    const stored = localStorage.getItem("pemanasan-global-visited")
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as string[]
-        const nextSet = new Set(parsed)
-        setVisitedIslands(nextSet)
-        if (nextSet.size >= islands.length) {
-          setShowCompletion(true)
-        }
-      } catch {
-        setVisitedIslands(new Set())
-      }
-    }
-    const storedPos = localStorage.getItem("pemanasan-global-user-pos")
-    if (storedPos) {
-      try {
-        const parsed = JSON.parse(storedPos) as { x: number; y: number }
-        if (
-          typeof parsed.x === "number" &&
-          typeof parsed.y === "number" &&
-          Number.isFinite(parsed.x) &&
-          Number.isFinite(parsed.y)
-        ) {
-          setUserPos({ x: parsed.x, y: parsed.y })
-        }
-      } catch {
-        // ignore invalid storage
-      }
-    }
-  }, [])
 
   React.useEffect(() => {
     if (visitedIslands.size >= islands.length) {
@@ -79,7 +83,6 @@ export default function PemanasanGlobalPetaPage() {
     setSelectedIsland(null)
     const nextPos = { x: clamp(x, 4, 96), y: clamp(y, 6, 94) }
     setUserPos(nextPos)
-    localStorage.setItem("pemanasan-global-user-pos", JSON.stringify(nextPos))
   }
 
   return (
@@ -113,7 +116,7 @@ export default function PemanasanGlobalPetaPage() {
         <div
           ref={mapRef}
           onClick={handleMapClick}
-          className="relative aspect-video w-full overflow-hidden rounded-2xl border bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.35),transparent_55%),radial-gradient(circle_at_80%_70%,rgba(255,255,255,0.25),transparent_60%),linear-gradient(120deg,#3b5d7a,#8fb1c8_45%,#d6d4c8_80%)]"
+          className="relative aspect-video w-full overflow-hidden rounded-2xl border bg-[url('/images/pulau/bg.png')] bg-cover bg-center bg-no-repeat"
         >
           {islands.map((island) => (
             <button
@@ -124,32 +127,37 @@ export default function PemanasanGlobalPetaPage() {
                 setSelectedIsland(island)
                 const nextPos = { x: island.left, y: island.top }
                 setUserPos(nextPos)
-                localStorage.setItem("pemanasan-global-user-pos", JSON.stringify(nextPos))
               }}
-              className={`absolute flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-xs font-semibold text-white shadow-md transition hover:scale-105 ${
-                visitedIslands.has(island.id)
-                  ? "border-emerald-200 bg-emerald-700"
-                  : selectedIsland?.id === island.id
-                    ? "border-yellow-300 bg-emerald-600"
-                    : "border-white/60 bg-emerald-500"
+              className={`group absolute -translate-x-1/2 -translate-y-1/2 transition duration-200 hover:scale-105 ${
+                selectedIsland?.id === island.id ? "scale-105" : ""
               }`}
               style={{ top: `${island.top}%`, left: `${island.left}%` }}
             >
-              <span className="flex flex-col items-center gap-1">
-                <span>{island.name}</span>
-                {visitedIslands.has(island.id) ? (
-                  <span className="text-sm">✓</span>
-                ) : null}
-              </span>
+              <span className="sr-only">{island.name}</span>
+              <img
+                src={island.imageSrc}
+                alt={island.name}
+                className={`h-[6.5rem] w-[6.5rem] object-contain drop-shadow-[0_8px_14px_rgba(15,23,42,0.38)] transition duration-200 sm:h-[7.5rem] sm:w-[7.5rem] md:h-36 md:w-36 ${
+                  visitedIslands.has(island.id)
+                    ? "brightness-110 saturate-110"
+                    : "brightness-60 saturate-75 contrast-90 group-hover:brightness-75"
+                } ${selectedIsland?.id === island.id ? "drop-shadow-[0_10px_20px_rgba(250,204,21,0.55)]" : ""}`}
+              />
+              {visitedIslands.has(island.id) ? (
+                <span className="absolute left-1/2 top-1/2 inline-flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-emerald-500 text-lg font-bold text-white shadow-lg ring-2 ring-white/80">
+                  ✓
+                </span>
+              ) : null}
             </button>
           ))}
 
-          <div
-            className="absolute flex size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-yellow-400 text-xs font-semibold text-slate-900 shadow-lg transition-[top,left] duration-700 ease-in-out"
+          <img
+            src="/images/kapal.png"
+            alt=""
+            aria-hidden="true"
+            className="absolute h-10 w-10 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-lg transition-[top,left] duration-700 ease-in-out md:h-12 md:w-12"
             style={{ top: `${userPos.y}%`, left: `${userPos.x}%` }}
-          >
-            Kamu
-          </div>
+          />
 
           {selectedIsland ? (
             <div

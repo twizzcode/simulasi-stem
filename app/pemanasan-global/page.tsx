@@ -5,25 +5,39 @@ import { PageShell } from "@/components/page-shell"
 export default function PemanasanGlobalPage() {
   return (
     <PageShell title="Pemanasan Global & Perubahan Iklim">
-      <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Materi Inti
-        </p>
-        <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-          Pemanasan Global & Perubahan Iklim
-        </h1>
-        <p className="mt-3 text-sm text-muted-foreground md:text-base">
-          Pemanasan global adalah meningkatnya suhu Bumi karena panas Matahari
-          terjebak oleh gas rumah kaca di atmosfer. Akibat pemanasan global,
-          terjadilah perubahan iklim, yaitu perubahan pola cuaca di Bumi. Musim
-          menjadi tidak menentu, hujan dan panas ekstrem lebih sering terjadi,
-          es di kutub mencair, dan permukaan laut naik. Pemanasan global dan
-          perubahan iklim tidak hanya berdampak pada alam, tetapi juga pada
-          kehidupan manusia. Pertanian terganggu karena musim sulit diprediksi,
-          serta bencana seperti banjir dan kekeringan makin sering terjadi.
-          Karena itu, memahami kedua konsep ini penting agar kita sadar bahwa
-          tindakan manusia hari ini sangat menentukan kondisi Bumi di masa depan.
-        </p>
+      <section className="relative overflow-hidden rounded-2xl border bg-card p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:p-8 md:pt-28">
+        <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
+          <img
+            src="/images/perubahan-iklim-1.png"
+            alt="Ikon perubahan iklim 1"
+            className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
+          />
+          <img
+            src="/images/perubahan-iklim-2.png"
+            alt="Ikon perubahan iklim 2"
+            className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
+          />
+        </div>
+        <div className="relative">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            Materi Inti
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
+            Pemanasan Global & Perubahan Iklim
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground md:text-base">
+            Pemanasan global adalah meningkatnya suhu Bumi karena panas Matahari
+            terjebak oleh gas rumah kaca di atmosfer. Akibat pemanasan global,
+            terjadilah perubahan iklim, yaitu perubahan pola cuaca di Bumi. Musim
+            menjadi tidak menentu, hujan dan panas ekstrem lebih sering terjadi,
+            es di kutub mencair, dan permukaan laut naik. Pemanasan global dan
+            perubahan iklim tidak hanya berdampak pada alam, tetapi juga pada
+            kehidupan manusia. Pertanian terganggu karena musim sulit diprediksi,
+            serta bencana seperti banjir dan kekeringan makin sering terjadi.
+            Karena itu, memahami kedua konsep ini penting agar kita sadar bahwa
+            tindakan manusia hari ini sangat menentukan kondisi Bumi di masa depan.
+          </p>
+        </div>
       </section>
 
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">

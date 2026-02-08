@@ -48,7 +48,7 @@ const storyPages = [
         id: "hemat-energi",
         cost: 6,
         label: "Merancang bangun yang membantu menghemat energi",
-        impact: "Persentase dampak: 12%",
+        impactPercent: 12,
         detail:
           "Di Indonesia, sektor bangunan juga menjadi salah satu penyumbang emisi gas rumah kaca yang cukup besar. Bangunan yang hemat energi dirancang dengan ventilasi dan pencahayaan alami yang baik, menggunakan material yang mampu menahan panas, serta memanfaatkan teknologi pendingin dan penerangan yang lebih ramah lingkungan. Semua upaya ini bertujuan untuk mengurangi penggunaan energi dan menekan emisi ke atmosfer.",
       },
@@ -56,7 +56,7 @@ const storyPages = [
         id: "penghijauan",
         cost: 4,
         label: "Menanam pohon untuk penghijauan",
-        impact: "Persentase dampak: 6%",
+        impactPercent: 6,
         detail:
           "Pohon dan hutan berperan penting dalam menyerap karbon dioksida dari udara. Selain itu, keberadaan pepohonan membantu menjaga kualitas udara tetap bersih dan menyediakan ruang hijau yang nyaman bagi masyarakat untuk beraktivitas dan beristirahat. Di Indonesia, upaya penanaman pohon dan pengembangan ruang terbuka hijau sangat penting untuk mendukung lingkungan yang sehat dan berkelanjutan.",
       },
@@ -64,7 +64,7 @@ const storyPages = [
         id: "pertanian",
         cost: 4,
         label: "Meningkatkan strategi bercocok tanam dalam pertanian",
-        impact: "Persentase dampak: 6%",
+        impactPercent: 6,
         detail:
           "Emisi gas rumah kaca dari sektor pertanian juga menyumbang bagian yang cukup besar terhadap total emisi di Indonesia. Dengan mengubah cara petani menanam dan mengelola lahannya misalnya melalui pertanian ramah lingkungan, pengolahan tanah minimal, penggunaan pupuk organik, serta pengurangan pupuk berbasis bahan bakar fosil, emisi dapat ditekan sekaligus meningkatkan kesuburan dan kesehatan tanah dalam jangka panjang.",
       },
@@ -72,7 +72,7 @@ const storyPages = [
         id: "transportasi",
         cost: 8,
         label: "Membangun transportasi umum bersih dan kendaraan listrik",
-        impact: "Persentase dampak: 17%",
+        impactPercent: 17,
         detail:
           "Sektor transportasi merupakan salah satu penyumbang emisi gas rumah kaca yang besar di Indonesia, terutama dari kendaraan berbahan bakar bensin dan solar. Dengan meningkatkan penggunaan kendaraan listrik serta memperluas dan memperbaiki sistem transportasi umum yang ramah lingkungan, emisi dari kendaraan konvensional dapat ditekan dan ketergantungan pada bahan bakar fosil seperti minyak dan gas bisa dikurangi.",
       },
@@ -80,7 +80,7 @@ const storyPages = [
         id: "pangan",
         cost: 7,
         label: "Mensosialisasikan cara pengolahan pangan efisien kepada masyarakat",
-        impact: "Persentase dampak: 2%",
+        impactPercent: 2,
         detail:
           "Di Indonesia, pengolahan pangan yang kurang efisien masih menyebabkan pemborosan bahan makanan dan energi. Dengan mensosialisasikan cara mengolah, menyimpan, dan memanfaatkan pangan secara bijak kepada masyarakat, penggunaan sumber daya dapat ditekan, limbah makanan dapat dikurangi, serta emisi yang dihasilkan dari proses produksi dan distribusi pangan bisa diminimalkan.",
       },
@@ -89,7 +89,7 @@ const storyPages = [
         cost: 9,
         label:
           "Mengganti pembangkit listrik tenaga batu bara dan gas dengan sumber energi nuklir",
-        impact: "Persentase dampak: 20%",
+        impactPercent: 20,
         detail:
           "Selama ini, Indonesia masih sangat bergantung pada pembangkit listrik berbahan bakar batu bara dan gas. Dengan mengembangkan pembangkit listrik tenaga nuklir sebagai sumber energi rendah karbon, Indonesia berpeluang menghasilkan listrik dalam jumlah besar dengan emisi yang jauh lebih kecil. Langkah ini dapat membantu mengurangi ketergantungan pada bahan bakar fosil sekaligus menekan emisi gas rumah kaca.",
       },
@@ -97,7 +97,7 @@ const storyPages = [
         id: "carbon-capture",
         cost: 9,
         label: "Menggunakan teknologi untuk menangkap dan menyimpan karbon",
-        impact: "Persentase dampak: 10%",
+        impactPercent: 10,
         detail:
           "Pengembangan teknologi untuk menangkap dan menyimpan karbon dari pembangkit listrik berbahan bakar fosil serta industri berat dapat membantu Indonesia menekan emisi gas rumah kaca. Dengan penerapan teknologi ini secara bertahap, emisi yang dilepaskan ke atmosfer dapat dikurangi. Seiring meningkatnya biaya emisi karbon, teknologi penangkapan karbon akan semakin terjangkau dan lebih luas digunakan.",
       },
@@ -106,7 +106,7 @@ const storyPages = [
         cost: 9,
         label:
           "Membangun sumber energi terbarukan seperti pembangkit listrik tenaga surya dan angin",
-        impact: "Persentase dampak: 25%",
+        impactPercent: 25,
         detail:
           "Energi terbarukan, seperti listrik tenaga surya dan angin, jauh lebih bersih dibandingkan minyak, gas, dan batu bara. Di Indonesia yang kaya akan sinar Matahari dan potensi angin di beberapa wilayah, pengembangan energi ini sangat penting untuk mengurangi emisi gas rumah kaca. Seiring meningkatnya biaya emisi karbon, teknologi energi terbarukan akan semakin terjangkau dan dapat dimanfaatkan lebih luas.",
       },
@@ -114,7 +114,7 @@ const storyPages = [
         id: "edukasi",
         cost: 5,
         label: "Melakukan edukasi di sekolah terkait darurat polusi karbon",
-        impact: "Persentase dampak: 2%",
+        impactPercent: 2,
         detail:
           "Sekolah memiliki peran penting dalam membangun kesadaran generasi muda tentang bahaya polusi karbon dan dampaknya terhadap lingkungan. Dengan memberikan edukasi sejak dini mengenai pemanasan global, perubahan iklim, dan cara mengurangi jejak karbon, siswa di Indonesia dapat tumbuh menjadi agen perubahan yang peduli terhadap Bumi dan siap mengambil tindakan nyata untuk masa depan yang lebih berkelanjutan.",
       },
@@ -122,7 +122,7 @@ const storyPages = [
         id: "tarif-karbon",
         cost: 7,
         label: "Memberlakukan tarif untuk pelepasan karbon pada sektor industri",
-        impact: "Persentase dampak: 13%",
+        impactPercent: 13,
         detail:
           "Dengan memberi nilai ekonomi pada pencemaran karbon, pelaku industri dan masyarakat akan terdorong untuk beralih ke sumber energi yang lebih bersih. Kebijakan ini membuka peluang bagi teknologi ramah lingkungan untuk digunakan lebih luas di Indonesia, sehingga seiring waktu biayanya menjadi semakin terjangkau dan dampak emisi dapat dikurangi secara signifikan.",
       },
@@ -147,6 +147,7 @@ export default function SmartTownPage() {
   const [activeInfoId, setActiveInfoId] = React.useState<string | null>(null)
   const [showSubmitConfirm, setShowSubmitConfirm] = React.useState(false)
   const [submitted, setSubmitted] = React.useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
   const currentPage = storyPages[pageIndex]
   const isLastPage = pageIndex === storyPages.length - 1
   const isChecklistPage = pageIndex === 5
@@ -162,8 +163,7 @@ export default function SmartTownPage() {
     return selectedActions.reduce((sum, item) => {
       const entry = checklistOptions.find((option) => option.id === item)
       if (!entry) return sum
-      const match = entry.impact.match(/(\d+)%/)
-      const value = match ? Number(match[1]) : 0
+      const value = entry.impactPercent ?? 0
       return sum + (Number.isFinite(value) ? value : 0)
     }, 0)
   }, [selectedActions])
@@ -273,99 +273,111 @@ export default function SmartTownPage() {
             Keluar Full Screen
           </button>
         ) : null}
-        <div className={`relative w-full ${isFullscreen ? "h-full" : "min-h-[60vh]"}`}>
+        <div className={`relative w-full ${isFullscreen ? "h-full" : "aspect-video"}`}>
           <div className="absolute inset-0 flex">
             <div className="relative flex w-full flex-col md:flex-row">
-              <div className="relative z-10 flex h-full w-full max-w-md flex-col bg-black/75 p-6 text-white md:max-w-none md:basis-[38%]">
-                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                    Halaman {pageIndex + 1} dari {storyPages.length}
-                  </p>
-                  <h2 className="text-xl font-semibold md:text-2xl">
-                    {currentPage.title}
-                  </h2>
-                  <div className="space-y-3 text-sm text-white/80">
-                    {currentPage.body.map((line) => (
-                      <p key={line}>{line}</p>
-                    ))}
-                    {currentPage.checklist ? (
-                      <div className="space-y-2 pt-2">
-                        {currentPage.checklist.map((item) => {
-                          const checked = selectedActions.includes(item.id)
-                          const disabled = !checked && remainingCoins < item.cost
-                          return (
-                            <label
-                              key={item.id}
-                              className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-xs text-white/80 ${
-                                disabled
-                                  ? "cursor-not-allowed border-white/10 bg-white/5 opacity-60"
-                                  : "border-white/20 bg-white/10"
-                              }`}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => handleToggleAction(item.id, item.cost)}
-                                disabled={disabled}
-                                className="mt-0.5 size-4 rounded border-white/40 bg-white/10"
-                              />
-                              <span className="flex-1">
-                                ({item.cost} koin) {item.label}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={(event) => {
-                                  event.preventDefault()
-                                  setActiveInfoId(item.id)
-                                }}
-                                className="flex size-6 items-center justify-center rounded-md border border-white/30 bg-white/10 text-xs font-semibold text-white/90 transition hover:bg-white/20"
+              <div className="absolute inset-0 bg-[url('/images/peta-map.png')] bg-contain bg-center bg-no-repeat" />
+              {isSidebarOpen ? (
+                <div className="relative z-10 flex h-full w-full max-w-md flex-col bg-black/75 p-6 text-white md:max-w-none md:basis-[38%]">
+                  <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+                      Halaman {pageIndex + 1} dari {storyPages.length}
+                    </p>
+                    <h2 className="text-xl font-semibold md:text-2xl">
+                      {currentPage.title}
+                    </h2>
+                    <div className="space-y-3 text-sm text-white/80">
+                      {currentPage.body.map((line) => (
+                        <p key={line}>{line}</p>
+                      ))}
+                      {currentPage.checklist ? (
+                        <div className="space-y-2 pt-2">
+                          {currentPage.checklist.map((item) => {
+                            const checked = selectedActions.includes(item.id)
+                            const disabled = !checked && remainingCoins < item.cost
+                            return (
+                              <label
+                                key={item.id}
+                                className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-xs text-white/80 ${
+                                  disabled
+                                    ? "cursor-not-allowed border-white/10 bg-white/5 opacity-60"
+                                    : "border-white/20 bg-white/10"
+                                }`}
                               >
-                                ?
-                              </button>
-                            </label>
-                          )
-                        })}
-                      </div>
-                    ) : null}
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={() => handleToggleAction(item.id, item.cost)}
+                                  disabled={disabled}
+                                  className="mt-0.5 size-4 rounded border-white/40 bg-white/10"
+                                />
+                                <span className="flex-1">
+                                  ({item.cost} koin) {item.label}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={(event) => {
+                                    event.preventDefault()
+                                    setActiveInfoId(item.id)
+                                  }}
+                                  className="flex size-6 items-center justify-center rounded-md border border-white/30 bg-white/10 text-xs font-semibold text-white/90 transition hover:bg-white/20"
+                                >
+                                  ?
+                                </button>
+                              </label>
+                            )
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
 
-                <div className="mt-6 flex items-center justify-between text-sm text-cyan-300">
-                  <button
-                    type="button"
-                    onClick={handlePrev}
-                    disabled={pageIndex === 0}
-                    className="flex items-center gap-2 font-semibold transition hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <span className="text-lg">◀</span> Back
-                  </button>
-                  {isChecklistPage ? (
+                  <div className="mt-6 flex items-center justify-between text-sm text-cyan-300">
                     <button
                       type="button"
-                      onClick={handleSubmit}
-                      className="flex items-center gap-2 font-semibold transition hover:text-cyan-200"
-                    >
-                      Submit <span className="text-lg">▶</span>
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleNext}
-                      disabled={isLastPage}
+                      onClick={handlePrev}
+                      disabled={pageIndex === 0}
                       className="flex items-center gap-2 font-semibold transition hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      Next <span className="text-lg">▶</span>
+                      <span className="text-lg">◀</span> Back
                     </button>
-                  )}
+                    {isChecklistPage ? (
+                      <button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="flex items-center gap-2 font-semibold transition hover:text-cyan-200"
+                      >
+                        Submit <span className="text-lg">▶</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleNext}
+                        disabled={isLastPage}
+                        className="flex items-center gap-2 font-semibold transition hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Next <span className="text-lg">▶</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) : null}
 
               <div className="relative flex-1 overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.35),transparent_55%),radial-gradient(circle_at_80%_70%,rgba(255,255,255,0.25),transparent_60%),linear-gradient(120deg,#3b5d7a,#8fb1c8_45%,#d6d4c8_80%)] opacity-70" />
-                <div className="absolute inset-0 mix-blend-multiply">
-                  <div className="absolute -left-10 bottom-10 h-40 w-64 rounded-full bg-white/40 blur-3xl" />
-                  <div className="absolute right-10 top-10 h-32 w-52 rounded-full bg-white/30 blur-3xl" />
-                </div>
+                <div className="absolute inset-0 bg-black/15" />
+                <button
+                  type="button"
+                  onClick={() => setIsSidebarOpen((prev) => !prev)}
+                  className="absolute left-4 top-4 z-20 inline-flex items-center gap-2 rounded-full border border-white/35 bg-black/40 px-3 py-2 text-xs font-semibold text-white shadow backdrop-blur-sm transition hover:border-white"
+                >
+                  <img
+                    src="/images/build.png"
+                    alt=""
+                    aria-hidden="true"
+                    className="h-5 w-5 object-contain"
+                  />
+                  {isSidebarOpen ? "Tutup Sidebar" : "Buka Sidebar"}
+                </button>
 
                 <div className="absolute right-6 top-6 flex items-center gap-3">
                   <span className="text-3xl font-bold text-yellow-300 drop-shadow">
@@ -442,9 +454,6 @@ export default function SmartTownPage() {
                         </button>
                       </div>
                       <p className="text-sm text-muted-foreground">{info.detail}</p>
-                      <p className="text-sm font-semibold text-foreground">
-                        {info.impact}
-                      </p>
                     </div>
                   )
                 })()}

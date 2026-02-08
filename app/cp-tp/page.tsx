@@ -3,8 +3,20 @@ import { PageShell } from "@/components/page-shell"
 export default function CpTpPage() {
   return (
     <PageShell title="CP & TP">
-      <section className="rounded-2xl border bg-gradient-to-br from-background via-card to-secondary/40 p-6 shadow-sm">
-        <div className="flex flex-col gap-3">
+      <section className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-background via-card to-secondary/40 p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:pt-28">
+        <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
+          <img
+            src="/images/cp.png"
+            alt="Ikon CP"
+            className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
+          />
+          <img
+            src="/images/tp.png"
+            alt="Ikon TP"
+            className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
+          />
+        </div>
+        <div className="relative flex flex-col gap-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             Bab Isu-Isu Lingkungan
           </p>

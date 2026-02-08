@@ -94,7 +94,13 @@ export default function PemanasanGlobalSimulasiPage() {
               isFullscreen ? "h-full" : "aspect-video"
             }`}
           >
-            <div className="absolute inset-0 flex flex-col justify-between bg-[#f7f5f0]">
+            <div
+              className={`absolute inset-0 flex flex-col justify-between ${
+                pageIndex < 2
+                  ? "bg-[url('/images/2065.png')] bg-cover bg-center bg-no-repeat"
+                  : "bg-[url('/images/jalan.png')] bg-cover bg-center bg-no-repeat"
+              }`}
+            >
               <div className="absolute left-6 top-6 w-[70%] max-w-md rounded-lg bg-[#bcd4dd] p-4 text-sm text-slate-800 shadow">
                 {pages[pageIndex]}
               </div>

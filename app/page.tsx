@@ -5,21 +5,50 @@ import { PageShell } from "@/components/page-shell"
 
 export default function Home() {
   return (
-    <PageShell title="Beranda">
-      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-background to-secondary/40 p-8 shadow-sm md:p-12">
+    <PageShell title="Beranda" firstPanelGradient={false}>
+      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-background to-secondary/40 p-5 shadow-sm sm:p-6 md:p-8">
         <div className="absolute -right-20 -top-24 size-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-28 -left-20 size-80 rounded-full bg-secondary/40 blur-3xl" />
-        <div className="relative max-w-3xl space-y-6">
-          <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <div className="relative mb-5 h-20 md:mb-10 md:h-28">
+          <img
+            src="/images/bumi-panas.png"
+            alt="Ilustrasi bumi panas"
+            className="pointer-events-none absolute left-0 top-0 h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-28 md:w-28"
+          />
+          <div className="pointer-events-none absolute inset-x-0 top-1.5 flex items-start justify-center gap-3 sm:top-2 sm:gap-6 md:top-3 md:gap-14">
+            <img
+              src="/images/co2.png"
+              alt="Ikon CO2"
+              className="h-9 w-9 object-contain sm:h-12 sm:w-12 md:h-16 md:w-16"
+            />
+            <img
+              src="/images/ch4.png"
+              alt="Ikon CH4"
+              className="h-9 w-9 object-contain sm:h-12 sm:w-12 md:h-16 md:w-16"
+            />
+            <img
+              src="/images/n2o.png"
+              alt="Ikon N2O"
+              className="h-9 w-9 object-contain sm:h-12 sm:w-12 md:h-16 md:w-16"
+            />
+          </div>
+          <img
+            src="/images/tenaga-surya.png"
+            alt="Ilustrasi tenaga surya"
+            className="pointer-events-none absolute right-0 top-0 h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-28 md:w-28"
+          />
+        </div>
+        <div className="relative max-w-3xl space-y-4 md:space-y-6">
+          <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground sm:px-4 sm:text-xs">
             Media Pembelajaran IPA
             <span className="size-1.5 rounded-full bg-primary" />
             STEM-ESD
           </span>
           <div className="space-y-3">
-            <h1 className="text-3xl font-semibold leading-tight tracking-tight text-foreground md:text-4xl">
+            <h1 className="text-2xl font-semibold leading-tight tracking-tight text-foreground sm:text-3xl md:text-4xl">
               Simulasi Komputer Berbasis STEM-ESD
             </h1>
-            <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
               Simulasi komputer berbasis STEM-ESD merupakan media pembelajaran
               IPA berbentuk web yang dirancang untuk membahas isu-isu lingkungan
               dan perubahan iklim secara kontekstual. Melalui aktivitas
@@ -33,7 +62,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/cp-tp"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 md:px-6 md:py-3"
             >
               <Play className="size-4" />
               Mulai Belajar
@@ -62,7 +91,7 @@ export default function Home() {
         ].map((item) => (
           <article
             key={item.title}
-            className="rounded-2xl border bg-background/70 p-5 shadow-sm"
+            className="rounded-2xl border bg-background/70 p-4 shadow-sm md:p-5"
           >
             <h2 className="text-lg font-semibold text-foreground">
               {item.title}

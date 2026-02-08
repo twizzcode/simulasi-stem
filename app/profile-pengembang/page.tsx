@@ -25,15 +25,12 @@ export default function ProfilePengembangPage() {
         {[
           {
             name: "Tiara Dwi Wulandari, S.Pd.",
-            initials: "TW",
           },
           {
             name: "Arif Widiyatmoko, S.Pd., M.Pd., Ph.D.",
-            initials: "AW",
           },
           {
             name: "Associate Prof. Dr. Hutkemri Zulnaidi",
-            initials: "HZ",
           },
         ].map((member) => (
           <article
@@ -43,9 +40,11 @@ export default function ProfilePengembangPage() {
             <div className="absolute -right-16 -top-20 size-40 rounded-full bg-primary/10 blur-2xl transition group-hover:bg-primary/20" />
             <div className="relative">
               <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm">
-                  {member.initials}
-                </div>
+                <img
+                  src="/images/profile.png"
+                  alt={`Foto ${member.name}`}
+                  className="size-12 rounded-2xl object-cover shadow-sm"
+                />
                 <div>
                   <h2 className="text-base font-semibold text-foreground">
                     {member.name}

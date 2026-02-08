@@ -21,9 +21,14 @@ import {
 type PageShellProps = {
   title: string
   children?: React.ReactNode
+  firstPanelGradient?: boolean
 }
 
-export function PageShell({ title, children }: PageShellProps) {
+export function PageShell({
+  title,
+  children,
+  firstPanelGradient = true,
+}: PageShellProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -51,7 +56,11 @@ export function PageShell({ title, children }: PageShellProps) {
           </div>
         </header>
         <div className="flex flex-1 flex-col px-6 pb-10 pt-6 md:px-10">
-          <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+          <div
+            className={`mx-auto flex w-full max-w-5xl flex-col gap-6 ${
+              firstPanelGradient ? "page-shell-first-gradient" : ""
+            }`}
+          >
             {children ?? (
               <div className="flex min-h-[60vh] items-center justify-center rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground">
                 Konten {title} sedang disiapkan.
