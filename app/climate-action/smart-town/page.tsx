@@ -165,6 +165,7 @@ export default function SmartTownPage() {
     }, 0)
   }, [selectedActions])
   const remainingCoins = Math.max(0, totalCoins - selectedCost)
+  const showHouse1 = selectedActions.includes("hemat-energi")
   const impactPercent = React.useMemo(() => {
     return selectedActions.reduce((sum, item) => {
       const entry = checklistOptions.find((option) => option.id === item)
@@ -283,6 +284,13 @@ export default function SmartTownPage() {
           <div className="absolute inset-0 flex">
             <div className="relative flex w-full flex-col md:flex-row">
               <div className="absolute inset-0 bg-[url('/images/peta-map.png')] bg-contain bg-center bg-no-repeat" />
+              {showHouse1 ? (
+                <img
+                  src="/images/rumah1.png"
+                  alt="Rumah hemat energi"
+                  className="absolute left-[26%] top-[59%] z-10 h-[180px] w-[180px] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow"
+                />
+              ) : null}
               {isSidebarOpen ? (
                 <div className="relative z-10 flex h-full w-full max-w-md flex-col bg-black/75 p-6 text-white md:max-w-none md:basis-[38%]">
                   <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
@@ -397,6 +405,7 @@ export default function SmartTownPage() {
 
               <div className="relative flex-1 overflow-hidden">
                 <div className="absolute inset-0 bg-black/15" />
+
                 <button
                   type="button"
                   onClick={() => setIsSidebarOpen((prev) => !prev)}
