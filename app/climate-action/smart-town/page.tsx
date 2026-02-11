@@ -3,6 +3,20 @@
 import * as React from "react"
 import { PageShell } from "@/components/page-shell"
 import Link from "next/link"
+import {
+  busPlacement,
+  carbonCapturePlacement,
+  panganPeoplePlacements,
+  carbonTariffPlacements,
+  educationPlacement,
+  farmPlacements,
+  getIconSizeClass,
+  housePlacements,
+  nuclearPlacement,
+  solarPanelPlacements,
+  treePlacements,
+  windTurbinePlacements,
+} from "./icons"
 
 const storyPages = [
   {
@@ -166,6 +180,15 @@ export default function SmartTownPage() {
   }, [selectedActions])
   const remainingCoins = Math.max(0, totalCoins - selectedCost)
   const showHouse1 = selectedActions.includes("hemat-energi")
+  const showTrees = selectedActions.includes("penghijauan")
+  const showFarm = selectedActions.includes("pertanian")
+  const showPangan = selectedActions.includes("pangan")
+  const showBus = selectedActions.includes("transportasi")
+  const showCarbonTariff = selectedActions.includes("tarif-karbon")
+  const showCarbonCapture = selectedActions.includes("carbon-capture")
+  const showEducation = selectedActions.includes("edukasi")
+  const showNuclear = selectedActions.includes("nuklir")
+  const showRenewableEnergy = selectedActions.includes("energi-terbarukan")
   const impactPercent = React.useMemo(() => {
     return selectedActions.reduce((sum, item) => {
       const entry = checklistOptions.find((option) => option.id === item)
@@ -223,6 +246,95 @@ export default function SmartTownPage() {
     setPageIndex(6)
   }
 
+  const sidebarPanelClass = isFullscreen
+    ? "absolute inset-y-0 left-0 z-[10] flex h-full w-full max-w-[360px] flex-col bg-black/75 p-5 text-white"
+    : "absolute inset-y-0 left-0 z-[10] flex h-full w-full max-w-[260px] flex-col bg-black/75 p-3 text-white"
+  const sidebarTypographyClass = isFullscreen
+    ? "[&_h2]:text-2xl [&_p]:text-base [&_.sidebar-page]:text-sm [&_.sidebar-text]:text-base [&_.sidebar-nav]:text-base"
+    : "[&_h2]:text-xl [&_p]:text-sm [&_.sidebar-page]:text-xs [&_.sidebar-text]:text-sm [&_.sidebar-nav]:text-sm"
+
+  const sidebarContent = (
+    <>
+      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+        <p className="sidebar-page font-semibold uppercase tracking-[0.2em] text-white/70">
+          Halaman {pageIndex + 1} dari {storyPages.length}
+        </p>
+        <h2 className="font-semibold">{currentPage.title}</h2>
+        <div className="sidebar-text space-y-2 text-white/80">
+          {currentPage.body.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+          {currentPage.checklist ? (
+            <div
+              className="grid grid-cols-2 gap-2 pt-1.5"
+            >
+              {currentPage.checklist.map((item) => {
+                const checked = selectedActions.includes(item.id)
+                const disabled = !checked && remainingCoins < item.cost
+                const frameClass =
+                  checklistCardFrames[
+                    currentPage.checklist.indexOf(item) % checklistCardFrames.length
+                  ]
+                return (
+                  <label
+                    key={item.id}
+                    className={`block ${
+                      disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => handleToggleAction(item.id, item.cost)}
+                      disabled={disabled}
+                      className="sr-only"
+                    />
+                    <div
+                      className={`group relative aspect-square rounded-lg border-2 p-0.5 shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+                        checked ? "ring-2 ring-emerald-300" : ""
+                      } ${frameClass}`}
+                    >
+                      <div className="absolute inset-1 rounded-xl bg-gradient-to-br from-white/95 via-white/90 to-slate-100/80" />
+                      <div className="relative flex h-full flex-col rounded-lg border-2 border-slate-700/80 bg-white/90 p-1.5 text-slate-800 shadow-inner">
+                        <div className="flex items-center justify-between">
+                          <span className={`inline-flex items-center gap-1 rounded-full border border-slate-300/80 bg-white px-1.5 py-0.5 font-semibold text-slate-700 shadow-sm ${isFullscreen ? "text-xs" : "text-[10px]"}`}>
+                            {item.cost} koin
+                          </span>
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.preventDefault()
+                              setActiveInfoId(item.id)
+                            }}
+                            className={`flex items-center justify-center rounded-full border border-slate-500 bg-white font-bold text-slate-700 shadow-sm transition hover:bg-slate-100 ${isFullscreen ? "size-4 text-[10px]" : "size-3.5 text-[8px]"}`}
+                          >
+                            ?
+                          </button>
+                        </div>
+                        <span className={`mt-1 overflow-hidden font-semibold leading-snug text-slate-800 ${isFullscreen ? "max-h-[72px] text-xs" : "max-h-[56px] text-[10px]"}`}>
+                          {item.label}
+                        </span>
+                        <div className="mt-auto" />
+                      </div>
+                      <span className="pointer-events-none absolute bottom-1 right-1 block size-4 rounded-tl-full border-l-2 border-t-2 border-slate-600 bg-slate-100/80" />
+                      {checked ? (
+                        <span className="absolute inset-0 flex items-center justify-center">
+                          <span className="inline-flex size-9 items-center justify-center rounded-full bg-emerald-500 text-xl font-bold text-white shadow-md">
+                            ✓
+                          </span>
+                        </span>
+                      ) : null}
+                    </div>
+                  </label>
+                )
+              })}
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </>
+  )
+
   return (
     <PageShell title="Smart Town">
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
@@ -242,13 +354,6 @@ export default function SmartTownPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={handleFullscreen}
-              className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
-            >
-              {isFullscreen ? "Keluar Full Screen" : "Full Screen"}
-            </button>
             <Link
               href="/climate-action"
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
@@ -267,213 +372,290 @@ export default function SmartTownPage() {
 
       <div
         ref={containerRef}
-        className={`relative w-full overflow-hidden bg-[#f1ecdc] shadow-sm ${
-          isFullscreen ? "rounded-none border-0" : "rounded-2xl border"
+        className={`relative w-full bg-[#f1ecdc] shadow-sm ${
+          isFullscreen ? "overflow-hidden rounded-none border-0" : "overflow-hidden rounded-2xl border"
         }`}
+        style={
+          isFullscreen
+            ? { height: "100%" }
+            : { aspectRatio: "16 / 9", minHeight: "320px" }
+        }
       >
-        {isFullscreen ? (
-          <button
-            type="button"
-            onClick={handleFullscreen}
-            className="absolute right-4 top-4 z-10 rounded-full border border-white/40 bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:border-white"
-          >
-            Keluar Full Screen
-          </button>
-        ) : null}
-        <div className={`relative w-full ${isFullscreen ? "h-full" : "aspect-video"}`}>
-          <div className="absolute inset-0 flex">
-            <div className="relative flex w-full flex-col md:flex-row">
-              <div className="absolute inset-0 bg-[url('/images/peta-map.png')] bg-contain bg-center bg-no-repeat" />
-              {showHouse1 ? (
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Layer 1: Background map */}
+          <img
+            src="/images/peta-map.png"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+
+          {/* Layer 2: Dark overlay */}
+          <div className="absolute inset-0 z-[1] bg-black/15" />
+
+          {/* Layer 3: Map objects (images) */}
+          {showHouse1 ? (
+            <>
+              {housePlacements.map((placement, index) => (
                 <img
+                  key={`${placement.left}-${placement.top}-${index}`}
                   src="/images/rumah1.png"
                   alt="Rumah hemat energi"
-                  className="absolute left-[26%] top-[59%] z-10 h-[180px] w-[180px] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow"
+                  className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
                 />
-              ) : null}
-              {isSidebarOpen ? (
-                <div className="relative z-10 flex h-full w-full max-w-md flex-col bg-black/75 p-6 text-white md:max-w-none md:basis-[38%]">
-                  <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                      Halaman {pageIndex + 1} dari {storyPages.length}
-                    </p>
-                    <h2 className="text-xl font-semibold md:text-2xl">
-                      {currentPage.title}
-                    </h2>
-                    <div className="space-y-3 text-sm text-white/80">
-                      {currentPage.body.map((line) => (
-                        <p key={line}>{line}</p>
-                      ))}
-                    {currentPage.checklist ? (
-                      <div className="grid grid-cols-2 gap-3 pt-2">
-                        {currentPage.checklist.map((item) => {
-                          const checked = selectedActions.includes(item.id)
-                          const disabled = !checked && remainingCoins < item.cost
-                          const frameClass =
-                            checklistCardFrames[
-                              currentPage.checklist.indexOf(item) %
-                                checklistCardFrames.length
-                            ]
-                          return (
-                            <label
-                              key={item.id}
-                              className={`block ${
-                                disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
-                              }`}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => handleToggleAction(item.id, item.cost)}
-                                disabled={disabled}
-                                className="sr-only"
-                              />
-                              <div
-                                className={`group relative aspect-square rounded-2xl border-4 p-1.5 shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${
-                                  checked ? "ring-2 ring-emerald-300" : ""
-                                } ${frameClass}`}
-                              >
-                                <div className="absolute inset-1 rounded-xl bg-gradient-to-br from-white/95 via-white/90 to-slate-100/80" />
-                                <div className="relative flex h-full flex-col rounded-xl border-2 border-slate-700/80 bg-white/90 p-2 text-slate-800 shadow-inner">
-                                  <div className="flex items-center justify-between">
-                                    <span className="inline-flex items-center gap-1 rounded-full border border-slate-300/80 bg-white px-2 py-0.5 text-[10px] font-semibold text-slate-700 shadow-sm">
-                                      {item.cost} koin
-                                    </span>
-                                    <button
-                                      type="button"
-                                      onClick={(event) => {
-                                        event.preventDefault()
-                                        setActiveInfoId(item.id)
-                                      }}
-                                      className="flex size-5 items-center justify-center rounded-full border border-slate-500 bg-white text-[10px] font-bold text-slate-700 shadow-sm transition hover:bg-slate-100"
-                                    >
-                                      ?
-                                    </button>
-                                  </div>
-                                  <span className="mt-2 max-h-[48px] overflow-hidden text-[11px] font-semibold leading-snug text-slate-800">
-                                    {item.label}
-                                  </span>
-                                  <div className="mt-auto" />
-                                </div>
-                                <span className="pointer-events-none absolute bottom-1 right-1 block size-4 rounded-tl-full border-l-2 border-t-2 border-slate-600 bg-slate-100/80" />
-                                {checked ? (
-                                  <span className="absolute inset-0 flex items-center justify-center">
-                                    <span className="inline-flex size-9 items-center justify-center rounded-full bg-emerald-500 text-xl font-bold text-white shadow-md">
-                                      ✓
-                                    </span>
-                                  </span>
-                                ) : null}
-                              </div>
-                            </label>
-                          )
-                        })}
-                      </div>
-                      ) : null}
-                    </div>
-                  </div>
+              ))}
+            </>
+          ) : null}
+          {showTrees ? (
+            <>
+              {treePlacements.map((placement, index) => (
+                <img
+                  key={`${placement.left}-${placement.top}-${index}`}
+                  src="/images/pohon.png"
+                  alt="Pohon penghijauan"
+                  className={`absolute z-[6] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+            </>
+          ) : null}
+          {showFarm ? (
+            <>
+              {farmPlacements.map((placement, index) => (
+                <img
+                  key={`sawah-${placement.left}-${placement.top}-${index}`}
+                  src="/images/sawah.png"
+                  alt="Sawah pertanian berkelanjutan"
+                  className={`absolute z-[5] object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{
+                    left: placement.left,
+                    top: placement.top,
+                    transform: `translate(-50%, -50%) rotate(${placement.rotateDeg ?? 0}deg)`,
+                  }}
+                />
+              ))}
+            </>
+          ) : null}
+          {showCarbonCapture ? (
+            <img
+              src="/images/karbon.png"
+              alt="Teknologi penangkap dan penyimpan karbon"
+              className={`absolute z-[5] object-contain drop-shadow ${getIconSizeClass(
+                isFullscreen,
+                carbonCapturePlacement,
+              )}`}
+              style={{
+                left: carbonCapturePlacement.left,
+                top: carbonCapturePlacement.top,
+                transform: `translate(-50%, -50%) rotate(${carbonCapturePlacement.rotateDeg ?? 0}deg)`,
+              }}
+            />
+          ) : null}
+          {showEducation ? (
+            <img
+              src="/images/image.png"
+              alt="Edukasi darurat polusi karbon"
+              className={`absolute z-[7] object-contain drop-shadow ${getIconSizeClass(
+                isFullscreen,
+                educationPlacement,
+              )}`}
+              style={{
+                left: educationPlacement.left,
+                top: educationPlacement.top,
+                transform: `translate(-50%, -50%) rotate(${educationPlacement.rotateDeg ?? 0}deg)`,
+              }}
+            />
+          ) : null}
+          {showBus ? (
+            <img
+              src="/images/bis.png"
+              alt="Bus transportasi umum bersih"
+              className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                isFullscreen,
+                busPlacement,
+              )}`}
+              style={{ left: busPlacement.left, top: busPlacement.top }}
+            />
+          ) : null}
+          {showCarbonTariff ? (
+            <>
+              {carbonTariffPlacements.map((placement, index) => (
+                <img
+                  key={`${placement.left}-${placement.top}-${index}`}
+                  src="/images/uang.png"
+                  alt="Tarif karbon pada sektor industri"
+                  className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+            </>
+          ) : null}
+          {showPangan ? (
+            <>
+              {panganPeoplePlacements.map((placement, index) => (
+                <img
+                  key={`people-${placement.left}-${placement.top}-${index}`}
+                  src="/images/people.png"
+                  alt="Masyarakat belajar pengolahan pangan efisien"
+                  className={`absolute z-[8] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+            </>
+          ) : null}
+          {showNuclear ? (
+            <img
+              src="/images/nuklir.png"
+              alt="Pembangkit listrik nuklir"
+              className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                isFullscreen,
+                nuclearPlacement,
+              )}`}
+              style={{ left: nuclearPlacement.left, top: nuclearPlacement.top }}
+            />
+          ) : null}
+          {showRenewableEnergy ? (
+            <>
+              {windTurbinePlacements.map((placement, index) => (
+                <img
+                  key={`angin-${placement.left}-${placement.top}-${index}`}
+                  src="/images/angin.png"
+                  alt="Turbin angin"
+                  className={`absolute z-[3] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+              {solarPanelPlacements.map((placement, index) => (
+                <img
+                  key={`panel-${placement.left}-${placement.top}-${index}`}
+                  src="/images/panel.png"
+                  alt="Panel surya"
+                  className={`absolute z-[4] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+            </>
+          ) : null}
 
-                  <div className="mt-6 flex items-center justify-between text-sm text-cyan-300">
-                    <button
-                      type="button"
-                      onClick={handlePrev}
-                      disabled={pageIndex === 0}
-                      className="flex items-center gap-2 font-semibold transition hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      <span className="text-lg">◀</span> Back
-                    </button>
-                    {isChecklistPage ? (
-                      <button
-                        type="button"
-                        onClick={handleSubmit}
-                        className="flex items-center gap-2 font-semibold transition hover:text-cyan-200"
-                      >
-                        Submit <span className="text-lg">▶</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleNext}
-                        disabled={isLastPage}
-                        className="flex items-center gap-2 font-semibold transition hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        Next <span className="text-lg">▶</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ) : null}
+          {/* Layer 4: Sidebar panel — fixed position, won't shift */}
+          {isSidebarOpen ? (
+            <div className={`${sidebarPanelClass} ${sidebarTypographyClass}`}>
+              {sidebarContent}
+            </div>
+          ) : null}
 
-              <div className="relative flex-1 overflow-hidden">
-                <div className="absolute inset-0 bg-black/15" />
+          {/* Layer 5: HUD (coins, results) */}
+          <div className="absolute right-6 top-6 z-[15] flex items-center gap-3">
+            <span className="text-5xl font-bold text-yellow-300 drop-shadow">
+              {remainingCoins}
+            </span>
+            <div className="flex size-12 items-center justify-center rounded-full bg-yellow-300 text-xl font-bold text-yellow-800 shadow">
+              $
+            </div>
+          </div>
 
-                <button
-                  type="button"
-                  onClick={() => setIsSidebarOpen((prev) => !prev)}
-                  className="absolute left-4 top-4 z-20 inline-flex items-center gap-2 rounded-full border border-white/35 bg-black/40 px-3 py-2 text-xs font-semibold text-white shadow backdrop-blur-sm transition hover:border-white"
-                >
-                  <img
-                    src="/images/build.png"
-                    alt=""
-                    aria-hidden="true"
-                    className="h-5 w-5 object-contain"
+          {pageIndex === 6 ? (
+            <div className="absolute right-6 top-20 z-[15]">
+              <div className="flex flex-col items-center gap-3 rounded-xl bg-white/90 px-4 py-4 text-center shadow-lg">
+                <div className="flex h-28 w-10 flex-col overflow-hidden rounded-full border border-emerald-200 bg-white">
+                  <div
+                    className="mt-auto w-full bg-emerald-500"
+                    style={{
+                      height: `${Math.min(100, submitted ? impactPercent : 0)}%`,
+                    }}
                   />
-                  {isSidebarOpen ? "Tutup Sidebar" : "Buka Sidebar"}
-                </button>
-
-                <div className="absolute right-6 top-6 flex items-center gap-3">
-                  <span className="text-3xl font-bold text-yellow-300 drop-shadow">
-                    {remainingCoins}
-                  </span>
-                  <div className="flex size-10 items-center justify-center rounded-full bg-yellow-300 text-lg font-bold text-yellow-800 shadow">
-                    $
-                  </div>
                 </div>
-
-                {pageIndex === 6 ? (
-                  <div className="absolute right-6 top-20">
-                    <div className="flex flex-col items-center gap-3 rounded-xl bg-white/90 px-4 py-4 text-center shadow-lg">
-                      <div className="flex h-28 w-10 flex-col overflow-hidden rounded-full border border-emerald-200 bg-white">
-                        <div
-                          className="mt-auto w-full bg-emerald-500"
-                          style={{
-                            height: `${Math.min(100, submitted ? impactPercent : 0)}%`,
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                          Hasil
-                        </p>
-                        <p className="mt-1 text-lg font-semibold text-foreground">
-                          {submitted ? impactPercent : 0}%
-                        </p>
-                        <p className="mt-1 text-[11px] text-muted-foreground">
-                          Penurunan emisi
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
-
-                <div className="absolute bottom-6 right-6 flex items-center gap-3 text-white/90">
-                  <button
-                    type="button"
-                    className="flex size-10 items-center justify-center rounded-xl bg-white/20 text-xl shadow"
-                  >
-                    ♪
-                  </button>
-                  <button
-                    type="button"
-                    className="flex size-10 items-center justify-center rounded-xl bg-white/20 text-xl shadow"
-                  >
-                    🔇
-                  </button>
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                    Hasil
+                  </p>
+                  <p className="mt-1 text-lg font-semibold text-foreground">
+                    {submitted ? impactPercent : 0}%
+                  </p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Penurunan emisi
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
+          ) : null}
+
+          {/* Layer 6: Bottom nav buttons */}
+          <div className="absolute bottom-6 right-6 z-[15] flex items-center gap-3 text-white/90">
+              <button
+                type="button"
+                onClick={() => setIsSidebarOpen((prev) => !prev)}
+                className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100"
+              >
+                {isSidebarOpen ? "Tutup Panel" : "Buka Panel"}
+              </button>
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={pageIndex === 0}
+                className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                ◀ Back
+              </button>
+              {isChecklistPage ? (
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100"
+                >
+                  Submit ▶
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  disabled={isLastPage}
+                  className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Next ▶
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleFullscreen}
+                className={`inline-flex size-10 items-center justify-center rounded-xl shadow transition ${
+                  isFullscreen
+                    ? "bg-yellow-300 text-yellow-900 hover:bg-yellow-200"
+                    : "bg-white text-slate-900 hover:bg-slate-100"
+                }`}
+              >
+                <img
+                  src="/images/full.png"
+                  alt=""
+                  aria-hidden="true"
+                  className="h-5 w-5 object-contain"
+                />
+              </button>
+            </div>
           {activeInfoId ? (
-            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 p-4">
+            <div className="absolute inset-0 z-[30] flex items-center justify-center bg-black/50 p-4">
               <div className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl">
                 {(() => {
                   const info = checklistOptions.find(
@@ -502,7 +684,7 @@ export default function SmartTownPage() {
             </div>
           ) : null}
           {showSubmitConfirm ? (
-            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 p-4">
+            <div className="absolute inset-0 z-[30] flex items-center justify-center bg-black/50 p-4">
               <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl">
                 <h3 className="text-lg font-semibold text-foreground">
                   Konfirmasi Pilihan
