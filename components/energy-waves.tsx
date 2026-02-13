@@ -6,257 +6,399 @@ type EnergyWavesProps = {
   isPlaying: boolean
   groundPx?: number
   ghgLevel?: number
+  isFullscreen?: boolean
+}
+
+type RayPhase =
+  | "sunlight-down"
+  | "infrared-up"
+  | "erh-down"
+  | "escape-up"
+  | "fading"    // head stopped, tail still draining
+  | "done"
+
+type Pt = { x: number; y: number }
+
+type Ray = {
+  points: Pt[]
+  headX: number
+  headY: number
+  vx: number
+  vy: number
+  phase: RayPhase
+  speed: number
+  sunColor: string
+  irColor: string
+  erhColor: string
+  bounceCount: number
+  maxBounces: number
+  trailLen: number      // max visible trail length (in points)
+  opacity: number
 }
 
 export default function EnergyWaves({
   isPlaying,
   groundPx = 190,
   ghgLevel = 50,
+  isFullscreen = false,
 }: EnergyWavesProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const rafRef = useRef<number | null>(null)
+  const rafRef = useRef<number>(0)
   const ghgRef = useRef(ghgLevel)
+  const playRef = useRef(isPlaying)
+  const fullscreenRef = useRef(isFullscreen)
 
   useEffect(() => {
     ghgRef.current = ghgLevel
   }, [ghgLevel])
+  useEffect(() => {
+    playRef.current = isPlaying
+  }, [isPlaying])
+  useEffect(() => {
+    fullscreenRef.current = isFullscreen
+  }, [isFullscreen])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
+    const ctx = canvas.getContext("2d")!
+    if (!ctx) return
+    const parent = canvas.parentElement as HTMLElement | null
+    if (!parent) return
 
-    const ensurePaper = () => {
-      const win = window as any
-      if (win.paper) return Promise.resolve(win.paper)
-      if (win.__paperLoadPromise) return win.__paperLoadPromise
-      win.__paperLoadPromise = new Promise((resolve, reject) => {
-        const script = document.createElement("script")
-        script.src = "/libs/paper-full.min.js"
-        script.async = true
-        script.onload = () => resolve(win.paper)
-        script.onerror = () => reject(new Error("Paper.js failed to load"))
-        document.head.appendChild(script)
-      })
-      return win.__paperLoadPromise
-    }
+    let W = 0
+    let H = 0
 
-    let cancelled = false
-    let cleanup: (() => void) | undefined
-
-    const init = (paper: any) => {
-      if (cancelled) return
-
-      // Setup sekali
-      paper.setup(canvas)
-      const view = paper.view
-
-      const parent = canvas.parentElement as HTMLElement | null
-      if (!parent) return
-
-    // Resize yang benar: pakai devicePixelRatio + ukuran parent real
     const resize = () => {
       const rect = parent.getBoundingClientRect()
-      const cssW = Math.max(1, Math.round(rect.width))
-      const cssH = Math.max(1, Math.round(rect.height))
-
-      const dpr = Math.max(1, window.devicePixelRatio || 1)
-
-      // ukuran internal canvas (px) = css * dpr
-      canvas.width = Math.round(cssW * dpr)
-      canvas.height = Math.round(cssH * dpr)
-
-      // ukuran tampil canvas (css)
-      canvas.style.width = `${cssW}px`
-      canvas.style.height = `${cssH}px`
-
-      // viewSize pakai CSS size (koordinat Paper enak)
-      view.viewSize = new paper.Size(cssW, cssH)
-
-      // scale agar stroke tetap tajam di retina
-      view.zoom = dpr
+      const dpr = window.devicePixelRatio || 1
+      W = Math.round(rect.width)
+      H = Math.round(rect.height)
+      canvas.width = Math.round(W * dpr)
+      canvas.height = Math.round(H * dpr)
+      canvas.style.width = `${W}px`
+      canvas.style.height = `${H}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
     resize()
+    const ro = new ResizeObserver(() => resize())
+    ro.observe(parent)
 
-    const skyBottom = () => Math.max(0, view.size.height - groundPx)
-    const W = () => view.size.width
-    const H = () => view.size.height
+    const groundY = () => Math.max(60, H - groundPx)
+    const ghgLayerY = () => H * 0.22
 
-    // Bersihin kalau ada sisa
-    paper.project.clear()
+    const SUN_COLORS = ["#f5a623", "#f7c948", "#e8951a", "#dba12a"]
+    const IR_COLORS = ["#d7332f", "#e8563a", "#c02020", "#d94545"]
+    const ERH_COLORS = ["#e85a20", "#d94545", "#c02020"]
 
-    type Wave = { update(dt: number): void; remove(): void }
-    const waves: Wave[] = []
+    function pick<T>(arr: T[]): T {
+      return arr[Math.floor(Math.random() * arr.length)]
+    }
 
-    function createWave(
-      xRatio: number,
-      speed: number,
-      color: string,
-      direction: "up" | "down",
-      kind: "sunlight" | "infrared"
-    ): Wave {
-      const path = new paper.Path()
-      path.strokeColor = new paper.Color(color)
-      path.strokeWidth = 4
-      path.strokeCap = "round"
-      path.opacity = 0.95
+    function normalize(x: number, y: number, spd: number): [number, number] {
+      const len = Math.sqrt(x * x + y * y) || 1
+      return [(x / len) * spd, (y / len) * spd]
+    }
 
-      const pathNew = kind === "infrared" ? new paper.Path() : null
-      const clipRect = kind === "infrared" ? new paper.Path.Rectangle(new paper.Rectangle(0, 0, 1, 1)) : null
-      const clipGroup =
-        kind === "infrared" && pathNew && clipRect
-          ? new paper.Group([clipRect, pathNew])
-          : null
+    // ── Config ──
+    const RAYS_PER_BATCH = 6
+    const ANGLE = (25 * Math.PI) / 180
+    const BASE_SPEED = 130
 
-      if (pathNew && clipRect) {
-        pathNew.strokeColor = new paper.Color(color)
-        pathNew.strokeWidth = 4
-        pathNew.strokeCap = "round"
-        pathNew.opacity = 0.95
-        clipRect.clipMask = true
-      }
+    // Trail length: proportional to screen height
+    // Sunlight trail is longer, bounce trails are shorter
+    function sunTrailLen() {
+      return Math.round(H * 0.55)
+    }
+    function bounceTrailLen() {
+      return Math.round(H * 0.30)
+    }
 
-      const state = {
-        phase: Math.random() * Math.PI * 2,
-        offsetY:
-          direction === "up"
-            ? -H() * (1.2 + Math.random() * 0.8)
-            : H() * (1.2 + Math.random() * 0.8),
-        transitionY: 0,
-        targetWidth: 4,
-      }
+    // Interval between batches: 15s fullscreen, 10s normal
+    function getBatchInterval() {
+      return fullscreenRef.current ? 15 : 10
+    }
 
-      const rebuild = () => {
-        path.removeSegments()
-        if (pathNew) pathNew.removeSegments()
+    const allRays: Ray[] = []
+    let batchTimer = 0
 
-        // amplitude & wavelength dibuat RELATIF biar selalu keliatan “wavy”
-        const amp = Math.max(14, W() * 0.018)          // ~18px di 1000px width
-        const wavelength = Math.max(1, H() / 100)
-     // makin tinggi layar, makin “pas”
+    // Tail drain speed: how many points to remove per second
+    const DRAIN_SPEED = 200
 
-        const step = 8
-        const bottom = skyBottom()
+    function createBatch() {
+      const sunColor = pick(SUN_COLORS)
+      const irColor = pick(IR_COLORS)
+      const erhColor = pick(ERH_COLORS)
 
-        for (let y = 0; y <= bottom; y += step) {
-          const yy = y + state.offsetY
-          const xx = W() * xRatio + Math.sin(yy / wavelength + state.phase) * amp
-          const point = new paper.Point(xx, y)
-          path.add(point)
-          if (pathNew) pathNew.add(point)
-        }
+      for (let i = 0; i < RAYS_PER_BATCH; i++) {
+        const originX = W * 0.02 + i * W * 0.025
+        const originY = -5 - i * 12
 
-        path.smooth({ type: "continuous" })
-        if (pathNew) pathNew.smooth({ type: "continuous" })
-      }
+        const speed = BASE_SPEED
+        const vx = Math.sin(ANGLE) * speed
+        const vy = Math.cos(ANGLE) * speed
 
-      rebuild()
-
-      return {
-        update(dt: number) {
-          if (kind === "infrared" && pathNew && clipRect) {
-            const level = Math.max(0, Math.min(100, ghgRef.current))
-            const maxWidth = 6
-            const minWidth = 1.5
-            const t = 1 - level / 100
-            const desiredWidth = minWidth + (maxWidth - minWidth) * t
-
-            if (Math.abs(desiredWidth - state.targetWidth) > 0.05) {
-              // mulai transisi dari kondisi terakhir ke target baru
-              path.strokeWidth = pathNew.strokeWidth
-              state.targetWidth = desiredWidth
-              pathNew.strokeWidth = desiredWidth
-              state.transitionY = 0
-            }
-
-            const sweepSpeed = 280 // px/s
-            state.transitionY = Math.min(H(), state.transitionY + sweepSpeed * dt)
-            const top = Math.max(0, H() - state.transitionY)
-            clipRect.bounds = new paper.Rectangle(0, top, W(), state.transitionY)
-          }
-
-          const dir = direction === "up" ? -1 : 1
-          state.offsetY += dir * speed * dt
-          state.phase += dt * 1.2
-
-          if (direction === "up" && state.offsetY > H() * 0.9) {
-            state.offsetY = -H() * (1.2 + Math.random() * 0.8)
-            state.phase = Math.random() * Math.PI * 2
-          }
-
-          if (direction === "down" && state.offsetY < -H() * 0.9) {
-            state.offsetY = H() * (1.2 + Math.random() * 0.8)
-            state.phase = Math.random() * Math.PI * 2
-          }
-
-          rebuild()
-        },
-        remove() {
-          path.remove()
-          if (pathNew) pathNew.remove()
-          if (clipRect) clipRect.remove()
-          if (clipGroup) clipGroup.remove()
-        },
+        allRays.push({
+          points: [{ x: originX, y: originY }],
+          headX: originX,
+          headY: originY,
+          vx,
+          vy,
+          phase: "sunlight-down",
+          speed,
+          sunColor,
+          irColor,
+          erhColor,
+          bounceCount: 0,
+          maxBounces: 2 + Math.floor(Math.random() * 2),
+          trailLen: sunTrailLen(),
+          opacity: 0.85,
+        })
       }
     }
 
-    // Kalau isPlaying false, kita stop animasi tapi tetap bisa resize
-    let running = isPlaying
+    createBatch()
 
-    waves.push(createWave(0.05, 20, "#d8db47", "up", "sunlight"))
-    waves.push(createWave(0.50, 25, "#d8db47", "up", "sunlight"))
-    waves.push(createWave(0.95, 30, "#d8db47", "up", "sunlight"))
-    waves.push(createWave(0.2, 18, "#d7332f", "down", "infrared"))
-    waves.push(createWave(0.7, 22, "#d7332f", "down", "infrared"))
+    function getColor(ray: Ray): string {
+      switch (ray.phase) {
+        case "sunlight-down":
+          return ray.sunColor
+        case "infrared-up":
+          return ray.irColor
+        case "erh-down":
+          return ray.erhColor
+        case "escape-up":
+        case "fading":
+          return ray.irColor
+        default:
+          return ray.sunColor
+      }
+    }
 
+    function updateRay(ray: Ray, dt: number) {
+      if (ray.phase === "done") return
+
+      // === FADING phase: head stopped, drain tail ===
+      if (ray.phase === "fading") {
+        const drain = Math.max(1, Math.round(DRAIN_SPEED * dt))
+        for (let d = 0; d < drain && ray.points.length > 0; d++) {
+          ray.points.shift()
+        }
+        if (ray.points.length === 0) {
+          ray.phase = "done"
+        }
+        return
+      }
+
+      const gy = groundY()
+      const ghgY = ghgLayerY()
+      const level = Math.max(0, Math.min(100, ghgRef.current))
+      const bounceChance = level / 100
+
+      // Move head
+      ray.headX += ray.vx * dt
+      ray.headY += ray.vy * dt
+      ray.points.push({ x: ray.headX, y: ray.headY })
+
+      // Trim tail to trail length
+      while (ray.points.length > ray.trailLen) {
+        ray.points.shift()
+      }
+
+      switch (ray.phase) {
+        case "sunlight-down": {
+          if (ray.headY >= gy) {
+            ray.headY = gy
+            ray.points.push({ x: ray.headX, y: ray.headY })
+            // Mirror reflection
+            const [nvx, nvy] = normalize(ray.vx, -Math.abs(ray.vy), ray.speed)
+            ray.vx = nvx
+            ray.vy = nvy
+            ray.phase = "infrared-up"
+            // Shorter trail for bounces
+            ray.trailLen = bounceTrailLen()
+          }
+          break
+        }
+        case "infrared-up": {
+          if (ray.headY <= ghgY) {
+            ray.headY = ghgY
+            ray.points.push({ x: ray.headX, y: ray.headY })
+            if (Math.random() < bounceChance) {
+              const [nvx, nvy] = normalize(ray.vx, Math.abs(ray.vy), ray.speed)
+              ray.vx = nvx
+              ray.vy = nvy
+              ray.phase = "erh-down"
+            } else {
+              ray.phase = "escape-up"
+            }
+          }
+          break
+        }
+        case "erh-down": {
+          if (ray.headY >= gy) {
+            ray.headY = gy
+            ray.points.push({ x: ray.headX, y: ray.headY })
+            ray.bounceCount++
+            if (ray.bounceCount >= ray.maxBounces) {
+              // Stop head, start fading
+              ray.phase = "fading"
+            } else {
+              const [nvx, nvy] = normalize(ray.vx, -Math.abs(ray.vy), ray.speed)
+              ray.vx = nvx
+              ray.vy = nvy
+              ray.phase = "infrared-up"
+            }
+          }
+          break
+        }
+        case "escape-up": {
+          if (ray.headY < -50) {
+            // Stop head, start fading tail out
+            ray.phase = "fading"
+          }
+          break
+        }
+      }
+    }
+
+    function drawRay(ray: Ray) {
+      if (ray.points.length < 2) return
+
+      // Split into colored segments based on direction changes
+      let segStart = 0
+      let prevDir: "down" | "up" =
+        ray.points[1].y >= ray.points[0].y ? "down" : "up"
+      let bCount = 0
+
+      const segments: { start: number; end: number; color: string }[] = []
+
+      for (let i = 1; i < ray.points.length; i++) {
+        const dy = ray.points[i].y - ray.points[i - 1].y
+        const curDir: "down" | "up" = dy >= 0 ? "down" : "up"
+
+        if (curDir !== prevDir) {
+          const color =
+            prevDir === "down" && bCount === 0
+              ? ray.sunColor
+              : prevDir === "up"
+                ? ray.irColor
+                : ray.erhColor
+
+          segments.push({ start: segStart, end: i, color })
+          segStart = i - 1
+          if (prevDir === "down") bCount++
+          prevDir = curDir
+        }
+      }
+
+      const finalColor =
+        prevDir === "down" && bCount === 0
+          ? ray.sunColor
+          : prevDir === "up"
+            ? ray.irColor
+            : ray.erhColor
+      segments.push({ start: segStart, end: ray.points.length, color: finalColor })
+
+      for (const seg of segments) {
+        if (seg.end - seg.start < 2) continue
+        ctx.save()
+        ctx.globalAlpha = ray.opacity
+        ctx.strokeStyle = seg.color
+        ctx.lineWidth = 3.5
+        ctx.lineCap = "round"
+        ctx.lineJoin = "round"
+        ctx.beginPath()
+        ctx.moveTo(ray.points[seg.start].x, ray.points[seg.start].y)
+        for (let i = seg.start + 1; i < seg.end; i++) {
+          ctx.lineTo(ray.points[i].x, ray.points[i].y)
+        }
+        ctx.stroke()
+        ctx.restore()
+      }
+
+      // Arrowhead
+      if (ray.phase !== "done" && ray.phase !== "fading" && ray.points.length > 3) {
+        const last = ray.points[ray.points.length - 1]
+        const prev = ray.points[Math.max(0, ray.points.length - 6)]
+        const angle = Math.atan2(last.y - prev.y, last.x - prev.x)
+        const color = getColor(ray)
+
+        ctx.save()
+        ctx.globalAlpha = ray.opacity
+        ctx.translate(last.x, last.y)
+        ctx.rotate(angle)
+        ctx.beginPath()
+        ctx.moveTo(12, 0)
+        ctx.lineTo(-6, -7)
+        ctx.lineTo(-6, 7)
+        ctx.closePath()
+        ctx.fillStyle = color
+        ctx.fill()
+        ctx.restore()
+      }
+    }
+
+    function drawGHGLayer() {
+      const level = Math.max(0, Math.min(100, ghgRef.current))
+      if (level <= 0) return
+      const ghgY = ghgLayerY()
+      const layerH = 6 + (level / 100) * 35
+
+      ctx.save()
+      const grad = ctx.createLinearGradient(0, ghgY - layerH / 2, 0, ghgY + layerH / 2)
+      const alpha = 0.06 + (level / 100) * 0.22
+      grad.addColorStop(0, "rgba(100,200,235,0)")
+      grad.addColorStop(0.3, `rgba(140,210,240,${alpha})`)
+      grad.addColorStop(0.5, `rgba(160,220,250,${alpha * 1.3})`)
+      grad.addColorStop(0.7, `rgba(140,210,240,${alpha})`)
+      grad.addColorStop(1, "rgba(100,200,235,0)")
+      ctx.fillStyle = grad
+      ctx.fillRect(0, ghgY - layerH / 2, W, layerH)
+      ctx.restore()
+    }
 
     let last = performance.now()
 
     const tick = (now: number) => {
-      const dt = Math.min(0.033, (now - last) / 1000)
+      const dt = Math.min(0.05, (now - last) / 1000)
       last = now
+      ctx.clearRect(0, 0, W, H)
 
-      if (running) {
-        waves.forEach((w) => w.update(dt))
-        view.draw()
+      if (playRef.current) {
+        // Spawn new batch periodically (multiple batches can coexist)
+        batchTimer += dt
+        if (batchTimer >= getBatchInterval()) {
+          batchTimer = 0
+          createBatch()
+        }
+
+        // Update all rays
+        for (const r of allRays) updateRay(r, dt)
+
+        // Remove fully done rays (trail drained)
+        for (let i = allRays.length - 1; i >= 0; i--) {
+          if (allRays[i].phase === "done") {
+            allRays.splice(i, 1)
+          }
+        }
       }
+
+      drawGHGLayer()
+      for (const r of allRays) drawRay(r)
 
       rafRef.current = requestAnimationFrame(tick)
     }
 
     rafRef.current = requestAnimationFrame(tick)
 
-    // 🔥 Ini kunci: pantau ukuran parent berubah (flex, fullscreen, dll)
-    const ro = new ResizeObserver(() => resize())
-    ro.observe(parent)
-
-    // update running kalau prop berubah (tanpa recreate semuanya)
-    running = isPlaying
-
-      return () => {
-      ro.disconnect()
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      waves.forEach((w) => w.remove())
-      paper.project.clear()
-      view.zoom = 1
-      }
-    }
-
-    ensurePaper()
-      .then((paper: any) => {
-        cleanup = init(paper)
-      })
-      .catch(() => {
-        if (!cancelled) {
-          console.error("Paper.js belum ke-load")
-        }
-      })
-
     return () => {
-      cancelled = true
-      if (cleanup) cleanup()
+      ro.disconnect()
+      cancelAnimationFrame(rafRef.current)
+      allRays.length = 0
     }
-  }, [isPlaying, groundPx])
+  }, [groundPx])
 
   return (
     <canvas

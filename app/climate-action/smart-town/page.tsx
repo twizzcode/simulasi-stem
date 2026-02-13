@@ -5,17 +5,11 @@ import { PageShell } from "@/components/page-shell"
 import Link from "next/link"
 import {
   busPlacement,
-  carbonCapturePlacement,
-  panganPeoplePlacements,
   carbonTariffPlacements,
-  educationPlacement,
-  farmPlacements,
   getIconSizeClass,
   housePlacements,
   nuclearPlacement,
-  solarPanelPlacements,
   treePlacements,
-  windTurbinePlacements,
 } from "./icons"
 
 const storyPages = [
@@ -181,14 +175,9 @@ export default function SmartTownPage() {
   const remainingCoins = Math.max(0, totalCoins - selectedCost)
   const showHouse1 = selectedActions.includes("hemat-energi")
   const showTrees = selectedActions.includes("penghijauan")
-  const showFarm = selectedActions.includes("pertanian")
-  const showPangan = selectedActions.includes("pangan")
   const showBus = selectedActions.includes("transportasi")
   const showCarbonTariff = selectedActions.includes("tarif-karbon")
-  const showCarbonCapture = selectedActions.includes("carbon-capture")
-  const showEducation = selectedActions.includes("edukasi")
   const showNuclear = selectedActions.includes("nuklir")
-  const showRenewableEnergy = selectedActions.includes("energi-terbarukan")
   const impactPercent = React.useMemo(() => {
     return selectedActions.reduce((sum, item) => {
       const entry = checklistOptions.find((option) => option.id === item)
@@ -417,7 +406,7 @@ export default function SmartTownPage() {
                   key={`${placement.left}-${placement.top}-${index}`}
                   src="/images/pohon.png"
                   alt="Pohon penghijauan"
-                  className={`absolute z-[6] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                  className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
                   )}`}
@@ -425,56 +414,6 @@ export default function SmartTownPage() {
                 />
               ))}
             </>
-          ) : null}
-          {showFarm ? (
-            <>
-              {farmPlacements.map((placement, index) => (
-                <img
-                  key={`sawah-${placement.left}-${placement.top}-${index}`}
-                  src="/images/sawah.png"
-                  alt="Sawah pertanian berkelanjutan"
-                  className={`absolute z-[5] object-contain drop-shadow ${getIconSizeClass(
-                    isFullscreen,
-                    placement,
-                  )}`}
-                  style={{
-                    left: placement.left,
-                    top: placement.top,
-                    transform: `translate(-50%, -50%) rotate(${placement.rotateDeg ?? 0}deg)`,
-                  }}
-                />
-              ))}
-            </>
-          ) : null}
-          {showCarbonCapture ? (
-            <img
-              src="/images/karbon.png"
-              alt="Teknologi penangkap dan penyimpan karbon"
-              className={`absolute z-[5] object-contain drop-shadow ${getIconSizeClass(
-                isFullscreen,
-                carbonCapturePlacement,
-              )}`}
-              style={{
-                left: carbonCapturePlacement.left,
-                top: carbonCapturePlacement.top,
-                transform: `translate(-50%, -50%) rotate(${carbonCapturePlacement.rotateDeg ?? 0}deg)`,
-              }}
-            />
-          ) : null}
-          {showEducation ? (
-            <img
-              src="/images/image.png"
-              alt="Edukasi darurat polusi karbon"
-              className={`absolute z-[7] object-contain drop-shadow ${getIconSizeClass(
-                isFullscreen,
-                educationPlacement,
-              )}`}
-              style={{
-                left: educationPlacement.left,
-                top: educationPlacement.top,
-                transform: `translate(-50%, -50%) rotate(${educationPlacement.rotateDeg ?? 0}deg)`,
-              }}
-            />
           ) : null}
           {showBus ? (
             <img
@@ -503,22 +442,6 @@ export default function SmartTownPage() {
               ))}
             </>
           ) : null}
-          {showPangan ? (
-            <>
-              {panganPeoplePlacements.map((placement, index) => (
-                <img
-                  key={`people-${placement.left}-${placement.top}-${index}`}
-                  src="/images/people.png"
-                  alt="Masyarakat belajar pengolahan pangan efisien"
-                  className={`absolute z-[8] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
-                    isFullscreen,
-                    placement,
-                  )}`}
-                  style={{ left: placement.left, top: placement.top }}
-                />
-              ))}
-            </>
-          ) : null}
           {showNuclear ? (
             <img
               src="/images/nuklir.png"
@@ -529,34 +452,6 @@ export default function SmartTownPage() {
               )}`}
               style={{ left: nuclearPlacement.left, top: nuclearPlacement.top }}
             />
-          ) : null}
-          {showRenewableEnergy ? (
-            <>
-              {windTurbinePlacements.map((placement, index) => (
-                <img
-                  key={`angin-${placement.left}-${placement.top}-${index}`}
-                  src="/images/angin.png"
-                  alt="Turbin angin"
-                  className={`absolute z-[3] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
-                    isFullscreen,
-                    placement,
-                  )}`}
-                  style={{ left: placement.left, top: placement.top }}
-                />
-              ))}
-              {solarPanelPlacements.map((placement, index) => (
-                <img
-                  key={`panel-${placement.left}-${placement.top}-${index}`}
-                  src="/images/panel.png"
-                  alt="Panel surya"
-                  className={`absolute z-[4] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
-                    isFullscreen,
-                    placement,
-                  )}`}
-                  style={{ left: placement.left, top: placement.top }}
-                />
-              ))}
-            </>
           ) : null}
 
           {/* Layer 4: Sidebar panel — fixed position, won't shift */}

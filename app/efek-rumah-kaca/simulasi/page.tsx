@@ -13,7 +13,6 @@ import { Calendar, Pause, Play, SlidersVertical } from "lucide-react"
 
 import { PageShell } from "@/components/page-shell"
 import { Slider } from "@/components/ui/slider"
-import Script from "next/script"
 
 export default function EfekRumahKacaSimulasiPage() {
   const containerRef = React.useRef<HTMLDivElement | null>(null)
@@ -25,11 +24,19 @@ export default function EfekRumahKacaSimulasiPage() {
     "1990" | "2025" | "2050"
   >("2025")
   const [isPlaying, setIsPlaying] = React.useState(false)
+  const [showIntroModal, setShowIntroModal] = React.useState(true)
   const yearLevels: Record<"1990" | "2025" | "2050", number> = {
     "1990": 25,
     "2025": 60,
     "2050": 85,
   }
+
+  // Sync ghgLevel with year when in calendar mode
+  React.useEffect(() => {
+    if (ghgMode === "calendar") {
+      setGhgLevel(yearLevels[yearSelected])
+    }
+  }, [ghgMode, yearSelected])
 
   React.useEffect(() => {
     const handleChange = () => {
@@ -53,7 +60,6 @@ export default function EfekRumahKacaSimulasiPage() {
 
   return (
     <PageShell title="Simulasi Efek Rumah Kaca">
-      <Script src="/libs/paper-full.min.js" strategy="beforeInteractive" />
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -91,6 +97,32 @@ export default function EfekRumahKacaSimulasiPage() {
           isFullscreen ? "rounded-none border-0" : "rounded-2xl border"
         }`}
       >
+        {showIntroModal ? (
+          <div className="absolute inset-0 z-[30] flex items-center justify-center bg-black/55 p-4">
+            <div className="w-full max-w-2xl rounded-2xl border bg-white p-6 shadow-xl md:p-7">
+              <h2 className="text-xl font-semibold text-foreground md:text-2xl">
+                Pengantar Simulasi
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
+                Efek rumah kaca berkaitan dengan proses alam yang membuat panas
+                Matahari terperangkap di atmosfer Bumi sehingga suhu permukaan
+                meningkat. Aktivitas manusia menambah gas rumah kaca dan
+                memperkuat proses ini hingga memicu pemanasan global. Konsep ini
+                dapat dipahami melalui ilustrasi perbedaan kondisi Bumi pada masa
+                lalu, masa kini, dan masa depan.
+              </p>
+              <div className="mt-5 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowIntroModal(false)}
+                  className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90 md:text-sm"
+                >
+                  Mulai Simulasi
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
         {isFullscreen ? (
           <button
             type="button"
@@ -122,7 +154,7 @@ export default function EfekRumahKacaSimulasiPage() {
                 alt="Simulasi efek rumah kaca"
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <EnergyWaves isPlaying={isPlaying} groundPx={190} ghgLevel={ghgLevel} />
+              <EnergyWaves isPlaying={isPlaying} groundPx={isFullscreen ? 190 : 100} ghgLevel={ghgLevel} isFullscreen={isFullscreen} />
             </div>
 
             <div className="flex h-full w-full flex-col gap-3 overflow-auto md:basis-1/4 md:flex-none">
@@ -224,27 +256,6 @@ export default function EfekRumahKacaSimulasiPage() {
                   </button>
                 </div>
               </div>
-
-              {ghgMode === "slider" ? (
-                <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
-                  <div className="flex items-center justify-between text-xs font-semibold">
-                    <span>Cloud</span>
-                    <span>{showCloud ? "Aktif" : "Nonaktif"}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowCloud((prev) => !prev)}
-                    className="mt-3 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
-                  >
-                    <span
-                      className={`inline-flex size-4 items-center justify-center rounded-sm border ${
-                        showCloud ? "bg-primary/20 border-primary/40" : "bg-white"
-                      }`}
-                    />
-                    Tampilkan Awan
-                  </button>
-                </div>
-              ) : null}
 
               <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
                 <div className="flex items-center justify-between text-xs font-semibold">
