@@ -6,10 +6,16 @@ import Link from "next/link"
 import {
   busPlacement,
   carbonTariffPlacements,
+  carbonCapturePlacement,
+  educationPlacement,
+  farmPlacements,
   getIconSizeClass,
   housePlacements,
   nuclearPlacement,
+  panganPeoplePlacements,
+  solarPanelPlacements,
   treePlacements,
+  windTurbinePlacements,
 } from "./icons"
 
 const storyPages = [
@@ -155,6 +161,9 @@ const checklistCardFrames = [
 
 export default function SmartTownPage() {
   const containerRef = React.useRef<HTMLDivElement | null>(null)
+  const [isCompactDevice, setIsCompactDevice] = React.useState(false)
+  const [isPortrait, setIsPortrait] = React.useState(false)
+  const [isViewportPortrait, setIsViewportPortrait] = React.useState(false)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
   const [pageIndex, setPageIndex] = React.useState(0)
   const [selectedActions, setSelectedActions] = React.useState<string[]>([])
@@ -178,6 +187,11 @@ export default function SmartTownPage() {
   const showBus = selectedActions.includes("transportasi")
   const showCarbonTariff = selectedActions.includes("tarif-karbon")
   const showNuclear = selectedActions.includes("nuklir")
+  const showPangan = selectedActions.includes("pangan")
+  const showPertanian = selectedActions.includes("pertanian")
+  const showCarbonCapture = selectedActions.includes("carbon-capture")
+  const showEnergiTerbarukan = selectedActions.includes("energi-terbarukan")
+  const showEdukasi = selectedActions.includes("edukasi")
   const impactPercent = React.useMemo(() => {
     return selectedActions.reduce((sum, item) => {
       const entry = checklistOptions.find((option) => option.id === item)
@@ -198,13 +212,47 @@ export default function SmartTownPage() {
     }
   }, [])
 
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia("(orientation: portrait)")
+    const syncOrientation = () => setIsPortrait(mediaQuery.matches)
+    syncOrientation()
+    mediaQuery.addEventListener("change", syncOrientation)
+    return () => {
+      mediaQuery.removeEventListener("change", syncOrientation)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    const syncViewport = () => {
+      setIsCompactDevice(window.innerWidth < 768 || window.innerHeight < 768)
+      setIsViewportPortrait(window.innerHeight >= window.innerWidth)
+    }
+    syncViewport()
+    window.addEventListener("resize", syncViewport)
+    return () => window.removeEventListener("resize", syncViewport)
+  }, [])
+
   const handleFullscreen = async () => {
     if (!containerRef.current) return
     if (document.fullscreenElement) {
       await document.exitFullscreen()
+      if (isCompactDevice) {
+        try {
+          await (screen.orientation as ScreenOrientation).unlock()
+        } catch {
+          // Ignore orientation unlock failures on unsupported browsers.
+        }
+      }
       return
     }
     await containerRef.current.requestFullscreen()
+    if (isCompactDevice) {
+      try {
+        await screen.orientation.lock("landscape")
+      } catch {
+        // Ignore orientation lock failures on unsupported browsers.
+      }
+    }
   }
 
   const handlePrev = () => {
@@ -236,27 +284,28 @@ export default function SmartTownPage() {
   }
 
   const sidebarPanelClass = isFullscreen
-    ? "absolute inset-y-0 left-0 z-[10] flex h-full w-full max-w-[360px] flex-col bg-black/75 p-5 text-white"
-    : "absolute inset-y-0 left-0 z-[10] flex h-full w-full max-w-[260px] flex-col bg-black/75 p-3 text-white"
+    ? "absolute inset-y-0 left-0 z-[10] flex h-full w-[360px] flex-col overflow-hidden bg-black/75 p-5 text-white"
+    : "absolute inset-y-0 left-0 z-[10] flex h-full w-[220px] flex-col overflow-hidden bg-black/75 p-3 text-white sm:w-[260px]"
   const sidebarTypographyClass = isFullscreen
     ? "[&_h2]:text-2xl [&_p]:text-base [&_.sidebar-page]:text-sm [&_.sidebar-text]:text-base [&_.sidebar-nav]:text-base"
     : "[&_h2]:text-xl [&_p]:text-sm [&_.sidebar-page]:text-xs [&_.sidebar-text]:text-sm [&_.sidebar-nav]:text-sm"
 
   const sidebarContent = (
     <>
-      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
-        <p className="sidebar-page font-semibold uppercase tracking-[0.2em] text-white/70">
-          Halaman {pageIndex + 1} dari {storyPages.length}
-        </p>
-        <h2 className="font-semibold">{currentPage.title}</h2>
-        <div className="sidebar-text space-y-2 text-white/80">
-          {currentPage.body.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-          {currentPage.checklist ? (
-            <div
-              className="grid grid-cols-2 gap-2 pt-1.5"
-            >
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pr-1">
+        <div className="space-y-2">
+          <p className="sidebar-page font-semibold uppercase tracking-[0.2em] text-white/70">
+            Halaman {pageIndex + 1} dari {storyPages.length}
+          </p>
+          <h2 className="font-semibold">{currentPage.title}</h2>
+          <div className="sidebar-text space-y-2 text-white/80">
+            {currentPage.body.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+            {currentPage.checklist ? (
+              <div
+                className="grid grid-cols-2 gap-2 pt-1.5"
+              >
               {currentPage.checklist.map((item) => {
                 const checked = selectedActions.includes(item.id)
                 const disabled = !checked && remainingCoins < item.cost
@@ -265,22 +314,22 @@ export default function SmartTownPage() {
                     currentPage.checklist.indexOf(item) % checklistCardFrames.length
                   ]
                 return (
-                  <label
+                  <div
                     key={item.id}
-                    className={`block ${
+                    role="checkbox"
+                    aria-checked={checked}
+                    aria-disabled={disabled}
+                    tabIndex={-1}
+                    onClick={() => {
+                      if (!disabled) handleToggleAction(item.id, item.cost)
+                    }}
+                    className={`block select-none ${
                       disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
                     }`}
                   >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => handleToggleAction(item.id, item.cost)}
-                      disabled={disabled}
-                      className="sr-only"
-                    />
                     <div
-                      className={`group relative aspect-square rounded-lg border-2 p-0.5 shadow transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${
-                        checked ? "ring-2 ring-emerald-300" : ""
+                      className={`group relative aspect-square rounded-lg border-2 p-0.5 shadow transition duration-200 ring-2 sm:hover:-translate-y-0.5 sm:hover:shadow-md ${
+                        checked ? "ring-emerald-300" : "ring-transparent"
                       } ${frameClass}`}
                     >
                       <div className="absolute inset-1 rounded-xl bg-gradient-to-br from-white/95 via-white/90 to-slate-100/80" />
@@ -292,7 +341,7 @@ export default function SmartTownPage() {
                           <button
                             type="button"
                             onClick={(event) => {
-                              event.preventDefault()
+                              event.stopPropagation()
                               setActiveInfoId(item.id)
                             }}
                             className={`flex items-center justify-center rounded-full border border-slate-500 bg-white font-bold text-slate-700 shadow-sm transition hover:bg-slate-100 ${isFullscreen ? "size-4 text-[10px]" : "size-3.5 text-[8px]"}`}
@@ -307,22 +356,27 @@ export default function SmartTownPage() {
                       </div>
                       <span className="pointer-events-none absolute bottom-1 right-1 block size-4 rounded-tl-full border-l-2 border-t-2 border-slate-600 bg-slate-100/80" />
                       {checked ? (
-                        <span className="absolute inset-0 flex items-center justify-center">
+                        <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                           <span className="inline-flex size-9 items-center justify-center rounded-full bg-emerald-500 text-xl font-bold text-white shadow-md">
                             ✓
                           </span>
                         </span>
                       ) : null}
                     </div>
-                  </label>
+                  </div>
                 )
               })}
             </div>
           ) : null}
+          </div>
         </div>
       </div>
     </>
   )
+  const shouldRotateFullscreenMobile =
+    isFullscreen &&
+    isCompactDevice &&
+    (isPortrait || isViewportPortrait)
 
   return (
     <PageShell title="Smart Town">
@@ -363,14 +417,28 @@ export default function SmartTownPage() {
         ref={containerRef}
         className={`relative w-full bg-[#f1ecdc] shadow-sm ${
           isFullscreen ? "overflow-hidden rounded-none border-0" : "overflow-hidden rounded-2xl border"
-        }`}
-        style={
-          isFullscreen
-            ? { height: "100%" }
-            : { aspectRatio: "16 / 9", minHeight: "320px" }
-        }
+        } ${isFullscreen ? "h-full" : "aspect-video"}`}
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div
+          className={`absolute inset-0 ${
+            shouldRotateFullscreenMobile
+              ? "flex items-center justify-center bg-black"
+              : ""
+          }`}
+        >
+          <div
+            className={`${
+              shouldRotateFullscreenMobile
+                ? "absolute left-1/2 top-1/2 h-dvw w-dvh -translate-x-1/2 -translate-y-1/2 origin-center -rotate-90"
+                : "relative h-full w-full"
+            }`}
+          >
+            <div
+              className={`overflow-hidden ${
+                shouldRotateFullscreenMobile ? "h-full w-full" : "absolute inset-0"
+              }`}
+              style={{ touchAction: "manipulation" }}
+            >
           {/* Layer 1: Background map */}
           <img
             src="/images/peta-map.png"
@@ -453,20 +521,117 @@ export default function SmartTownPage() {
               style={{ left: nuclearPlacement.left, top: nuclearPlacement.top }}
             />
           ) : null}
+          {showPangan ? (
+            <>
+              {panganPeoplePlacements.map((placement, index) => (
+                <img
+                  key={`${placement.left}-${placement.top}-${index}`}
+                  src="/images/people.png"
+                  alt="Sosialisasi pengolahan pangan"
+                  className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+            </>
+          ) : null}
+          {showPertanian ? (
+            <>
+              {farmPlacements.map((placement, index) => (
+                <img
+                  key={`${placement.left}-${placement.top}-${index}`}
+                  src="/images/sawah.png"
+                  alt="Pertanian ramah lingkungan"
+                  className={`absolute z-[2] object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{
+                    left: placement.left,
+                    top: placement.top,
+                    transform: `translate(-50%, -50%) rotate(${placement.rotateDeg ?? 0}deg)`,
+                  }}
+                />
+              ))}
+            </>
+          ) : null}
+          {showCarbonCapture ? (
+            <img
+              src="/images/karbon.png"
+              alt="Pengurangan emisi karbon"
+              className={`absolute z-[2] object-contain drop-shadow ${getIconSizeClass(
+                isFullscreen,
+                carbonCapturePlacement,
+              )}`}
+              style={{
+                left: carbonCapturePlacement.left,
+                top: carbonCapturePlacement.top,
+                transform: `translate(-50%, -50%) rotate(${carbonCapturePlacement.rotateDeg ?? 0}deg)`,
+              }}
+            />
+          ) : null}
+          {showEnergiTerbarukan ? (
+            <>
+              {solarPanelPlacements.map((placement, index) => (
+                <img
+                  key={`solar-${placement.left}-${placement.top}-${index}`}
+                  src="/images/panel.png"
+                  alt="Panel surya"
+                  className={`absolute z-[4] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+              {windTurbinePlacements.map((placement, index) => (
+                <img
+                  key={`wind-${placement.left}-${placement.top}-${index}`}
+                  src="/images/angin.png"
+                  alt="Turbin angin"
+                  className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
+                    isFullscreen,
+                    placement,
+                  )}`}
+                  style={{ left: placement.left, top: placement.top }}
+                />
+              ))}
+            </>
+          ) : null}
+          {showEdukasi ? (
+            <img
+              src="/images/school.png"
+              alt="Edukasi di sekolah"
+              className={`absolute z-[2] object-contain drop-shadow ${getIconSizeClass(
+                isFullscreen,
+                educationPlacement,
+              )}`}
+              style={{
+                left: educationPlacement.left,
+                top: educationPlacement.top,
+                transform: `translate(-50%, -50%) rotate(${educationPlacement.rotateDeg ?? 0}deg)`,
+              }}
+            />
+          ) : null}
 
           {/* Layer 4: Sidebar panel — fixed position, won't shift */}
           {isSidebarOpen ? (
-            <div className={`${sidebarPanelClass} ${sidebarTypographyClass}`}>
+            <div
+              className={`${sidebarPanelClass} ${sidebarTypographyClass}`}
+              style={{ transform: "translateZ(0)", willChange: "transform", contain: "layout size" }}
+            >
               {sidebarContent}
             </div>
           ) : null}
 
           {/* Layer 5: HUD (coins, results) */}
-          <div className="absolute right-6 top-6 z-[15] flex items-center gap-3">
-            <span className="text-5xl font-bold text-yellow-300 drop-shadow">
+          <div className="absolute right-3 top-3 z-[15] flex items-center gap-2 sm:right-6 sm:top-6 sm:gap-3">
+            <span className="text-2xl font-bold text-yellow-300 drop-shadow sm:text-5xl">
               {remainingCoins}
             </span>
-            <div className="flex size-12 items-center justify-center rounded-full bg-yellow-300 text-xl font-bold text-yellow-800 shadow">
+            <div className="flex size-8 items-center justify-center rounded-full bg-yellow-300 text-base font-bold text-yellow-800 shadow sm:size-12 sm:text-xl">
               $
             </div>
           </div>
@@ -498,11 +663,11 @@ export default function SmartTownPage() {
           ) : null}
 
           {/* Layer 6: Bottom nav buttons */}
-          <div className="absolute bottom-6 right-6 z-[15] flex items-center gap-3 text-white/90">
+          <div className="absolute bottom-3 right-3 z-[15] flex flex-wrap items-center justify-end gap-2 text-white/90 sm:bottom-6 sm:right-6 sm:gap-3">
               <button
                 type="button"
                 onClick={() => setIsSidebarOpen((prev) => !prev)}
-                className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100"
+                className="inline-flex w-auto items-center justify-center gap-1 rounded-xl bg-white px-2 py-1.5 text-[10px] font-semibold text-slate-900 shadow transition hover:bg-slate-100 sm:w-28 sm:gap-2 sm:px-3 sm:py-2 sm:text-sm"
               >
                 {isSidebarOpen ? "Tutup Panel" : "Buka Panel"}
               </button>
@@ -510,7 +675,7 @@ export default function SmartTownPage() {
                 type="button"
                 onClick={handlePrev}
                 disabled={pageIndex === 0}
-                className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex w-auto items-center justify-center gap-1 rounded-xl bg-white px-2 py-1.5 text-[10px] font-semibold text-slate-900 shadow transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-28 sm:gap-2 sm:px-3 sm:py-2 sm:text-sm"
               >
                 ◀ Back
               </button>
@@ -518,7 +683,7 @@ export default function SmartTownPage() {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100"
+                  className="inline-flex w-auto items-center justify-center gap-1 rounded-xl bg-white px-2 py-1.5 text-[10px] font-semibold text-slate-900 shadow transition hover:bg-slate-100 sm:w-28 sm:gap-2 sm:px-3 sm:py-2 sm:text-sm"
                 >
                   Submit ▶
                 </button>
@@ -527,7 +692,7 @@ export default function SmartTownPage() {
                   type="button"
                   onClick={handleNext}
                   disabled={isLastPage}
-                  className="inline-flex w-28 items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex w-auto items-center justify-center gap-1 rounded-xl bg-white px-2 py-1.5 text-[10px] font-semibold text-slate-900 shadow transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-28 sm:gap-2 sm:px-3 sm:py-2 sm:text-sm"
                 >
                   Next ▶
                 </button>
@@ -535,7 +700,7 @@ export default function SmartTownPage() {
               <button
                 type="button"
                 onClick={handleFullscreen}
-                className={`inline-flex size-10 items-center justify-center rounded-xl shadow transition ${
+                className={`inline-flex size-8 items-center justify-center rounded-xl shadow transition sm:size-10 ${
                   isFullscreen
                     ? "bg-yellow-300 text-yellow-900 hover:bg-yellow-200"
                     : "bg-white text-slate-900 hover:bg-slate-100"
@@ -545,7 +710,7 @@ export default function SmartTownPage() {
                   src="/images/full.png"
                   alt=""
                   aria-hidden="true"
-                  className="h-5 w-5 object-contain"
+                  className="h-4 w-4 object-contain sm:h-5 sm:w-5"
                 />
               </button>
             </div>
@@ -608,6 +773,8 @@ export default function SmartTownPage() {
               </div>
             </div>
           ) : null}
+            </div>
+          </div>
         </div>
       </div>
     </PageShell>

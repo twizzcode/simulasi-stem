@@ -33,7 +33,7 @@ export function PageShell({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header className="page-shell-header sticky top-0 z-40 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator
@@ -55,9 +55,9 @@ export function PageShell({
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col px-6 pb-10 pt-6 md:px-10">
+        <div className="page-shell-content flex flex-1 flex-col px-6 pb-10 pt-6 md:px-10">
           <div
-            className={`mx-auto flex w-full max-w-5xl flex-col gap-6 ${
+            className={`page-shell-main mx-auto flex w-full max-w-5xl flex-col gap-6 ${
               firstPanelGradient ? "page-shell-first-gradient" : ""
             }`}
           >

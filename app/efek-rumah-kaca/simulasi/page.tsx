@@ -16,7 +16,9 @@ import { Slider } from "@/components/ui/slider"
 
 export default function EfekRumahKacaSimulasiPage() {
   const containerRef = React.useRef<HTMLDivElement | null>(null)
+  const [isCompactDevice, setIsCompactDevice] = React.useState(false)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
+  const [isPortrait, setIsPortrait] = React.useState(false)
   const [ghgLevel, setGhgLevel] = React.useState(50)
   const [showCloud, setShowCloud] = React.useState(false)
   const [ghgMode, setGhgMode] = React.useState<"slider" | "calendar">("slider")
@@ -24,7 +26,6 @@ export default function EfekRumahKacaSimulasiPage() {
     "1990" | "2025" | "2050"
   >("2025")
   const [isPlaying, setIsPlaying] = React.useState(false)
-  const [showIntroModal, setShowIntroModal] = React.useState(true)
   const yearLevels: Record<"1990" | "2025" | "2050", number> = {
     "1990": 25,
     "2025": 60,
@@ -49,14 +50,56 @@ export default function EfekRumahKacaSimulasiPage() {
     }
   }, [])
 
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia("(orientation: portrait)")
+    const syncOrientation = () => setIsPortrait(mediaQuery.matches)
+    syncOrientation()
+    mediaQuery.addEventListener("change", syncOrientation)
+    return () => {
+      mediaQuery.removeEventListener("change", syncOrientation)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    const syncCompact = () => {
+      setIsCompactDevice(window.innerWidth < 768 || window.innerHeight < 768)
+    }
+    syncCompact()
+    window.addEventListener("resize", syncCompact)
+    return () => window.removeEventListener("resize", syncCompact)
+  }, [])
+
   const handleFullscreen = async () => {
     if (!containerRef.current) return
     if (document.fullscreenElement) {
       await document.exitFullscreen()
+      if (isCompactDevice) {
+        try {
+          await (screen.orientation as ScreenOrientation).unlock()
+        } catch {
+          // Ignore orientation unlock failures on unsupported browsers.
+        }
+      }
       return
     }
     await containerRef.current.requestFullscreen()
+    if (isCompactDevice) {
+      try {
+        await screen.orientation.lock("landscape")
+      } catch {
+        // Ignore orientation lock failures on unsupported browsers.
+      }
+    }
   }
+
+  const shouldRotateFullscreenMobile =
+    isFullscreen && isCompactDevice && isPortrait
+  const simulationGroundPx = isFullscreen ? 190 : 100
+  const simulationGroundRatio = isCompactDevice
+    ? isFullscreen
+      ? 0.86
+      : 0.86
+    : undefined
 
   return (
     <PageShell title="Simulasi Efek Rumah Kaca">
@@ -69,9 +112,6 @@ export default function EfekRumahKacaSimulasiPage() {
             <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
               Efek Rumah Kaca
             </h1>
-            <p className="mt-3 text-sm text-muted-foreground md:text-base">
-              Dummy text: nantinya area ini akan berisi simulasi interaktif.
-            </p>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -97,32 +137,6 @@ export default function EfekRumahKacaSimulasiPage() {
           isFullscreen ? "rounded-none border-0" : "rounded-2xl border"
         }`}
       >
-        {showIntroModal ? (
-          <div className="absolute inset-0 z-[30] flex items-center justify-center bg-black/55 p-4">
-            <div className="w-full max-w-2xl rounded-2xl border bg-white p-6 shadow-xl md:p-7">
-              <h2 className="text-xl font-semibold text-foreground md:text-2xl">
-                Pengantar Simulasi
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
-                Efek rumah kaca berkaitan dengan proses alam yang membuat panas
-                Matahari terperangkap di atmosfer Bumi sehingga suhu permukaan
-                meningkat. Aktivitas manusia menambah gas rumah kaca dan
-                memperkuat proses ini hingga memicu pemanasan global. Konsep ini
-                dapat dipahami melalui ilustrasi perbedaan kondisi Bumi pada masa
-                lalu, masa kini, dan masa depan.
-              </p>
-              <div className="mt-5 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setShowIntroModal(false)}
-                  className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90 md:text-sm"
-                >
-                  Mulai Simulasi
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : null}
         {isFullscreen ? (
           <button
             type="button"
@@ -134,11 +148,27 @@ export default function EfekRumahKacaSimulasiPage() {
         ) : null}
         <div
           className={`relative w-full ${
-            isFullscreen ? "h-full" : "min-h-[60vh]"
+            isFullscreen ? "h-full" : "aspect-video md:aspect-auto md:min-h-[60vh]"
           }`}
         >
-          <div className="absolute inset-0 flex flex-col gap-4 p-4 md:flex-row md:p-5">
-            <div className="relative overflow-hidden rounded-xl border bg-black shadow-sm md:basis-3/4 md:flex-none">
+          <div
+            className={`absolute inset-0 ${
+              shouldRotateFullscreenMobile
+                ? "flex items-center justify-center bg-black"
+                : ""
+            }`}
+          >
+            <div
+              className={`relative h-full w-full ${
+                shouldRotateFullscreenMobile
+                  ? "h-[100vw] w-[100vh] -rotate-90"
+                  : ""
+              }`}
+            >
+              <div
+                className="absolute inset-0 flex flex-row gap-4 p-4 md:p-5"
+              >
+                <div className="relative basis-3/4 flex-none overflow-hidden rounded-xl border bg-black shadow-sm">
               <img
                 src={
                   ghgMode === "calendar"
@@ -154,10 +184,16 @@ export default function EfekRumahKacaSimulasiPage() {
                 alt="Simulasi efek rumah kaca"
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <EnergyWaves isPlaying={isPlaying} groundPx={isFullscreen ? 190 : 100} ghgLevel={ghgLevel} isFullscreen={isFullscreen} />
+              <EnergyWaves
+                isPlaying={isPlaying}
+                groundPx={simulationGroundPx}
+                groundRatio={simulationGroundRatio}
+                ghgLevel={ghgLevel}
+                isFullscreen={isFullscreen}
+              />
             </div>
 
-            <div className="flex h-full w-full flex-col gap-3 overflow-auto md:basis-1/4 md:flex-none">
+                <div className="flex h-full w-full basis-1/4 flex-none flex-col gap-3 overflow-auto">
               <div className="rounded-2xl border bg-white/80 p-4 text-foreground shadow-sm">
                 <h3 className="text-center text-sm font-semibold">Energy</h3>
                 <div className="mt-3 flex items-center justify-between text-xs">
@@ -265,15 +301,17 @@ export default function EfekRumahKacaSimulasiPage() {
                 <button
                   type="button"
                   onClick={() => setIsPlaying((prev) => !prev)}
-                  className="mt-3 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                  className={`mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                    isPlaying
+                      ? "border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                  }`}
                 >
-                  {isPlaying ? (
-                    <Pause className="size-3" />
-                  ) : (
-                    <Play className="size-3" />
-                  )}
-                  {isPlaying ? "Pause" : "Play"}
+                  {isPlaying ? <Pause className="size-3" /> : <Play className="size-3" />}
+                  {isPlaying ? "Pause" : "Mulai Simulasi"}
                 </button>
+              </div>
+                </div>
               </div>
             </div>
           </div>

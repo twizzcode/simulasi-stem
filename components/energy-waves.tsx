@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react"
 type EnergyWavesProps = {
   isPlaying: boolean
   groundPx?: number
+  groundRatio?: number
   ghgLevel?: number
   isFullscreen?: boolean
 }
@@ -39,6 +40,7 @@ type Ray = {
 export default function EnergyWaves({
   isPlaying,
   groundPx = 190,
+  groundRatio,
   ghgLevel = 50,
   isFullscreen = false,
 }: EnergyWavesProps) {
@@ -85,7 +87,13 @@ export default function EnergyWaves({
     const ro = new ResizeObserver(() => resize())
     ro.observe(parent)
 
-    const groundY = () => Math.max(60, H - groundPx)
+    const groundY = () => {
+      if (typeof groundRatio === "number") {
+        const ratio = Math.max(0, Math.min(1, groundRatio))
+        return Math.max(60, H * ratio)
+      }
+      return Math.max(60, H - groundPx)
+    }
     const ghgLayerY = () => H * 0.22
 
     const SUN_COLORS = ["#f5a623", "#f7c948", "#e8951a", "#dba12a"]
@@ -398,7 +406,7 @@ export default function EnergyWaves({
       cancelAnimationFrame(rafRef.current)
       allRays.length = 0
     }
-  }, [groundPx])
+  }, [groundPx, groundRatio])
 
   return (
     <canvas
