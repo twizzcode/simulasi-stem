@@ -164,7 +164,7 @@ export default function PemanasanGlobalSimulasiPage() {
     await containerRef.current.requestFullscreen()
     if (isCompactDevice) {
       try {
-        await screen.orientation.lock("landscape")
+        await (screen.orientation as ScreenOrientation).lock("landscape")
       } catch {}
     }
   }

@@ -93,7 +93,7 @@ export default function ClimateActionQuizPage() {
     await containerRef.current.requestFullscreen()
     if (isCompactDevice) {
       try {
-        await screen.orientation.lock("landscape")
+        await (screen.orientation as ScreenOrientation).lock("landscape")
       } catch {
         // Ignore orientation lock failures on unsupported browsers.
       }
