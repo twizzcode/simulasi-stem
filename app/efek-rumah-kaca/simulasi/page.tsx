@@ -75,7 +75,7 @@ export default function EfekRumahKacaSimulasiPage() {
       await document.exitFullscreen()
       if (isCompactDevice) {
         try {
-          await (screen.orientation as ScreenOrientation).unlock()
+          await (screen.orientation as any).unlock()
         } catch {
           // Ignore orientation unlock failures on unsupported browsers.
         }
@@ -85,7 +85,7 @@ export default function EfekRumahKacaSimulasiPage() {
     await containerRef.current.requestFullscreen()
     if (isCompactDevice) {
       try {
-        await (screen.orientation as ScreenOrientation).lock("landscape")
+        await (screen.orientation as any).lock("landscape")
       } catch {
         // Ignore orientation lock failures on unsupported browsers.
       }

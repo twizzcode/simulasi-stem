@@ -156,7 +156,7 @@ export default function PemanasanGlobalSimulasiPage() {
       await document.exitFullscreen()
       if (isCompactDevice) {
         try {
-          await (screen.orientation as ScreenOrientation).unlock()
+          await (screen.orientation as any).unlock()
         } catch {}
       }
       return
@@ -164,7 +164,7 @@ export default function PemanasanGlobalSimulasiPage() {
     await containerRef.current.requestFullscreen()
     if (isCompactDevice) {
       try {
-        await (screen.orientation as ScreenOrientation).lock("landscape")
+        await (screen.orientation as any).lock("landscape")
       } catch {}
     }
   }
