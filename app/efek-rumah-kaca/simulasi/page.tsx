@@ -6,6 +6,7 @@ const EnergyWaves = dynamic(() => import("@/components/energy-waves"), {
   ssr: false,
 })
 
+import Image from "next/image"
 import * as React from "react"
 import Link from "next/link"
 
@@ -169,7 +170,7 @@ export default function EfekRumahKacaSimulasiPage() {
                 className="absolute inset-0 flex flex-row gap-4 p-4 md:p-5"
               >
                 <div className="relative basis-3/4 flex-none overflow-hidden rounded-xl border bg-black shadow-sm">
-              <img
+              <Image
                 src={
                   ghgMode === "calendar"
                     ? yearSelected === "1990"
@@ -182,7 +183,10 @@ export default function EfekRumahKacaSimulasiPage() {
                       : "/images/4.png"
                 }
                 alt="Simulasi efek rumah kaca"
-                className="absolute inset-0 h-full w-full object-cover"
+                fill
+                sizes="75vw"
+                priority
+                className="object-cover"
               />
               <EnergyWaves
                 isPlaying={isPlaying}

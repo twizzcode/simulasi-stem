@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 
 import { PageShell } from "@/components/page-shell"
 import { useIsMobile } from "@/hooks/use-mobile"
+import BumiRays from "@/components/bumi-rays"
 
 const steps = [
   {
@@ -37,6 +38,7 @@ const steps = [
     title: "Step 6 · Penjelasan Gas Rumah Kaca",
     desc: "Gas rumah kaca adalah gas-gas yang terdapat di atmosfer Bumi dan berperan dalam menahan panas Matahari agar tidak seluruhnya lepas kembali ke angkasa. Ketika sinar Matahari mencapai permukaan Bumi, sebagian energi diserap dan diubah menjadi panas, lalu dipancarkan kembali dalam bentuk radiasi inframerah. Gas rumah kaca seperti uap air, karbon dioksida (CO₂), metana (CH₄), dinitrogen oksida (N₂O), dan CFC menyerap serta memantulkan kembali radiasi inframerah tersebut ke permukaan Bumi, sehingga suhu Bumi tetap hangat dan mendukung kehidupan. Namun, jika jumlah gas rumah kaca berlebihan akibat aktivitas manusia, panas yang terperangkap menjadi terlalu banyak dan menyebabkan pemanasan global.",
     image: "/images/gas-rumah-kaca.png",
+    overlayVideo: "/images/berputar.mp4",
   },
   {
     title: "Step 7 · Asal Gas Rumah Kaca",
@@ -94,7 +96,9 @@ export default function EfekRumahKacaMateriPage() {
 
   const overlayInline = (
     <div
-      className={`absolute inset-x-0 bottom-0 flex ${
+      className={`absolute ${
+        index === 5 ? "inset-0 flex items-center" : "inset-x-0 bottom-0 flex"
+      } ${
         shouldRotate ? "p-3" : "p-5 md:p-6"
       } ${
         index < 4 ? "justify-start" : "justify-end"
@@ -105,7 +109,7 @@ export default function EfekRumahKacaMateriPage() {
           shouldRotate ? "p-2" : "p-3 md:p-4"
         } ${isFullscreen ? (shouldRotate ? "max-w-sm" : "max-w-3xl") : "max-w-xl"} ${
           index < 4 ? "" : "md:ml-auto"
-        }`}
+        } ${index === 5 ? "h-full flex flex-col" : ""}`}
       >
         <h2
           className={`font-semibold ${
@@ -117,7 +121,7 @@ export default function EfekRumahKacaMateriPage() {
         <p
           className={`mt-2 text-white/80 ${
             shouldRotate ? "text-[8px] leading-relaxed" : "text-xs md:text-sm"
-          }`}
+          } ${index === 5 ? "flex-1" : ""}`}
         >
           {current.desc}
         </p>
@@ -125,7 +129,7 @@ export default function EfekRumahKacaMateriPage() {
         <div
           className={`flex flex-wrap items-center justify-between gap-3 ${
             shouldRotate ? "mt-3" : "mt-4"
-          }`}
+          } ${index === 5 ? "mt-auto" : ""}`}
         >
           <button
             type="button"
@@ -258,6 +262,23 @@ export default function EfekRumahKacaMateriPage() {
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               )}
+              {index === 4 ? <BumiRays isPlaying /> : null}
+              {current.overlayVideo ? (
+                <video
+                  src={current.overlayVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="pointer-events-none absolute"
+                  style={{
+                    width: "30%",
+                    left: "7%",
+                    top: "6%",
+                    borderRadius: "9999px",
+                  }}
+                />
+              ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
               {showOverlay ? overlayInline : null}
             </div>

@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import * as React from "react"
 import Link from "next/link"
 
@@ -281,13 +282,19 @@ export default function PemanasanGlobalSimulasiPage() {
             >
               {scene === "intro" ? (
                 <div className="relative h-full w-full overflow-hidden rounded-xl border bg-white/80 shadow-sm">
-                  <div
-                    className={`absolute inset-0 ${
-                      pageIndex < 2
-                        ? "bg-[url('/images/2065.png')] bg-cover bg-center bg-no-repeat"
-                        : "bg-[url('/images/jalan.png')] bg-cover bg-center bg-no-repeat"
-                    }`}
-                  >
+                  <div className="absolute inset-0">
+                    <Image
+                      src={
+                        pageIndex < 2
+                          ? "/images/2065.png"
+                          : "/images/jalan.png"
+                      }
+                      alt=""
+                      fill
+                      sizes="80vw"
+                      priority
+                      className="object-cover"
+                    />
                     <div className="absolute left-3 top-3 w-[78%] max-w-md rounded-lg bg-[#bcd4dd] p-3 text-xs text-slate-800 shadow md:left-6 md:top-6 md:w-[70%] md:p-4 md:text-sm">
                       {introPages[pageIndex]}
                     </div>
@@ -333,8 +340,16 @@ export default function PemanasanGlobalSimulasiPage() {
                 <div
                   ref={mapRef}
                   onClick={handleMapClick}
-                  className="relative h-full w-full overflow-hidden rounded-2xl border bg-[url('/images/pulau/bg.png')] bg-cover bg-center bg-no-repeat"
+                  className="relative h-full w-full overflow-hidden rounded-2xl border"
                 >
+                  <Image
+                    src="/images/pulau/bg.png"
+                    alt=""
+                    fill
+                    sizes="80vw"
+                    priority
+                    className="object-cover"
+                  />
                   {islands.map((island) => (
                     <button
                       key={island.id}
@@ -348,9 +363,11 @@ export default function PemanasanGlobalSimulasiPage() {
                       style={{ top: `${island.top}%`, left: `${island.left}%` }}
                     >
                       <span className="sr-only">{island.name}</span>
-                      <img
+                      <Image
                         src={island.imageSrc}
                         alt={island.name}
+                        width={144}
+                        height={144}
                         className={`h-[6.5rem] w-[6.5rem] object-contain drop-shadow-[0_8px_14px_rgba(15,23,42,0.38)] transition duration-200 sm:h-[7.5rem] sm:w-[7.5rem] md:h-36 md:w-36 ${
                           visitedIslands.has(island.id)
                             ? "brightness-110 saturate-110"
@@ -365,10 +382,12 @@ export default function PemanasanGlobalSimulasiPage() {
                     </button>
                   ))}
 
-                  <img
+                  <Image
                     src="/images/kapal.png"
                     alt=""
                     aria-hidden="true"
+                    width={48}
+                    height={48}
                     className="absolute h-10 w-10 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-lg transition-[top,left] duration-700 ease-in-out md:h-12 md:w-12"
                     style={{ top: `${userPos.y}%`, left: `${userPos.x}%` }}
                   />
@@ -441,11 +460,17 @@ export default function PemanasanGlobalSimulasiPage() {
 
               {scene === "island" ? (
                 <div
-                  className="relative h-full w-full overflow-hidden rounded-2xl border bg-white/80 bg-cover bg-center"
-                  style={
-                    islandScene ? { backgroundImage: `url('${islandScene}')` } : undefined
-                  }
+                  className="relative h-full w-full overflow-hidden rounded-2xl border bg-white/80"
                 >
+                  {islandScene ? (
+                    <Image
+                      src={islandScene}
+                      alt=""
+                      fill
+                      sizes="80vw"
+                      className="object-cover"
+                    />
+                  ) : null}
                   {islandScene ? <div className="absolute inset-0 bg-black/25" /> : null}
                   <div className="absolute inset-0 flex flex-col justify-between p-6">
                     <div className="max-w-2xl rounded-xl bg-white/90 p-5 text-sm text-muted-foreground shadow">

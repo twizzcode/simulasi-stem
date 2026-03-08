@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 import { PageShell } from "@/components/page-shell"
@@ -7,14 +8,18 @@ export default function PemanasanGlobalPage() {
     <PageShell title="Pemanasan Global & Perubahan Iklim">
       <section className="relative overflow-hidden rounded-2xl border bg-card p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:p-8 md:pt-28">
         <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
-          <img
+          <Image
             src="/images/perubahan-iklim-1.png"
             alt="Ikon perubahan iklim 1"
+            width={80}
+            height={80}
             className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
           />
-          <img
+          <Image
             src="/images/perubahan-iklim-2.png"
             alt="Ikon perubahan iklim 2"
+            width={80}
+            height={80}
             className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
           />
         </div>
@@ -33,10 +38,18 @@ export default function PemanasanGlobalPage() {
             es di kutub mencair, dan permukaan laut naik. Pemanasan global dan
             perubahan iklim tidak hanya berdampak pada alam, tetapi juga pada
             kehidupan manusia. Pertanian terganggu karena musim sulit diprediksi,
-            serta bencana seperti banjir dan kekeringan makin sering terjadi.
+            serta bencaya seperti banjir dan kekeringan makin sering terjadi.
             Karena itu, memahami kedua konsep ini penting agar kita sadar bahwa
             tindakan manusia hari ini sangat menentukan kondisi Bumi di masa depan.
           </p>
+          <div className="mt-5">
+            <Link
+              href="/pemanasan-global/simulasi"
+              className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+            >
+              Buka Simulasi
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -68,11 +81,13 @@ export default function PemanasanGlobalPage() {
 
       <section className="rounded-2xl border bg-card p-4 shadow-sm md:p-6">
         <div className="relative w-full overflow-hidden rounded-2xl border bg-secondary/20 shadow-sm">
-          <div className="aspect-[5/2] w-full">
-            <img
+          <div className="relative aspect-[5/2] w-full">
+            <Image
               src="/images/cuaca.png"
               alt="Ilustrasi cuaca dan iklim"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 80vw"
+              className="object-cover"
             />
           </div>
         </div>
@@ -153,33 +168,19 @@ export default function PemanasanGlobalPage() {
 
       <section className="rounded-2xl border bg-card p-4 shadow-sm md:p-6">
         <div className="relative w-full overflow-hidden rounded-2xl border bg-secondary/20 shadow-sm">
-          <div className="aspect-[5/2] w-full">
-            <img
+          <div className="relative aspect-[5/2] w-full">
+            <Image
               src="/images/iklim.png"
               alt="Ilustrasi iklim"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 80vw"
+              className="object-cover"
             />
           </div>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
-        <h2 className="text-lg font-semibold text-foreground">
-          Simulasi Interaktif
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Area simulasi pemanasan global akan ditampilkan di sini.
-        </p>
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed bg-background/60 p-5 text-sm text-muted-foreground">
-          <span>Placeholder simulasi.</span>
-          <Link
-            href="/pemanasan-global/simulasi"
-            className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
-          >
-            Buka Simulasi
-          </Link>
-        </div>
-      </section>
+
     </PageShell>
   )
 }

@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { Play } from "lucide-react"
 
@@ -6,39 +7,21 @@ import { PageShell } from "@/components/page-shell"
 export default function Home() {
   return (
     <PageShell title="Beranda" firstPanelGradient={false}>
-      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-background to-secondary/40 p-5 shadow-sm sm:p-6 md:p-8">
+      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-background to-secondary/40 shadow-sm">
         <div className="absolute -right-20 -top-24 size-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-28 -left-20 size-80 rounded-full bg-secondary/40 blur-3xl" />
-        <div className="relative mb-5 h-20 md:mb-10 md:h-28">
-          <img
-            src="/images/bumi-panas.png"
-            alt="Ilustrasi bumi panas"
-            className="pointer-events-none absolute left-0 top-0 h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-28 md:w-28"
-          />
-          <div className="pointer-events-none absolute inset-x-0 top-1.5 flex items-start justify-center gap-3 sm:top-2 sm:gap-6 md:top-3 md:gap-14">
-            <img
-              src="/images/co2.png"
-              alt="Ikon CO2"
-              className="h-9 w-9 object-contain sm:h-12 sm:w-12 md:h-16 md:w-16"
-            />
-            <img
-              src="/images/ch4.png"
-              alt="Ikon CH4"
-              className="h-9 w-9 object-contain sm:h-12 sm:w-12 md:h-16 md:w-16"
-            />
-            <img
-              src="/images/n2o.png"
-              alt="Ikon N2O"
-              className="h-9 w-9 object-contain sm:h-12 sm:w-12 md:h-16 md:w-16"
-            />
-          </div>
-          <img
-            src="/images/tenaga-surya.png"
-            alt="Ilustrasi tenaga surya"
-            className="pointer-events-none absolute right-0 top-0 h-16 w-16 object-contain sm:h-20 sm:w-20 md:h-28 md:w-28"
+        
+        <div className="relative h-48 w-full overflow-hidden rounded-t-3xl sm:h-64 md:h-80">
+          <Image
+            src="/images/bumiii.png"
+            alt="Header ilustrasi bumi"
+            fill
+            priority
+            className="object-cover"
           />
         </div>
-        <div className="relative max-w-3xl space-y-4 md:space-y-6">
+
+        <div className="relative max-w-3xl space-y-4 p-5 sm:p-6 md:space-y-6 md:p-8">
           <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground sm:px-4 sm:text-xs">
             Media Pembelajaran IPA
             <span className="size-1.5 rounded-full bg-primary" />

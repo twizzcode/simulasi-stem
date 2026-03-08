@@ -1,19 +1,25 @@
-import { PageShell } from "@/components/page-shell"
+import Image from "next/image"
 import Link from "next/link"
+
+import { PageShell } from "@/components/page-shell"
 
 export default function EfekRumahKacaPage() {
   return (
     <PageShell title="Efek Rumah Kaca">
       <section className="relative overflow-hidden rounded-2xl border bg-card p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:p-8 md:pt-28">
         <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
-          <img
+          <Image
             src="/images/rumahkaca-1.png"
             alt="Ikon rumah kaca 1"
+            width={80}
+            height={80}
             className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
           />
-          <img
+          <Image
             src="/images/rumahkaca-2.png"
             alt="Ikon rumah kaca 2"
+            width={80}
+            height={80}
             className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
           />
         </div>
@@ -37,7 +43,7 @@ export default function EfekRumahKacaPage() {
           matahari tetap berada di bumi serta tidak dapat dipantukan secara
           sempurna keluar atmosfer. Efek rumah kaca terjadi akibat aktivitas
           manusia yang menghasilkan gas buangan seperti karbon dioksida (CO₂),
-          dinitrogen oksida (N₂O), uap air (H2O), dan metana (CH₄). Gas-gas ini
+          dinitrogen oksida (N₂O), uap air (H₂O), dan metana (CH₄). Gas-gas ini
           terakumulasi di atmosfer yang menyebabkan energi Matahari terperangkap
           di Bumi dan tidak dapat dipantulkan ke luar angkasa lagi. Jika jumlah
           gas rumah kaca tersebut semakin meningkat maka panas yang terperangkap

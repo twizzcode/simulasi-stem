@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import * as React from "react"
 
 import { PageShell } from "@/components/page-shell"
@@ -258,10 +259,12 @@ export default function SertifikatPage() {
           <p className="text-sm font-semibold text-foreground">Preview</p>
           <div className="mt-4 space-y-4">
             <div className="relative aspect-[297/210] w-full overflow-hidden rounded-2xl border bg-white shadow-inner">
-              <img
+              <Image
                 src="/images/sertifikat.png"
                 alt="Sertifikat"
-                className="absolute inset-0 h-full w-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 60vw"
+                className="object-cover"
               />
               <div className="absolute left-1/2 top-[58%] w-full -translate-x-1/2 text-center">
                 <p className="text-2xl font-semibold text-slate-800">
@@ -271,18 +274,22 @@ export default function SertifikatPage() {
             </div>
 
             <div className="relative aspect-[297/210] w-full overflow-hidden rounded-2xl border bg-white shadow-inner">
-              <img
+              <Image
                 src="/images/sertifikat-1.png"
                 alt="Sertifikat halaman 2"
-                className="absolute inset-0 h-full w-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 60vw"
+                className="object-cover"
               />
             </div>
 
             <div className="relative aspect-[297/210] w-full overflow-hidden rounded-2xl border bg-white shadow-inner">
-              <img
+              <Image
                 src="/images/sertifikat-2.png"
                 alt="Sertifikat halaman 3"
-                className="absolute inset-0 h-full w-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 60vw"
+                className="object-cover"
               />
             </div>
           </div>

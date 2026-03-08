@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { PageShell } from "@/components/page-shell"
 
 export default function AktivitasSiswaPage() {
@@ -5,14 +6,18 @@ export default function AktivitasSiswaPage() {
     <PageShell title="Aktivitas Siswa">
       <section className="relative overflow-hidden rounded-2xl border bg-card p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:p-8 md:pt-28">
         <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
-          <img
+          <Image
             src="/images/aktivitas-1.png"
             alt="Ikon aktivitas 1"
+            width={80}
+            height={80}
             className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
           />
-          <img
+          <Image
             src="/images/aktivitas-2.png"
             alt="Ikon aktivitas 2"
+            width={80}
+            height={80}
             className="h-14 w-14 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20"
           />
         </div>

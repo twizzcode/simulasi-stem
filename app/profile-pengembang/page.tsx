@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { PageShell } from "@/components/page-shell"
 
 export default function ProfilePengembangPage() {
@@ -25,12 +26,15 @@ export default function ProfilePengembangPage() {
         {[
           {
             name: "Tiara Dwi Wulandari, S.Pd.",
+            affiliation: "Universitas Negeri Semarang, Indonesia",
           },
           {
-            name: "Arif Widiyatmoko, S.Pd., M.Pd., Ph.D.",
+            name: "Assoc. Prof. Arif Widiyatmoko, Ph.D.",
+            affiliation: "Universitas Negeri Semarang, Indonesia",
           },
           {
-            name: "Associate Prof. Dr. Hutkemri Zulnaidi",
+            name: "Assoc. Prof. Dr. Hutkemri",
+            affiliation: "Universiti Malaya, Malaysia",
           },
         ].map((member) => (
           <article
@@ -39,16 +43,21 @@ export default function ProfilePengembangPage() {
           >
             <div className="absolute -right-16 -top-20 size-40 rounded-full bg-primary/10 blur-2xl transition group-hover:bg-primary/20" />
             <div className="relative">
-              <div className="flex items-center gap-4">
-                <img
+              <div className="flex items-start gap-4">
+                <Image
                   src="/images/profile.png"
                   alt={`Foto ${member.name}`}
+                  width={48}
+                  height={48}
                   className="size-12 rounded-2xl object-cover shadow-sm"
                 />
-                <div>
+                <div className="flex-1">
                   <h2 className="text-base font-semibold text-foreground">
                     {member.name}
                   </h2>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {member.affiliation}
+                  </p>
                 </div>
               </div>
             </div>

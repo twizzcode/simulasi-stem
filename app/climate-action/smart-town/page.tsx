@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import * as React from "react"
 import { PageShell } from "@/components/page-shell"
 import Link from "next/link"
@@ -28,7 +29,7 @@ const storyPages = [
   {
     title: "Pemanasan global dan perubahan iklim",
     body: [
-      "Pemanasan global dan perubahan iklim terjadi akibat berbagai aktivitas manusia yang menghasilkan gas-gas rumah kaca, seperti karbon dioksida (CO₂), dinitrogen oksida (N₂O), uap air (H2O), dan metana (CH₄).",
+      "Pemanasan global dan perubahan iklim terjadi akibat berbagai aktivitas manusia yang menghasilkan gas-gas rumah kaca, seperti karbon dioksida (CO₂), dinitrogen oksida (N₂O), uap air (H₂O), dan metana (CH₄).",
       "Gas-gas ini terakumulasi di atmosfer dan menahan panas Matahari, sehingga suhu Bumi meningkat dan memicu perubahan iklim.",
       "Kami membutuhkan bantuanmu untuk mengurangi bertambahnya dampak negatif dari permasalahan ini.",
     ],
@@ -48,20 +49,13 @@ const storyPages = [
     ],
   },
   {
-    title: "Tujuan misi",
-    body: [
-      "Misi ini bertujuan untuk mengurangi emisi gas rumah kaca. Langkah-langkah yang kamu pilih akan berpengaruh langsung terhadap laju peningkatan suhu global.",
-      "Karena itu, gunakan strategi dan teknologi yang tepat untuk mewujudkan masa depan rendah karbon dan mencegah pemanasan global lebih parah!",
-    ],
-  },
-  {
     title: "Pilih aksi (checkbox)",
     body: [],
     checklist: [
       {
         id: "hemat-energi",
         cost: 6,
-        label: "Merancang bangun yang membantu menghemat energi",
+        label: "Merancang bangun hemat energi",
         impactPercent: 12,
         detail:
           "Di Indonesia, sektor bangunan juga menjadi salah satu penyumbang emisi gas rumah kaca yang cukup besar. Bangunan yang hemat energi dirancang dengan ventilasi dan pencahayaan alami yang baik, menggunakan material yang mampu menahan panas, serta memanfaatkan teknologi pendingin dan penerangan yang lebih ramah lingkungan. Semua upaya ini bertujuan untuk mengurangi penggunaan energi dan menekan emisi ke atmosfer.",
@@ -93,7 +87,7 @@ const storyPages = [
       {
         id: "pangan",
         cost: 7,
-        label: "Mensosialisasikan cara pengolahan pangan efisien kepada masyarakat",
+        label: "Sosialisasi pengolahan pangan efisien",
         impactPercent: 2,
         detail:
           "Di Indonesia, pengolahan pangan yang kurang efisien masih menyebabkan pemborosan bahan makanan dan energi. Dengan mensosialisasikan cara mengolah, menyimpan, dan memanfaatkan pangan secara bijak kepada masyarakat, penggunaan sumber daya dapat ditekan, limbah makanan dapat dikurangi, serta emisi yang dihasilkan dari proses produksi dan distribusi pangan bisa diminimalkan.",
@@ -102,7 +96,7 @@ const storyPages = [
         id: "nuklir",
         cost: 9,
         label:
-          "Mengganti pembangkit listrik tenaga batu bara dan gas dengan sumber energi nuklir",
+          "Mengganti PLTU batu bara dan gas dengan nuklir",
         impactPercent: 20,
         detail:
           "Selama ini, Indonesia masih sangat bergantung pada pembangkit listrik berbahan bakar batu bara dan gas. Dengan mengembangkan pembangkit listrik tenaga nuklir sebagai sumber energi rendah karbon, Indonesia berpeluang menghasilkan listrik dalam jumlah besar dengan emisi yang jauh lebih kecil. Langkah ini dapat membantu mengurangi ketergantungan pada bahan bakar fosil sekaligus menekan emisi gas rumah kaca.",
@@ -110,7 +104,7 @@ const storyPages = [
       {
         id: "carbon-capture",
         cost: 9,
-        label: "Menggunakan teknologi untuk menangkap dan menyimpan karbon",
+        label: "Menangkap dan menyimpan karbon dengan teknologi",
         impactPercent: 10,
         detail:
           "Pengembangan teknologi untuk menangkap dan menyimpan karbon dari pembangkit listrik berbahan bakar fosil serta industri berat dapat membantu Indonesia menekan emisi gas rumah kaca. Dengan penerapan teknologi ini secara bertahap, emisi yang dilepaskan ke atmosfer dapat dikurangi. Seiring meningkatnya biaya emisi karbon, teknologi penangkapan karbon akan semakin terjangkau dan lebih luas digunakan.",
@@ -119,7 +113,7 @@ const storyPages = [
         id: "energi-terbarukan",
         cost: 9,
         label:
-          "Membangun sumber energi terbarukan seperti pembangkit listrik tenaga surya dan angin",
+          "Membangun sumber energi terbarukan",
         impactPercent: 25,
         detail:
           "Energi terbarukan, seperti listrik tenaga surya dan angin, jauh lebih bersih dibandingkan minyak, gas, dan batu bara. Di Indonesia yang kaya akan sinar Matahari dan potensi angin di beberapa wilayah, pengembangan energi ini sangat penting untuk mengurangi emisi gas rumah kaca. Seiring meningkatnya biaya emisi karbon, teknologi energi terbarukan akan semakin terjangkau dan dapat dimanfaatkan lebih luas.",
@@ -135,7 +129,7 @@ const storyPages = [
       {
         id: "tarif-karbon",
         cost: 7,
-        label: "Memberlakukan tarif untuk pelepasan karbon pada sektor industri",
+        label: "Menerapkan tarif emisi karbon sektor industri",
         impactPercent: 13,
         detail:
           "Dengan memberi nilai ekonomi pada pencemaran karbon, pelaku industri dan masyarakat akan terdorong untuk beralih ke sumber energi yang lebih bersih. Kebijakan ini membuka peluang bagi teknologi ramah lingkungan untuk digunakan lebih luas di Indonesia, sehingga seiring waktu biayanya menjadi semakin terjangkau dan dampak emisi dapat dikurangi secara signifikan.",
@@ -454,10 +448,12 @@ export default function SmartTownPage() {
           {showHouse1 ? (
             <>
               {housePlacements.map((placement, index) => (
-                <img
+                <Image
                   key={`${placement.left}-${placement.top}-${index}`}
                   src="/images/rumah1.png"
                   alt="Rumah hemat energi"
+                  width={200}
+                  height={200}
                   className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
@@ -470,10 +466,12 @@ export default function SmartTownPage() {
           {showTrees ? (
             <>
               {treePlacements.map((placement, index) => (
-                <img
+                <Image
                   key={`${placement.left}-${placement.top}-${index}`}
                   src="/images/pohon.png"
                   alt="Pohon penghijauan"
+                  width={120}
+                  height={120}
                   className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
@@ -484,9 +482,11 @@ export default function SmartTownPage() {
             </>
           ) : null}
           {showBus ? (
-            <img
+            <Image
               src="/images/bis.png"
               alt="Bus transportasi umum bersih"
+              width={200}
+              height={200}
               className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                 isFullscreen,
                 busPlacement,
@@ -497,10 +497,12 @@ export default function SmartTownPage() {
           {showCarbonTariff ? (
             <>
               {carbonTariffPlacements.map((placement, index) => (
-                <img
+                <Image
                   key={`${placement.left}-${placement.top}-${index}`}
                   src="/images/uang.png"
                   alt="Tarif karbon pada sektor industri"
+                  width={100}
+                  height={100}
                   className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
@@ -511,9 +513,11 @@ export default function SmartTownPage() {
             </>
           ) : null}
           {showNuclear ? (
-            <img
+            <Image
               src="/images/nuklir.png"
               alt="Pembangkit listrik nuklir"
+              width={200}
+              height={200}
               className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                 isFullscreen,
                 nuclearPlacement,
@@ -524,10 +528,12 @@ export default function SmartTownPage() {
           {showPangan ? (
             <>
               {panganPeoplePlacements.map((placement, index) => (
-                <img
+                <Image
                   key={`${placement.left}-${placement.top}-${index}`}
                   src="/images/people.png"
                   alt="Sosialisasi pengolahan pangan"
+                  width={100}
+                  height={100}
                   className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
@@ -540,10 +546,12 @@ export default function SmartTownPage() {
           {showPertanian ? (
             <>
               {farmPlacements.map((placement, index) => (
-                <img
+                <Image
                   key={`${placement.left}-${placement.top}-${index}`}
                   src="/images/sawah.png"
                   alt="Pertanian ramah lingkungan"
+                  width={120}
+                  height={120}
                   className={`absolute z-[2] object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
@@ -558,9 +566,11 @@ export default function SmartTownPage() {
             </>
           ) : null}
           {showCarbonCapture ? (
-            <img
+            <Image
               src="/images/karbon.png"
               alt="Pengurangan emisi karbon"
+              width={160}
+              height={160}
               className={`absolute z-[2] object-contain drop-shadow ${getIconSizeClass(
                 isFullscreen,
                 carbonCapturePlacement,
@@ -575,10 +585,12 @@ export default function SmartTownPage() {
           {showEnergiTerbarukan ? (
             <>
               {solarPanelPlacements.map((placement, index) => (
-                <img
+                <Image
                   key={`solar-${placement.left}-${placement.top}-${index}`}
                   src="/images/panel.png"
                   alt="Panel surya"
+                  width={120}
+                  height={120}
                   className={`absolute z-[4] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
@@ -587,10 +599,12 @@ export default function SmartTownPage() {
                 />
               ))}
               {windTurbinePlacements.map((placement, index) => (
-                <img
+                <Image
                   key={`wind-${placement.left}-${placement.top}-${index}`}
                   src="/images/angin.png"
                   alt="Turbin angin"
+                  width={120}
+                  height={120}
                   className={`absolute z-[2] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow ${getIconSizeClass(
                     isFullscreen,
                     placement,
@@ -601,9 +615,11 @@ export default function SmartTownPage() {
             </>
           ) : null}
           {showEdukasi ? (
-            <img
+            <Image
               src="/images/school.png"
               alt="Edukasi di sekolah"
+              width={120}
+              height={120}
               className={`absolute z-[2] object-contain drop-shadow ${getIconSizeClass(
                 isFullscreen,
                 educationPlacement,
@@ -706,10 +722,12 @@ export default function SmartTownPage() {
                     : "bg-white text-slate-900 hover:bg-slate-100"
                 }`}
               >
-                <img
+                <Image
                   src="/images/full.png"
                   alt=""
                   aria-hidden="true"
+                  width={20}
+                  height={20}
                   className="h-4 w-4 object-contain sm:h-5 sm:w-5"
                 />
               </button>
