@@ -2,8 +2,9 @@
 
 import Image from "next/image"
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { PageShell } from "@/components/page-shell"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import {
   busPlacement,
   carbonTariffPlacements,
@@ -19,133 +20,6 @@ import {
   windTurbinePlacements,
 } from "./icons"
 
-const storyPages = [
-  {
-    title: "Selamat datang!",
-    body: [
-      "Kami membutuhkan bantuanmu untuk menghadapi permasalahan pemanasan global dan perubahan iklim.",
-    ],
-  },
-  {
-    title: "Pemanasan global dan perubahan iklim",
-    body: [
-      "Pemanasan global dan perubahan iklim terjadi akibat berbagai aktivitas manusia yang menghasilkan gas-gas rumah kaca, seperti karbon dioksida (CO₂), dinitrogen oksida (N₂O), uap air (H₂O), dan metana (CH₄).",
-      "Gas-gas ini terakumulasi di atmosfer dan menahan panas Matahari, sehingga suhu Bumi meningkat dan memicu perubahan iklim.",
-      "Kami membutuhkan bantuanmu untuk mengurangi bertambahnya dampak negatif dari permasalahan ini.",
-    ],
-  },
-  {
-    title: "Misi Smart Town",
-    body: [
-      "Kamu memiliki 50 koin, gunakan koin tersebut untuk membangun kota pintar yang berorientasi pada pengurangan emisi gas rumah kaca dengan seefektif mungkin.",
-      "Semangat!",
-    ],
-  },
-  {
-    title: "Tujuan misi",
-    body: [
-      "Misi ini bertujuan untuk mengurangi emisi gas rumah kaca. Langkah-langkah yang kamu pilih akan berpengaruh langsung terhadap laju peningkatan suhu global.",
-      "Karena itu, gunakan strategi dan teknologi yang tepat untuk mewujudkan masa depan rendah karbon dan mencegah pemanasan global lebih parah!",
-    ],
-  },
-  {
-    title: "Pilih aksi (checkbox)",
-    body: [],
-    checklist: [
-      {
-        id: "hemat-energi",
-        cost: 6,
-        label: "Merancang bangun hemat energi",
-        impactPercent: 12,
-        detail:
-          "Di Indonesia, sektor bangunan juga menjadi salah satu penyumbang emisi gas rumah kaca yang cukup besar. Bangunan yang hemat energi dirancang dengan ventilasi dan pencahayaan alami yang baik, menggunakan material yang mampu menahan panas, serta memanfaatkan teknologi pendingin dan penerangan yang lebih ramah lingkungan. Semua upaya ini bertujuan untuk mengurangi penggunaan energi dan menekan emisi ke atmosfer.",
-      },
-      {
-        id: "penghijauan",
-        cost: 4,
-        label: "Menanam pohon untuk penghijauan",
-        impactPercent: 6,
-        detail:
-          "Pohon dan hutan berperan penting dalam menyerap karbon dioksida dari udara. Selain itu, keberadaan pepohonan membantu menjaga kualitas udara tetap bersih dan menyediakan ruang hijau yang nyaman bagi masyarakat untuk beraktivitas dan beristirahat. Di Indonesia, upaya penanaman pohon dan pengembangan ruang terbuka hijau sangat penting untuk mendukung lingkungan yang sehat dan berkelanjutan.",
-      },
-      {
-        id: "pertanian",
-        cost: 4,
-        label: "Meningkatkan strategi bercocok tanam dalam pertanian",
-        impactPercent: 6,
-        detail:
-          "Emisi gas rumah kaca dari sektor pertanian juga menyumbang bagian yang cukup besar terhadap total emisi di Indonesia. Dengan mengubah cara petani menanam dan mengelola lahannya misalnya melalui pertanian ramah lingkungan, pengolahan tanah minimal, penggunaan pupuk organik, serta pengurangan pupuk berbasis bahan bakar fosil, emisi dapat ditekan sekaligus meningkatkan kesuburan dan kesehatan tanah dalam jangka panjang.",
-      },
-      {
-        id: "transportasi",
-        cost: 8,
-        label: "Membangun transportasi umum bersih dan kendaraan listrik",
-        impactPercent: 17,
-        detail:
-          "Sektor transportasi merupakan salah satu penyumbang emisi gas rumah kaca yang besar di Indonesia, terutama dari kendaraan berbahan bakar bensin dan solar. Dengan meningkatkan penggunaan kendaraan listrik serta memperluas dan memperbaiki sistem transportasi umum yang ramah lingkungan, emisi dari kendaraan konvensional dapat ditekan dan ketergantungan pada bahan bakar fosil seperti minyak dan gas bisa dikurangi.",
-      },
-      {
-        id: "pangan",
-        cost: 7,
-        label: "Sosialisasi pengolahan pangan efisien",
-        impactPercent: 2,
-        detail:
-          "Di Indonesia, pengolahan pangan yang kurang efisien masih menyebabkan pemborosan bahan makanan dan energi. Dengan mensosialisasikan cara mengolah, menyimpan, dan memanfaatkan pangan secara bijak kepada masyarakat, penggunaan sumber daya dapat ditekan, limbah makanan dapat dikurangi, serta emisi yang dihasilkan dari proses produksi dan distribusi pangan bisa diminimalkan.",
-      },
-      {
-        id: "nuklir",
-        cost: 9,
-        label:
-          "Mengganti PLTU batu bara dan gas dengan nuklir",
-        impactPercent: 20,
-        detail:
-          "Selama ini, Indonesia masih sangat bergantung pada pembangkit listrik berbahan bakar batu bara dan gas. Dengan mengembangkan pembangkit listrik tenaga nuklir sebagai sumber energi rendah karbon, Indonesia berpeluang menghasilkan listrik dalam jumlah besar dengan emisi yang jauh lebih kecil. Langkah ini dapat membantu mengurangi ketergantungan pada bahan bakar fosil sekaligus menekan emisi gas rumah kaca.",
-      },
-      {
-        id: "carbon-capture",
-        cost: 9,
-        label: "Menangkap dan menyimpan karbon dengan teknologi",
-        impactPercent: 10,
-        detail:
-          "Pengembangan teknologi untuk menangkap dan menyimpan karbon dari pembangkit listrik berbahan bakar fosil serta industri berat dapat membantu Indonesia menekan emisi gas rumah kaca. Dengan penerapan teknologi ini secara bertahap, emisi yang dilepaskan ke atmosfer dapat dikurangi. Seiring meningkatnya biaya emisi karbon, teknologi penangkapan karbon akan semakin terjangkau dan lebih luas digunakan.",
-      },
-      {
-        id: "energi-terbarukan",
-        cost: 9,
-        label:
-          "Membangun sumber energi terbarukan",
-        impactPercent: 25,
-        detail:
-          "Energi terbarukan, seperti listrik tenaga surya dan angin, jauh lebih bersih dibandingkan minyak, gas, dan batu bara. Di Indonesia yang kaya akan sinar Matahari dan potensi angin di beberapa wilayah, pengembangan energi ini sangat penting untuk mengurangi emisi gas rumah kaca. Seiring meningkatnya biaya emisi karbon, teknologi energi terbarukan akan semakin terjangkau dan dapat dimanfaatkan lebih luas.",
-      },
-      {
-        id: "edukasi",
-        cost: 5,
-        label: "Melakukan edukasi di sekolah terkait darurat polusi karbon",
-        impactPercent: 2,
-        detail:
-          "Sekolah memiliki peran penting dalam membangun kesadaran generasi muda tentang bahaya polusi karbon dan dampaknya terhadap lingkungan. Dengan memberikan edukasi sejak dini mengenai pemanasan global, perubahan iklim, dan cara mengurangi jejak karbon, siswa di Indonesia dapat tumbuh menjadi agen perubahan yang peduli terhadap Bumi dan siap mengambil tindakan nyata untuk masa depan yang lebih berkelanjutan.",
-      },
-      {
-        id: "tarif-karbon",
-        cost: 7,
-        label: "Menerapkan tarif emisi karbon sektor industri",
-        impactPercent: 13,
-        detail:
-          "Dengan memberi nilai ekonomi pada pencemaran karbon, pelaku industri dan masyarakat akan terdorong untuk beralih ke sumber energi yang lebih bersih. Kebijakan ini membuka peluang bagi teknologi ramah lingkungan untuk digunakan lebih luas di Indonesia, sehingga seiring waktu biayanya menjadi semakin terjangkau dan dampak emisi dapat dikurangi secara signifikan.",
-      },
-    ],
-  },
-  {
-    title: "Selamat!",
-    body: [
-      "Kamu telah berhasil menyelesaikan seluruh misi. Aksi dan keputusanmu membawa dampak besar bagi Bumi di masa depan.",
-      "Terima kasih telah menjadi bagian dari Agen Perubahan Iklim. Teruslah menjadi penjaga lingkungan dan inspirasi bagi sekitar!",
-    ],
-  },
-]
-
-const checklistOptions = storyPages.find((page) => page.checklist)?.checklist ?? []
 const checklistCardFrames = [
   "border-amber-400 bg-amber-100/90",
   "border-yellow-400 bg-yellow-100/90",
@@ -154,6 +28,49 @@ const checklistCardFrames = [
 ]
 
 export default function SmartTownPage() {
+  const t = useTranslations("SmartTown")
+
+  const storyPages = [
+    {
+      title: t("story1Title"),
+      body: [t("story1Body")],
+    },
+    {
+      title: t("story2Title"),
+      body: [t("story2Body1"), t("story2Body2"), t("story2Body3")],
+    },
+    {
+      title: t("story3Title"),
+      body: [t("story3Body1"), t("story3Body2")],
+    },
+    {
+      title: t("story4Title"),
+      body: [t("story4Body1"), t("story4Body2")],
+    },
+    {
+      title: t("story5Title"),
+      body: [] as string[],
+      checklist: [
+        { id: "hemat-energi", cost: 6, label: t("action1Label"), impactPercent: 12, detail: t("action1Detail") },
+        { id: "penghijauan", cost: 4, label: t("action2Label"), impactPercent: 6, detail: t("action2Detail") },
+        { id: "pertanian", cost: 4, label: t("action3Label"), impactPercent: 6, detail: t("action3Detail") },
+        { id: "transportasi", cost: 8, label: t("action4Label"), impactPercent: 17, detail: t("action4Detail") },
+        { id: "pangan", cost: 7, label: t("action5Label"), impactPercent: 2, detail: t("action5Detail") },
+        { id: "nuklir", cost: 9, label: t("action6Label"), impactPercent: 20, detail: t("action6Detail") },
+        { id: "carbon-capture", cost: 9, label: t("action7Label"), impactPercent: 10, detail: t("action7Detail") },
+        { id: "energi-terbarukan", cost: 9, label: t("action8Label"), impactPercent: 25, detail: t("action8Detail") },
+        { id: "edukasi", cost: 5, label: t("action9Label"), impactPercent: 2, detail: t("action9Detail") },
+        { id: "tarif-karbon", cost: 7, label: t("action10Label"), impactPercent: 13, detail: t("action10Detail") },
+      ],
+    },
+    {
+      title: t("story6Title"),
+      body: [t("story6Body1"), t("story6Body2")],
+    },
+  ]
+
+  const checklistOptions = storyPages.find((page) => page.checklist)?.checklist ?? []
+
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   const [isCompactDevice, setIsCompactDevice] = React.useState(false)
   const [isPortrait, setIsPortrait] = React.useState(false)
@@ -289,7 +206,7 @@ export default function SmartTownPage() {
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pr-1">
         <div className="space-y-2">
           <p className="sidebar-page font-semibold uppercase tracking-[0.2em] text-white/70">
-            Halaman {pageIndex + 1} dari {storyPages.length}
+            {t("page", { current: pageIndex + 1, total: storyPages.length })}
           </p>
           <h2 className="font-semibold">{currentPage.title}</h2>
           <div className="sidebar-text space-y-2 text-white/80">
@@ -330,7 +247,7 @@ export default function SmartTownPage() {
                       <div className="relative flex h-full flex-col rounded-lg border-2 border-slate-700/80 bg-white/90 p-1.5 text-slate-800 shadow-inner">
                         <div className="flex items-center justify-between">
                           <span className={`inline-flex items-center gap-1 rounded-full border border-slate-300/80 bg-white px-1.5 py-0.5 font-semibold text-slate-700 shadow-sm ${isFullscreen ? "text-xs" : "text-[10px]"}`}>
-                            {item.cost} koin
+                            {item.cost} {t("coin")}
                           </span>
                           <button
                             type="button"
@@ -373,21 +290,18 @@ export default function SmartTownPage() {
     (isPortrait || isViewportPortrait)
 
   return (
-    <PageShell title="Smart Town">
+    <PageShell title={t("title")}>
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Climate Action
+              {t("subtitle")}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-              Merancang Smart Town
+              {t("heading")}
             </h1>
             <p className="mt-3 max-w-3xl text-sm text-muted-foreground md:text-base">
-              Tantangan ini mengajak siswa merancang kota cerdas yang ramah
-              lingkungan dengan memadukan prinsip STEM-ESD. Fokus pada solusi
-              mitigasi perubahan iklim yang realistis dan dapat diterapkan di
-              lingkungan sekitar.
+              {t("description")}
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -395,13 +309,13 @@ export default function SmartTownPage() {
               href="/climate-action"
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
             >
-              Kembali
+              {t("back")}
             </Link>
             <Link
               href="/climate-action/kuis"
               className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
             >
-              Lanjut ke Kuis
+              {t("goToQuiz")}
             </Link>
           </div>
         </div>
@@ -665,13 +579,13 @@ export default function SmartTownPage() {
                 </div>
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                    Hasil
+                    {t("result")}
                   </p>
                   <p className="mt-1 text-lg font-semibold text-foreground">
                     {submitted ? impactPercent : 0}%
                   </p>
                   <p className="mt-1 text-[11px] text-muted-foreground">
-                    Penurunan emisi
+                    {t("emissionReduction")}
                   </p>
                 </div>
               </div>
@@ -685,7 +599,7 @@ export default function SmartTownPage() {
                 onClick={() => setIsSidebarOpen((prev) => !prev)}
                 className="inline-flex w-auto items-center justify-center gap-1 rounded-xl bg-white px-2 py-1.5 text-[10px] font-semibold text-slate-900 shadow transition hover:bg-slate-100 sm:w-28 sm:gap-2 sm:px-3 sm:py-2 sm:text-sm"
               >
-                {isSidebarOpen ? "Tutup Panel" : "Buka Panel"}
+                {isSidebarOpen ? t("closePanel") : t("openPanel")}
               </button>
               <button
                 type="button"
@@ -744,7 +658,7 @@ export default function SmartTownPage() {
                     <div className="space-y-4 text-foreground">
                       <div className="flex items-start justify-between gap-4">
                         <h3 className="text-lg font-semibold">
-                          {info.label} ({info.cost} koin)
+                          {info.label} ({info.cost} {t("coin")})
                         </h3>
                         <button
                           type="button"
@@ -765,12 +679,12 @@ export default function SmartTownPage() {
             <div className="absolute inset-0 z-[30] flex items-center justify-center bg-black/50 p-4">
               <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl">
                 <h3 className="text-lg font-semibold text-foreground">
-                  Konfirmasi Pilihan
+                  {t("confirmTitle")}
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {selectedActions.length
-                    ? "Yakin ingin mengirim pilihan aksi ini?"
-                    : "Belum ada aksi yang dipilih. Tetap kirim?"}
+                    ? t("confirmWithActions")
+                    : t("confirmWithoutActions")}
                 </p>
                 <div className="mt-5 flex items-center justify-center gap-3">
                   <button
@@ -778,14 +692,14 @@ export default function SmartTownPage() {
                     onClick={() => setShowSubmitConfirm(false)}
                     className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                   >
-                    Batal
+                    {t("cancel")}
                   </button>
                   <button
                     type="button"
                     onClick={confirmSubmit}
                     className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
                   >
-                    Kirim
+                    {t("send")}
                   </button>
                 </div>
               </div>

@@ -1,53 +1,56 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
+import { useRouter } from "@/i18n/navigation"
 
 import { PageShell } from "@/components/page-shell"
 import { useIsMobile } from "@/hooks/use-mobile"
 import BumiRays from "@/components/bumi-rays"
 
-const steps = [
-  {
-    title: "Step 1 · Perumpamaan Rumah Kaca",
-    desc: "Bumi diibaratkan sebagai rumah kaca, sedangkan manusia, hewan, tumbuhan, dan seluruh aktivitas kehidupan di dalamnya diibaratkan sebagai tanaman yang berada di dalam rumah kaca.",
-    image: "/images/rumah-kaca-1.png",
-  },
-  {
-    title: "Step 2 · Cahaya Matahari Masuk",
-    desc: "Cahaya Matahari masuk ke Bumi seperti sinar yang menembus kaca pada rumah kaca.",
-    video: "/video/step-1.mp4",
-  },
-  {
-    title: "Step 3 · Radiasi Inframerah & Pemanasan",
-    desc: "Sebagian radiasi diserap oleh Bumi dan sebagian dipantulkan dalam bentuk radiasi inframerah. Saat radiasi inframerah ke atas akan terkena kaca; sebagian bisa keluar dan sebagian memantul kembali ke rumah kaca.",
-    video: "/video/step-2.mp4",
-  },
-  {
-    title: "Step 4 · Suhu Semakin Meningkat",
-    desc: "Hal ini terus berulang hingga suhu di dalam rumah kaca itupun semakin meningkat.",
-    video: "/video/step-3.mp4",
-  },
-  {
-    title: "Step 5 · Studi Kasus Bumi",
-    desc: "Kondisi ini sama halnya dengan yang berada di Bumi. Panas dari Matahari masuk ke atmosfer. Sebagian radiasi diserap oleh Bumi dan sebagian dipantulkan dalam bentuk radiasi inframerah. Saat radiasi inframerah ke atas akan terkena gas rumah kaca. Sebagian radiasi inframerah bisa keluar, sebagian memantul masuk kembali ke Bumi. Siklus pemantulan dan penyerapan ini terus berulang dan menyebabkan suhu Bumi meningkat.",
-    image: "/images/bumi.png",
-  },
-  {
-    title: "Step 6 · Penjelasan Gas Rumah Kaca",
-    desc: "Gas rumah kaca adalah gas-gas yang terdapat di atmosfer Bumi dan berperan dalam menahan panas Matahari agar tidak seluruhnya lepas kembali ke angkasa. Ketika sinar Matahari mencapai permukaan Bumi, sebagian energi diserap dan diubah menjadi panas, lalu dipancarkan kembali dalam bentuk radiasi inframerah. Gas rumah kaca seperti uap air, karbon dioksida (CO₂), metana (CH₄), dinitrogen oksida (N₂O), dan CFC menyerap serta memantulkan kembali radiasi inframerah tersebut ke permukaan Bumi, sehingga suhu Bumi tetap hangat dan mendukung kehidupan. Namun, jika jumlah gas rumah kaca berlebihan akibat aktivitas manusia, panas yang terperangkap menjadi terlalu banyak dan menyebabkan pemanasan global.",
-    image: "/images/gas-rumah-kaca.png",
-    overlayVideo: "/images/berputar.mp4",
-  },
-  {
-    title: "Step 7 · Asal Gas Rumah Kaca",
-    desc: "Gas rumah kaca berasal dari proses alami dan aktivitas manusia, seperti penguapan air, pernapasan makhluk hidup, pembakaran bahan bakar fosil, kegiatan industri, pertanian, dan penggunaan bahan kimia buatan. Gas-gas ini berperan menahan panas di atmosfer, namun jika jumlahnya berlebihan dapat meningkatkan suhu Bumi dan memicu pemanasan global.",
-    image: "/images/asal.png",
-  },
-]
-
 export default function EfekRumahKacaMateriPage() {
+  const t = useTranslations("EfekRumahKacaMateri")
+
+  const steps = [
+    {
+      title: t("step1Title"),
+      desc: t("step1Desc"),
+      image: "/images/rumah-kaca-1.png",
+    },
+    {
+      title: t("step2Title"),
+      desc: t("step2Desc"),
+      video: "/video/step-1.mp4",
+    },
+    {
+      title: t("step3Title"),
+      desc: t("step3Desc"),
+      video: "/video/step-2.mp4",
+    },
+    {
+      title: t("step4Title"),
+      desc: t("step4Desc"),
+      video: "/video/step-3.mp4",
+    },
+    {
+      title: t("step5Title"),
+      desc: t("step5Desc"),
+      image: "/images/bumi.png",
+    },
+    {
+      title: t("step6Title"),
+      desc: t("step6Desc"),
+      image: "/images/gas-rumah-kaca.png",
+      overlayVideo: "/images/berputar.mp4",
+    },
+    {
+      title: t("step7Title"),
+      desc: t("step7Desc"),
+      image: "/images/asal.png",
+    },
+  ]
+
   const [index, setIndex] = React.useState(0)
   const current = steps[index] ?? steps[0]
   const containerRef = React.useRef<HTMLDivElement | null>(null)
@@ -139,7 +142,7 @@ export default function EfekRumahKacaMateriPage() {
               shouldRotate ? "px-2.5 py-1 text-[8px]" : "px-3 py-1.5 text-[11px]"
             }`}
           >
-            Sebelumnya
+            {t("previous")}
           </button>
           <div className="flex items-center gap-2">
             {steps.map((_, i) => (
@@ -160,7 +163,7 @@ export default function EfekRumahKacaMateriPage() {
                   shouldRotate ? "px-2.5 py-1 text-[8px]" : "px-3 py-1.5 text-[11px]"
                 }`}
               >
-                Keluar
+                {t("exit")}
               </button>
             ) : null}
             <button
@@ -170,7 +173,7 @@ export default function EfekRumahKacaMateriPage() {
                 shouldRotate ? "px-2.5 py-1 text-[8px]" : "px-3 py-1.5 text-[11px]"
               }`}
             >
-              {index >= steps.length - 1 ? "Selesai" : "Berikutnya"}
+              {index >= steps.length - 1 ? t("done") : t("next")}
             </button>
           </div>
         </div>
@@ -179,10 +182,10 @@ export default function EfekRumahKacaMateriPage() {
   )
 
   return (
-    <PageShell title="Materi Efek Rumah Kaca">
+    <PageShell title={t("title")}>
       {!current ? (
         <div className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
-          Konten materi belum tersedia.
+          {t("contentNotAvailable")}
         </div>
       ) : (
         <>
@@ -190,14 +193,13 @@ export default function EfekRumahKacaMateriPage() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                  Materi Efek Rumah Kaca
+                  {t("subtitle")}
                 </p>
                 <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
                   {current.title}
                 </h1>
                 <p className="mt-3 text-sm text-muted-foreground md:text-base">
-                  Ringkasan materi per langkah untuk memahami proses efek rumah
-                  kaca.
+                  {t("summary")}
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -206,13 +208,13 @@ export default function EfekRumahKacaMateriPage() {
                   onClick={handleFullscreen}
                   className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                 >
-                  {isFullscreen ? "Keluar Full Screen" : "Full Screen"}
+                  {isFullscreen ? t("exitFullScreen") : t("fullScreen")}
                 </button>
                 <Link
                   href="/efek-rumah-kaca"
                   className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                 >
-                  Kembali
+                  {t("back")}
                 </Link>
               </div>
             </div>
@@ -300,7 +302,7 @@ export default function EfekRumahKacaMateriPage() {
               disabled={index === 0}
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground disabled:opacity-40"
             >
-              Sebelumnya
+              {t("previous")}
             </button>
             <div className="flex items-center gap-2">
               {steps.map((_, i) => (
@@ -317,7 +319,7 @@ export default function EfekRumahKacaMateriPage() {
               onClick={handleNext}
               className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90"
             >
-              {index >= steps.length - 1 ? "Selesai" : "Berikutnya"}
+              {index >= steps.length - 1 ? t("done") : t("next")}
             </button>
           </div>
         </div>

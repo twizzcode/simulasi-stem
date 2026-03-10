@@ -1,12 +1,17 @@
+"use client"
+
 import Image from "next/image"
-import Link from "next/link"
 import { Play } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 import { PageShell } from "@/components/page-shell"
 
 export default function Home() {
+  const t = useTranslations("Home")
+
   return (
-    <PageShell title="Beranda" firstPanelGradient={false}>
+    <PageShell title={t("title")} firstPanelGradient={false}>
       <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-background to-secondary/40 shadow-sm">
         <div className="absolute -right-20 -top-24 size-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-28 -left-20 size-80 rounded-full bg-secondary/40 blur-3xl" />
@@ -23,23 +28,16 @@ export default function Home() {
 
         <div className="relative max-w-3xl space-y-4 p-5 sm:p-6 md:space-y-6 md:p-8">
           <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground sm:px-4 sm:text-xs">
-            Media Pembelajaran IPA
+            {t("badge")}
             <span className="size-1.5 rounded-full bg-primary" />
-            STEM-ESD
+            {t("badgeStem")}
           </span>
           <div className="space-y-3">
             <h1 className="text-2xl font-semibold leading-tight tracking-tight text-foreground sm:text-3xl md:text-4xl">
-              Simulasi Komputer Berbasis STEM-ESD
+              {t("heading")}
             </h1>
             <p className="text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
-              Simulasi komputer berbasis STEM-ESD merupakan media pembelajaran
-              IPA berbentuk web yang dirancang untuk membahas isu-isu lingkungan
-              dan perubahan iklim secara kontekstual. Melalui aktivitas
-              interaktif yang mengintegrasikan aspek STEM (Sains, Teknologi,
-              Engineering, dan Matematika) serta dengan berbasis Education for
-              Sustainable (ESD) media ini diharapkan mampu membantu siswa
-              memahami IPA sekaligus meningkatkan literasi perubahan iklim yang
-              dibutuhkan pada era saat ini.
+              {t("description")}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -48,10 +46,10 @@ export default function Home() {
               className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 md:px-6 md:py-3"
             >
               <Play className="size-4" />
-              Mulai Belajar
+              {t("startLearning")}
             </Link>
             <span className="text-xs text-muted-foreground">
-              Lihat CP & TP sebelum memulai simulasi
+              {t("viewCpTp")}
             </span>
           </div>
         </div>
@@ -59,18 +57,9 @@ export default function Home() {
 
       <section className="grid gap-4 md:grid-cols-3">
         {[
-          {
-            title: "Kontekstual & Interaktif",
-            desc: "Skenario lingkungan nyata yang divisualkan melalui simulasi agar siswa aktif mengeksplorasi konsep.",
-          },
-          {
-            title: "Terintegrasi STEM",
-            desc: "Menghubungkan sains, teknologi, engineering, dan matematika untuk membangun pemahaman yang utuh.",
-          },
-          {
-            title: "Berbasis ESD",
-            desc: "Menumbuhkan kepedulian dan aksi nyata terhadap isu perubahan iklim dan keberlanjutan.",
-          },
+          { title: t("feature1Title"), desc: t("feature1Desc") },
+          { title: t("feature2Title"), desc: t("feature2Desc") },
+          { title: t("feature3Title"), desc: t("feature3Desc") },
         ].map((item) => (
           <article
             key={item.title}

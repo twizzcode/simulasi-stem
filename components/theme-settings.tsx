@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { Moon, Palette, Sun } from "lucide-react"
 
 import {
@@ -26,6 +27,7 @@ export function ThemeSettings() {
     return localStorage.getItem(DARK_KEY) === "true"
   })
   const [mounted, setMounted] = React.useState(false)
+  const t = useTranslations("Sidebar")
 
   React.useEffect(() => {
     setMounted(true)
@@ -41,7 +43,7 @@ export function ThemeSettings() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Pengaturan</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("settings")}</SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton
@@ -50,7 +52,7 @@ export function ThemeSettings() {
             }
           >
             <Palette />
-            <span>Skema Warna</span>
+            <span>{t("colorScheme")}</span>
             <span className="ml-auto text-xs text-muted-foreground">
               {mounted ? (theme === "colorful" ? "Colorful" : "Default") : "…"}
             </span>
@@ -60,7 +62,7 @@ export function ThemeSettings() {
         <SidebarMenuItem>
           <SidebarMenuButton onClick={() => setIsDark((prev) => !prev)}>
             {isDark ? <Moon /> : <Sun />}
-            <span>Dark Mode</span>
+            <span>{t("darkMode")}</span>
             <span className="ml-auto text-xs text-muted-foreground">
               {mounted ? (isDark ? "On" : "Off") : "…"}
             </span>

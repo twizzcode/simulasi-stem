@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import {
   BookOpen,
   Bot,
@@ -15,173 +16,76 @@ import {
   User,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
 import { ThemeSettings } from "@/components/theme-settings"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const t = useTranslations("Sidebar")
+
+  const projects = [
+    {
+      name: t("home"),
+      url: "/",
+      icon: Home,
+    },
+    {
+      name: t("cpTp"),
+      url: "/cp-tp",
+      icon: Goal,
+    },
+    {
+      name: t("efekRumahKaca"),
+      url: "/efek-rumah-kaca",
+      icon: SolarPanel,
+    },
+    {
+      name: t("pemanasanGlobal"),
+      url: "/pemanasan-global",
+      icon: Earth,
+    },
+    {
+      name: t("climateAction"),
+      url: "/climate-action",
+      icon: ShieldAlert,
+    },
+    {
+      name: t("aktivitasSiswa"),
+      url: "/aktivitas-siswa",
+      icon: Map,
+    },
+    {
+      name: t("profilePengembang"),
+      url: "/profile-pengembang",
+      icon: User,
+    },
+  ]
+
+  const teams = [
     {
       name: "Simulasi Komputer",
       logo: "/favicon.ico",
       plan: "STEM-ESD",
     }
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Beranda",
-      url: "/",
-      icon: Home,
-    },
-    {
-      name: "CP & TP",
-      url: "/cp-tp",
-      icon: Goal,
-    },
-    {
-      name: "Efek Rumah Kaca",
-      url: "/efek-rumah-kaca",
-      icon: SolarPanel,
-    },
-    {
-      name: "Pemanasan Global & Perubahan Iklim",
-      url: "/pemanasan-global",
-      icon: Earth,
-    },
-    {
-      name: "Climate Action",
-      url: "/climate-action",
-      icon: ShieldAlert,
-    },
-    {
-      name: "Aktivitas Siswa",
-      url: "/aktivitas-siswa",
-      icon: Map,
-    },
-    {
-      name: "Profile Pengembang",
-      url: "/profile-pengembang",
-      icon: User,
-    },
-  ],
-}
+  ]
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={teams} />
       </SidebarHeader>
       <SidebarContent>
-        {/* <NavMain items={data.navMain} /> */}
-        <NavProjects projects={data.projects} />
+        <NavProjects projects={projects} />
+        <LanguageSwitcher />
         <ThemeSettings />
       </SidebarContent>
-      {/* <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   )

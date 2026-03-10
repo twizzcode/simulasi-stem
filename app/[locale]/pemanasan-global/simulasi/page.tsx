@@ -2,7 +2,8 @@
 
 import Image from "next/image"
 import * as React from "react"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 import { PageShell } from "@/components/page-shell"
 
@@ -83,6 +84,7 @@ const contentById: Record<string, PulauContent> = {
 type Scene = "intro" | "map" | "island"
 
 export default function PemanasanGlobalSimulasiPage() {
+  const t = useTranslations("PemanasanGlobalSimulasi")
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   const mapRef = React.useRef<HTMLDivElement | null>(null)
   const [isCompactDevice, setIsCompactDevice] = React.useState(false)
@@ -102,10 +104,48 @@ export default function PemanasanGlobalSimulasiPage() {
   )
   const finishTimeoutRef = React.useRef<number | null>(null)
 
+  const islandName = (id: string) => {
+    const key = `island${id.toUpperCase()}` as const
+    return t(key)
+  }
+
+  const translatedContent: Record<string, { title: string; steps: string[]; sceneImages?: string[] }> = {
+    a: {
+      title: t("islandA"),
+      sceneImages: contentById.a.sceneImages,
+      steps: [t("islandAStep1"), t("islandAStep2")],
+    },
+    b: {
+      title: t("islandB"),
+      sceneImages: contentById.b.sceneImages,
+      steps: [t("islandBStep1"), t("islandBStep2")],
+    },
+    c: {
+      title: t("islandC"),
+      sceneImages: contentById.c.sceneImages,
+      steps: [t("islandCStep1"), t("islandCStep2")],
+    },
+    d: {
+      title: t("islandD"),
+      sceneImages: contentById.d.sceneImages,
+      steps: [t("islandDStep1"), t("islandDStep2")],
+    },
+    e: {
+      title: t("islandE"),
+      sceneImages: contentById.e.sceneImages,
+      steps: [t("islandEStep1"), t("islandEStep2")],
+    },
+    f: {
+      title: t("islandF"),
+      sceneImages: contentById.f.sceneImages,
+      steps: [t("islandFStep1"), t("islandFStep2")],
+    },
+  }
+
   const introPages = [
-    "Kamu baru saja sampai di tahun 2065",
-    "Lihatlah di sekitarmu, lingkungannya tampak berbeda",
-    "Mari jelajahi dan cari tau apa yang sebenarnya terjadi!",
+    t("intro1"),
+    t("intro2"),
+    t("intro3"),
   ]
 
   React.useEffect(() => {
@@ -191,7 +231,7 @@ export default function PemanasanGlobalSimulasiPage() {
     setScene("island")
   }
 
-  const islandContent = contentById[selectedIslandId] || contentById.a
+  const islandContent = translatedContent[selectedIslandId] || translatedContent.a
   const islandScene =
     islandContent.sceneImages?.[
       Math.min(islandStepIndex, (islandContent.sceneImages?.length ?? 1) - 1)
@@ -212,7 +252,7 @@ export default function PemanasanGlobalSimulasiPage() {
   }
 
   return (
-    <PageShell title="Simulasi Pemanasan Global">
+    <PageShell title={t("title")}>
       <section
         className={`rounded-2xl border bg-card p-6 shadow-sm md:p-8 ${
           isFullscreen ? "hidden" : ""
@@ -221,14 +261,13 @@ export default function PemanasanGlobalSimulasiPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Simulasi Interaktif
+              {t("subtitle")}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-              Pemanasan Global
+              {t("heading")}
             </h1>
             <p className="mt-3 text-sm text-muted-foreground md:text-base">
-              Jelajahi dari cerita awal, peta, sampai tiap pulau dalam satu
-              alur.
+              {t("description")}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -237,13 +276,13 @@ export default function PemanasanGlobalSimulasiPage() {
               onClick={toggleFullscreen}
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
             >
-              {isFullscreen ? "Keluar Full Screen" : "Full Screen"}
+              {isFullscreen ? t("exitFullScreen") : t("fullScreen")}
             </button>
             <Link
               href="/pemanasan-global"
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
             >
-              Kembali
+              {t("back")}
             </Link>
           </div>
         </div>
@@ -261,7 +300,7 @@ export default function PemanasanGlobalSimulasiPage() {
             onClick={toggleFullscreen}
             className="absolute right-4 top-4 z-30 rounded-full border border-white/40 bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:border-white"
           >
-            Keluar Full Screen
+            {t("exitFullScreen")}
           </button>
         ) : null}
 
@@ -301,13 +340,10 @@ export default function PemanasanGlobalSimulasiPage() {
                     {pageIndex === 2 ? (
                       <div className="absolute left-3 top-[43%] w-[84%] max-w-lg rounded-lg bg-[#bcd4dd] p-3 text-xs text-slate-800 shadow md:left-6 md:top-[45%] md:w-[75%] md:p-4 md:text-sm">
                         <p>
-                          Dunia telah banyak berubah akibat krisis iklim.
-                          Lingkungan, kota, dan kehidupan manusia tidak lagi
-                          seperti yang kita kenal sekarang.
+                          {t("introExtra")}
                         </p>
                         <p className="mt-2 font-semibold md:mt-3">
-                          Tantangan: Pergilah ke wilayah A-F untuk
-                          menyelesaikan misi!
+                          {t("introChallenge")}
                         </p>
                       </div>
                     ) : null}
@@ -318,7 +354,7 @@ export default function PemanasanGlobalSimulasiPage() {
                           onClick={() => setScene("map")}
                           className="rounded-full bg-yellow-400 px-5 py-2 text-xs font-semibold text-slate-900 shadow transition hover:bg-yellow-300 md:px-6"
                         >
-                          Lihat mapnya &gt;
+                          {t("viewMap")}
                         </button>
                       ) : (
                         <button
@@ -328,7 +364,7 @@ export default function PemanasanGlobalSimulasiPage() {
                           }
                           className="rounded-full bg-yellow-400 px-5 py-2 text-xs font-semibold text-slate-900 shadow transition hover:bg-yellow-300 md:px-6"
                         >
-                          Lanjut
+                          {t("continue")}
                         </button>
                       )}
                     </div>
@@ -362,10 +398,10 @@ export default function PemanasanGlobalSimulasiPage() {
                       className="group absolute -translate-x-1/2 -translate-y-1/2 transition duration-200 hover:scale-105"
                       style={{ top: `${island.top}%`, left: `${island.left}%` }}
                     >
-                      <span className="sr-only">{island.name}</span>
+                      <span className="sr-only">{islandName(island.id)}</span>
                       <Image
                         src={island.imageSrc}
-                        alt={island.name}
+                        alt={islandName(island.id)}
                         width={144}
                         height={144}
                         className={`h-[6.5rem] w-[6.5rem] object-contain drop-shadow-[0_8px_14px_rgba(15,23,42,0.38)] transition duration-200 sm:h-[7.5rem] sm:w-[7.5rem] md:h-36 md:w-36 ${
@@ -398,10 +434,10 @@ export default function PemanasanGlobalSimulasiPage() {
                       onClick={(event) => event.stopPropagation()}
                     >
                       <p className="font-semibold text-slate-900">
-                        {pendingIsland.name}
+                        {islandName(pendingIsland.id)}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Klik untuk mengunjungi pulau ini.
+                        {t("clickToVisit")}
                       </p>
                       <div className="mt-3 flex items-center gap-2">
                         <button
@@ -409,7 +445,7 @@ export default function PemanasanGlobalSimulasiPage() {
                           onClick={() => setPendingIsland(null)}
                           className="rounded-full border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                         >
-                          Batal
+                          {t("cancel")}
                         </button>
                         <button
                           type="button"
@@ -422,7 +458,7 @@ export default function PemanasanGlobalSimulasiPage() {
                           }
                           className="rounded-full bg-yellow-400 px-4 py-1.5 text-xs font-semibold text-slate-900 shadow transition hover:bg-yellow-300"
                         >
-                          Jelajahi Pulau
+                          {t("exploreIsland")}
                         </button>
                       </div>
                     </div>
@@ -432,10 +468,10 @@ export default function PemanasanGlobalSimulasiPage() {
                     <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 p-4">
                       <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl">
                         <h3 className="text-lg font-semibold text-foreground">
-                          Selamat!
+                          {t("congratulations")}
                         </h3>
                         <p className="mt-2 text-sm text-muted-foreground">
-                          Kamu sudah menyelesaikan semua misi.
+                          {t("allMissionsComplete")}
                         </p>
                         <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
                           <button
@@ -443,13 +479,13 @@ export default function PemanasanGlobalSimulasiPage() {
                             onClick={() => setShowCompletion(false)}
                             className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                           >
-                            Tutup
+                            {t("close")}
                           </button>
                           <Link
                             href="/pemanasan-global/sertifikat"
                             className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500"
                           >
-                            Download Sertifikat
+                            {t("downloadCertificate")}
                           </Link>
                         </div>
                       </div>
@@ -482,11 +518,11 @@ export default function PemanasanGlobalSimulasiPage() {
                         onClick={() => setScene("map")}
                         className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                       >
-                        Kembali ke Peta
+                        {t("backToMap")}
                       </button>
                       <div className="flex items-center gap-3">
                         <span className="text-xs text-muted-foreground">
-                          Langkah {islandStepIndex + 1} dari {islandContent.steps.length}
+                          {t("stepOf", { current: islandStepIndex + 1, total: islandContent.steps.length })}
                         </span>
                         {islandStepIndex < islandContent.steps.length - 1 ? (
                           <button
@@ -498,7 +534,7 @@ export default function PemanasanGlobalSimulasiPage() {
                             }
                             className="rounded-full bg-yellow-400 px-5 py-2 text-xs font-semibold text-slate-900 shadow transition hover:bg-yellow-300"
                           >
-                            Next
+                            {t("next")}
                           </button>
                         ) : (
                           <button
@@ -506,7 +542,7 @@ export default function PemanasanGlobalSimulasiPage() {
                             onClick={() => setShowFinishConfirm(true)}
                             className="rounded-full bg-emerald-500 px-5 py-2 text-xs font-semibold text-white shadow transition hover:bg-emerald-400"
                           >
-                            Selesaikan Misi
+                            {t("finishMission")}
                           </button>
                         )}
                       </div>
@@ -517,10 +553,10 @@ export default function PemanasanGlobalSimulasiPage() {
                     <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/45 p-4">
                       <div className="w-full max-w-sm rounded-2xl bg-white p-5 text-center shadow-xl">
                         <h3 className="text-base font-semibold text-foreground">
-                          Selesaikan misi ini?
+                          {t("finishMissionConfirm")}
                         </h3>
                         <p className="mt-2 text-sm text-muted-foreground">
-                          Progress pulau akan ditandai selesai.
+                          {t("progressSaved")}
                         </p>
                         <div className="mt-4 flex items-center justify-center gap-2">
                           <button
@@ -528,14 +564,14 @@ export default function PemanasanGlobalSimulasiPage() {
                             onClick={() => setShowFinishConfirm(false)}
                             className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                           >
-                            Batal
+                            {t("cancel")}
                           </button>
                           <button
                             type="button"
                             onClick={finishIsland}
                             className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500"
                           >
-                            Ya, Selesaikan
+                            {t("yesFinish")}
                           </button>
                         </div>
                       </div>
@@ -552,10 +588,10 @@ export default function PemanasanGlobalSimulasiPage() {
                           </span>
                         </div>
                         <h3 className="text-xl font-semibold text-foreground">
-                          Misi Selesai!
+                          {t("missionComplete")}
                         </h3>
                         <p className="mt-2 text-sm text-muted-foreground">
-                          Progress pulau sudah tersimpan.
+                          {t("progressSavedMsg")}
                         </p>
                       </div>
                     </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import {
@@ -29,6 +30,8 @@ export function PageShell({
   children,
   firstPanelGradient = true,
 }: PageShellProps) {
+  const t = useTranslations("PageShell")
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -44,7 +47,7 @@ export function PageShell({
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="/">
-                    Simulasi Komputer Berbasis STEM-ESD
+                    {t("breadcrumb")}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
@@ -63,7 +66,7 @@ export function PageShell({
           >
             {children ?? (
               <div className="flex min-h-[60vh] items-center justify-center rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground">
-                Konten {title} sedang disiapkan.
+                {t("contentLoading", { title })}
               </div>
             )}
           </div>

@@ -1,13 +1,15 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 import { PageShell } from "@/components/page-shell"
 import { Separator } from "@/components/ui/separator"
 import { questions } from "./questions"
 
 export default function ClimateActionQuizPage() {
+  const t = useTranslations("Quiz")
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   const [isCompactDevice, setIsCompactDevice] = React.useState(false)
   const [isPortrait, setIsPortrait] = React.useState(false)
@@ -104,7 +106,7 @@ export default function ClimateActionQuizPage() {
     isFullscreen && isCompactDevice && (isPortrait || isViewportPortrait)
 
   return (
-    <PageShell title="Kuis Climate Action">
+    <PageShell title={t("title")}>
       <section
         className={`rounded-2xl border bg-card p-6 shadow-sm md:p-8 ${
           isFullscreen ? "hidden" : ""
@@ -113,14 +115,13 @@ export default function ClimateActionQuizPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Evaluasi Pemahaman
+              {t("subtitle")}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-              Kuis Climate Action
+              {t("heading")}
             </h1>
             <p className="mt-3 text-sm text-muted-foreground md:text-base">
-              Template kuis pilihan ganda. Silakan ubah daftar soal pada data
-              di bagian atas file ini.
+              {t("description")}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -129,13 +130,13 @@ export default function ClimateActionQuizPage() {
               onClick={handleFullscreen}
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
             >
-              {isFullscreen ? "Keluar Full Screen" : "Full Screen"}
+              {isFullscreen ? t("exitFullScreen") : t("fullScreen")}
             </button>
             <Link
               href="/climate-action"
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
             >
-              Kembali
+              {t("back")}
             </Link>
           </div>
         </div>
@@ -153,7 +154,7 @@ export default function ClimateActionQuizPage() {
             onClick={handleFullscreen}
             className="absolute right-4 top-4 z-20 rounded-full border border-white/40 bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:border-white"
           >
-            Keluar Full Screen
+            {t("exitFullScreen")}
           </button>
         ) : null}
 
@@ -182,7 +183,7 @@ export default function ClimateActionQuizPage() {
                     <div className="grid gap-6 lg:grid-cols-[1fr_auto_260px]">
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                          Soal {currentIndex + 1} dari {total}
+                          {t("questionOf", { current: currentIndex + 1, total })}
                         </p>
                         <h2 className="mt-2 text-base font-semibold text-foreground">
                           {current.text}
@@ -218,7 +219,7 @@ export default function ClimateActionQuizPage() {
                             disabled={currentIndex === 0}
                             className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground disabled:opacity-50"
                           >
-                            Previous
+                            {t("previous")}
                           </button>
                           <button
                             type="button"
@@ -228,7 +229,7 @@ export default function ClimateActionQuizPage() {
                             disabled={currentIndex === total - 1}
                             className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:opacity-60"
                           >
-                            Next
+                            {t("next")}
                           </button>
                           <button
                             type="button"
@@ -239,7 +240,7 @@ export default function ClimateActionQuizPage() {
                                 : "border-primary/30 bg-background text-primary hover:border-primary/60"
                             }`}
                           >
-                            {flagged[current.id] ? "Ragu-ragu" : "Tandai Ragu-ragu"}
+                            {flagged[current.id] ? t("marked") : t("markDoubt")}
                           </button>
                           {currentIndex === total - 1 ? (
                             <button
@@ -247,7 +248,7 @@ export default function ClimateActionQuizPage() {
                               onClick={handleSubmit}
                               className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
                             >
-                              Submit
+                              {t("submit")}
                             </button>
                           ) : null}
                         </div>
@@ -257,7 +258,7 @@ export default function ClimateActionQuizPage() {
 
                       <aside>
                         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                          Navigasi Soal
+                          {t("navTitle")}
                         </p>
                         <div className="mt-4 grid grid-cols-5 gap-2 sm:grid-cols-7 lg:grid-cols-4">
                           {questions.map((q, idx) => {
@@ -289,9 +290,9 @@ export default function ClimateActionQuizPage() {
                           })}
                         </div>
                         <div className="mt-4 space-y-2 text-xs text-muted-foreground">
-                          <p>• Hijau: sudah dijawab</p>
-                          <p>• Kuning: ditandai ragu-ragu</p>
-                          <p>• Biru: soal aktif</p>
+                          <p>• {t("navGreen")}</p>
+                          <p>• {t("navYellow")}</p>
+                          <p>• {t("navBlue")}</p>
                         </div>
                       </aside>
                     </div>
@@ -301,8 +302,8 @@ export default function ClimateActionQuizPage() {
                     <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
                       <div className="flex flex-col gap-6">
                         <div>
-                          <h2 className="text-lg font-semibold text-foreground">Hasil Kuis</h2>
-                          <p className="mt-1 text-sm text-muted-foreground">Ringkasan skor akhir.</p>
+                          <h2 className="text-lg font-semibold text-foreground">{t("resultTitle")}</h2>
+                          <p className="mt-1 text-sm text-muted-foreground">{t("resultSummary")}</p>
                         </div>
                         <div className="flex w-full flex-col items-center gap-4">
                           <div className="relative flex w-full items-center justify-center">
@@ -326,16 +327,16 @@ export default function ClimateActionQuizPage() {
                             <span className="absolute text-base font-semibold text-foreground">{score}%</span>
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            {correctCount} benar · {wrongCount} salah
+                            {correctCount} {t("correct")} · {wrongCount} {t("wrong")}
                           </div>
                         </div>
                       </div>
                     </section>
 
                     <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
-                      <h3 className="text-lg font-semibold text-foreground">Pembahasan & Jawaban</h3>
+                      <h3 className="text-lg font-semibold text-foreground">{t("reviewTitle")}</h3>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        Berikut detail jawaban beserta pilihan yang benar.
+                        {t("reviewDesc")}
                       </p>
                       <div className="mt-6 space-y-4">
                         {questions.map((q, idx) => {
@@ -343,7 +344,7 @@ export default function ClimateActionQuizPage() {
                           return (
                             <article key={q.id} className="rounded-xl border bg-background/60 p-4">
                               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                                Soal {idx + 1}
+                                {t("questionOf", { current: idx + 1, total })}
                               </p>
                               <h3 className="mt-2 text-base font-semibold text-foreground">{q.text}</h3>
                               <div className="mt-3 grid gap-2">
@@ -368,10 +369,10 @@ export default function ClimateActionQuizPage() {
                                       </span>
                                       <span className="flex-1">{option}</span>
                                       {isCorrect ? (
-                                        <span className="text-[11px] font-semibold text-emerald-700">Benar</span>
+                                        <span className="text-[11px] font-semibold text-emerald-700">{t("correctLabel")}</span>
                                       ) : null}
                                       {isSelected && !isCorrect ? (
-                                        <span className="text-[11px] font-semibold text-red-700">Pilihanmu</span>
+                                        <span className="text-[11px] font-semibold text-red-700">{t("yourChoice")}</span>
                                       ) : null}
                                     </div>
                                   )

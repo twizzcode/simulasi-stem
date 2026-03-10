@@ -8,7 +8,8 @@ const EnergyWaves = dynamic(() => import("@/components/energy-waves"), {
 
 import Image from "next/image"
 import * as React from "react"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 import { Calendar, Pause, Play, SlidersVertical } from "lucide-react"
 
@@ -16,6 +17,7 @@ import { PageShell } from "@/components/page-shell"
 import { Slider } from "@/components/ui/slider"
 
 export default function EfekRumahKacaSimulasiPage() {
+  const t = useTranslations("EfekRumahKacaSimulasi")
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   const [isCompactDevice, setIsCompactDevice] = React.useState(false)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
@@ -103,15 +105,15 @@ export default function EfekRumahKacaSimulasiPage() {
     : undefined
 
   return (
-    <PageShell title="Simulasi Efek Rumah Kaca">
+    <PageShell title={t("title")}>
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Simulasi Interaktif
+              {t("subtitle")}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-              Efek Rumah Kaca
+              {t("heading")}
             </h1>
           </div>
           <div className="flex items-center gap-3">
@@ -120,13 +122,13 @@ export default function EfekRumahKacaSimulasiPage() {
               onClick={handleFullscreen}
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
             >
-              {isFullscreen ? "Keluar Full Screen" : "Full Screen"}
+              {isFullscreen ? t("exitFullScreen") : t("fullScreen")}
             </button>
             <Link
               href="/efek-rumah-kaca"
               className="rounded-full border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
             >
-              Kembali
+              {t("back")}
             </Link>
           </div>
         </div>
@@ -144,7 +146,7 @@ export default function EfekRumahKacaSimulasiPage() {
             onClick={handleFullscreen}
             className="absolute right-4 top-4 z-10 rounded-full border border-white/40 bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:border-white"
           >
-            Keluar Full Screen
+            {t("exitFullScreen")}
           </button>
         ) : null}
         <div
@@ -199,25 +201,25 @@ export default function EfekRumahKacaSimulasiPage() {
 
                 <div className="flex h-full w-full basis-1/4 flex-none flex-col gap-3 overflow-auto">
               <div className="rounded-2xl border bg-white/80 p-4 text-foreground shadow-sm">
-                <h3 className="text-center text-sm font-semibold">Energy</h3>
+                <h3 className="text-center text-sm font-semibold">{t("energy")}</h3>
                 <div className="mt-3 flex items-center justify-between text-xs">
-                  <span>Sunlight</span>
+                  <span>{t("sunlight")}</span>
                   <span className="h-1.5 w-10 rounded-full bg-[#d8db47]" />
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs">
-                  <span>Infrared</span>
+                  <span>{t("infrared")}</span>
                   <span className="h-1.5 w-10 rounded-full bg-[#d7332f]" />
                 </div>
               </div>
 
               <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
                 <h3 className="text-sm font-semibold">
-                  Greenhouse Gas Concentration
+                  {t("ghgConcentration")}
                 </h3>
                 {ghgMode === "slider" ? (
                   <>
                     <div className="mt-3 flex h-52 flex-col items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Lots</span>
+                      <span className="text-xs text-muted-foreground">{t("lots")}</span>
                       <div className="flex h-36 items-center">
                         <Slider
                           orientation="vertical"
@@ -228,14 +230,14 @@ export default function EfekRumahKacaSimulasiPage() {
                           className="w-10 [&_[data-slot=slider-track]]:bg-black/80 [&_[data-slot=slider-range]]:bg-black/80 [&_[data-slot=slider-thumb]]:h-3 [&_[data-slot=slider-thumb]]:w-10 [&_[data-slot=slider-thumb]]:rounded-md [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:border-[#0a83a8] [&_[data-slot=slider-thumb]]:bg-[#3a86a8]"
                         />
                       </div>
-                      <span className="text-xs text-muted-foreground">None</span>
+                      <span className="text-xs text-muted-foreground">{t("none")}</span>
                     </div>
                   </>
                 ) : (
                   <>
                     <div className="mt-3 flex h-52 items-center justify-center gap-4">
                       <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
-                        <span>Lots</span>
+                        <span>{t("lots")}</span>
                         <div className="relative h-36 w-8">
                           <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 rounded-full bg-black/80" />
                           <div
@@ -245,7 +247,7 @@ export default function EfekRumahKacaSimulasiPage() {
                             }}
                           />
                         </div>
-                        <span>None</span>
+                        <span>{t("none")}</span>
                       </div>
                       <div className="flex flex-col gap-2">
                         {(["2050", "2025", "1990"] as const).map((year) => (
@@ -299,8 +301,8 @@ export default function EfekRumahKacaSimulasiPage() {
 
               <div className="rounded-2xl border bg-white/80 p-4 shadow-sm">
                 <div className="flex items-center justify-between text-xs font-semibold">
-                  <span>Gelombang Energi</span>
-                  <span>{isPlaying ? "Berjalan" : "Berhenti"}</span>
+                  <span>{t("energyWave")}</span>
+                  <span>{isPlaying ? t("running") : t("stopped")}</span>
                 </div>
                 <button
                   type="button"
@@ -312,7 +314,7 @@ export default function EfekRumahKacaSimulasiPage() {
                   }`}
                 >
                   {isPlaying ? <Pause className="size-3" /> : <Play className="size-3" />}
-                  {isPlaying ? "Pause" : "Mulai Simulasi"}
+                  {isPlaying ? t("pause") : t("startSimulation")}
                 </button>
               </div>
                 </div>

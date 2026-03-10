@@ -4,6 +4,7 @@ import Image from "next/image"
 import * as React from "react"
 
 import { PageShell } from "@/components/page-shell"
+import { useTranslations } from "next-intl"
 
 const defaultName = "Nama Siswa"
 
@@ -204,6 +205,7 @@ const buildPdf = async (name: string) => {
 }
 
 export default function SertifikatPage() {
+  const t = useTranslations("Sertifikat")
   const [name, setName] = React.useState("")
 
   const handleDownload = async () => {
@@ -217,19 +219,18 @@ export default function SertifikatPage() {
   }
 
   return (
-    <PageShell title="Sertifikat">
+    <PageShell title={t("title")}>
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Penghargaan
+              {t("subtitle")}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-              Sertifikat Penyelesaian
+              {t("heading")}
             </h1>
             <p className="mt-3 text-sm text-muted-foreground md:text-base">
-              Masukkan nama untuk ditampilkan pada sertifikat, lalu unduh
-              sebagai PDF.
+              {t("description")}
             </p>
           </div>
         </div>
@@ -238,12 +239,12 @@ export default function SertifikatPage() {
       <section className="space-y-6">
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
           <label className="text-sm font-semibold text-foreground">
-            Nama pada sertifikat
+            {t("nameLabel")}
           </label>
           <input
             value={name}
             onChange={(event) => setName(event.target.value)}
-            placeholder="Contoh: Aulia Rahma"
+            placeholder={t("namePlaceholder")}
             className="mt-3 w-full rounded-xl border px-4 py-2 text-sm text-foreground shadow-sm focus:border-primary/50 focus:outline-none"
           />
           <button
@@ -251,12 +252,12 @@ export default function SertifikatPage() {
             onClick={handleDownload}
             className="mt-5 w-full rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500"
           >
-            Download PDF
+            {t("download")}
           </button>
         </div>
 
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <p className="text-sm font-semibold text-foreground">Preview</p>
+          <p className="text-sm font-semibold text-foreground">{t("preview")}</p>
           <div className="mt-4 space-y-4">
             <div className="relative aspect-[297/210] w-full overflow-hidden rounded-2xl border bg-white shadow-inner">
               <Image

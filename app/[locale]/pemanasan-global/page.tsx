@@ -1,11 +1,16 @@
+"use client"
+
 import Image from "next/image"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 import { PageShell } from "@/components/page-shell"
 
 export default function PemanasanGlobalPage() {
+  const t = useTranslations("PemanasanGlobal")
+
   return (
-    <PageShell title="Pemanasan Global & Perubahan Iklim">
+    <PageShell title={t("title")}>
       <section className="relative overflow-hidden rounded-2xl border bg-card p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:p-8 md:pt-28">
         <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
           <Image
@@ -25,55 +30,42 @@ export default function PemanasanGlobalPage() {
         </div>
         <div className="relative">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Materi Inti
+            {t("subtitle")}
           </p>
           <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
-            Pemanasan Global & Perubahan Iklim
+            {t("heading")}
           </h1>
           <p className="mt-3 text-sm text-muted-foreground md:text-base">
-            Pemanasan global adalah meningkatnya suhu Bumi karena panas Matahari
-            terjebak oleh gas rumah kaca di atmosfer. Akibat pemanasan global,
-            terjadilah perubahan iklim, yaitu perubahan pola cuaca di Bumi. Musim
-            menjadi tidak menentu, hujan dan panas ekstrem lebih sering terjadi,
-            es di kutub mencair, dan permukaan laut naik. Pemanasan global dan
-            perubahan iklim tidak hanya berdampak pada alam, tetapi juga pada
-            kehidupan manusia. Pertanian terganggu karena musim sulit diprediksi,
-            serta bencaya seperti banjir dan kekeringan makin sering terjadi.
-            Karena itu, memahami kedua konsep ini penting agar kita sadar bahwa
-            tindakan manusia hari ini sangat menentukan kondisi Bumi di masa depan.
+            {t("description")}
           </p>
           <div className="mt-5">
             <Link
               href="/pemanasan-global/simulasi"
               className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
             >
-              Buka Simulasi
+              {t("openSimulation")}
             </Link>
           </div>
         </div>
       </section>
 
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
-        <h2 className="text-lg font-semibold text-foreground">Cuaca</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("weatherTitle")}</h2>
         <div className="mt-5 grid gap-5 md:grid-cols-2">
           <div className="rounded-2xl border bg-secondary/20 p-5 text-sm text-muted-foreground shadow-sm">
             <div className="inline-flex rounded-full bg-slate-600 px-4 py-1 text-xs font-semibold text-white">
-              Cuaca
+              {t("weatherBadge")}
             </div>
             <p className="mt-3">
-              Keadaan udara atau atmosfer berupa temperatur, cahaya matahari,
-              kelembapan, atau kecepatan angin yang diukur pada satu tempat
-              tertentu dengan jangka waktu terbatas.
+              {t("weatherDesc")}
             </p>
           </div>
           <div className="rounded-2xl border bg-secondary/20 p-5 text-sm text-muted-foreground shadow-sm">
             <div className="inline-flex rounded-full bg-slate-600 px-4 py-1 text-xs font-semibold text-white">
-              Iklim
+              {t("climateBadge")}
             </div>
             <p className="mt-3">
-              Keadaan hawa, yang berupa suhu, kelembapan, awan, hujan, dan sinar
-              matahari, yang diamati pada suatu daerah dalam jangka waktu lebih
-              lama (sekitar 30 tahun).
+              {t("climateDesc")}
             </p>
           </div>
         </div>
@@ -95,22 +87,16 @@ export default function PemanasanGlobalPage() {
 
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
         <h2 className="text-lg font-semibold text-foreground">
-          Dampak Perubahan Cuaca dan Iklim
+          {t("impactTitle")}
         </h2>
         <div className="mt-5 grid gap-5">
           <div className="rounded-2xl border bg-secondary/20 p-5 text-sm text-muted-foreground shadow-sm">
             <div className="inline-flex rounded-full bg-emerald-600 px-4 py-1 text-xs font-semibold text-white">
-              Negara Tropis
+              {t("tropicalBadge")}
             </div>
             <ul className="mt-3 space-y-2">
-              {[
-                "Terjadi perubahan waktu musim hujan dan musim kemarau.",
-                "Terjadi kekeringan, tanaman sulit tumbuh, kurangnya air bersih, serta mudah terjadi kebakaran hutan.",
-                "Udara semakin panas dan lembab, memengaruhi kesehatan manusia.",
-                "Curah hujan tinggi, menyebabkan banjir dan tanah longsor.",
-                "Memicu berkembang biaknya hewan-hewan merugikan.",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
+              {([t("tropical1"), t("tropical2"), t("tropical3"), t("tropical4"), t("tropical5")] as string[]).map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
                   <span className="mt-1 size-2 rounded-full bg-emerald-500" />
                   <span>{item}</span>
                 </li>
@@ -120,17 +106,11 @@ export default function PemanasanGlobalPage() {
 
           <div className="rounded-2xl border bg-secondary/20 p-5 text-sm text-muted-foreground shadow-sm">
             <div className="inline-flex rounded-full bg-sky-600 px-4 py-1 text-xs font-semibold text-white">
-              Negara 4 Musim
+              {t("fourSeasonBadge")}
             </div>
             <ul className="mt-3 space-y-2">
-              {[
-                "Meningkatnya potensi gelombang panas, dehidrasi, serangan panas, dan korban jiwa.",
-                "Musim dingin lebih pendek dan temperaturnya meningkat sehingga hari-hari bersalju berkurang.",
-                "Musim gugur hangat dan kering, sehingga meningkatkan potensi kebakaran hutan.",
-                "Musim semi datang lebih cepat.",
-                "Terjadinya angin topan, badai, dan hujan es yang lebih sering.",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
+              {([t("fourSeason1"), t("fourSeason2"), t("fourSeason3"), t("fourSeason4"), t("fourSeason5")] as string[]).map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
                   <span className="mt-1 size-2 rounded-full bg-sky-500" />
                   <span>{item}</span>
                 </li>
@@ -141,23 +121,14 @@ export default function PemanasanGlobalPage() {
 
         <div className="mt-5 rounded-2xl border bg-secondary/20 p-5 text-sm text-muted-foreground shadow-sm">
           <div className="inline-flex rounded-full bg-slate-700 px-4 py-1 text-xs font-semibold text-white">
-            Kenaikan Permukaan Air Laut
+            {t("seaLevelBadge")}
           </div>
           <p className="mt-3">
-            Perubahan cuaca dan iklim di seluruh bumi membuat bumi menjadi lebih
-            hangat yang mengakibatkan es di bumi akan mencair dan menjadi air di
-            lautan. Dampak dari kenaikan permukaan air laut tersebut diantaranya:
+            {t("seaLevelDesc")}
           </p>
           <ul className="mt-3 space-y-2">
-            {[
-              "Mengganggu keberlangsungan hidup di sepanjang garis pantai.",
-              "Tercampurnya air tanah dengan air laut, mengganggu pasokan air tanah untuk minum, mandi, mencuci dan kegiatan lainnya.",
-              "Lambat laun kota-kota di pinggir pantai bisa tenggelam.",
-              "Pulau-pulau kecil juga bisa tenggelam.",
-              "Erosi tebing, pantai, dan bukit pasir di lautan akan menjadi lebih sering terjadi.",
-              "Meningkatnya frekuensi banjir akibat air pasang.",
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-3">
+            {([t("seaLevel1"), t("seaLevel2"), t("seaLevel3"), t("seaLevel4"), t("seaLevel5"), t("seaLevel6")] as string[]).map((item, i) => (
+              <li key={i} className="flex items-start gap-3">
                 <span className="mt-1 size-2 rounded-full bg-slate-600" />
                 <span>{item}</span>
               </li>

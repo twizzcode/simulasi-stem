@@ -1,23 +1,27 @@
+"use client"
+
 import Image from "next/image"
+import { useTranslations } from "next-intl"
+
 import { PageShell } from "@/components/page-shell"
 
 export default function ProfilePengembangPage() {
+  const t = useTranslations("ProfilePengembang")
+
   return (
-    <PageShell title="Profile Pengembang">
+    <PageShell title={t("title")}>
       <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-background to-secondary/40 p-8 shadow-sm md:p-10">
         <div className="absolute -right-24 -top-20 size-64 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-24 -left-16 size-64 rounded-full bg-secondary/30 blur-3xl" />
         <div className="relative">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Tim Pengembang
+            {t("subtitle")}
           </p>
           <h1 className="mt-2 text-3xl font-semibold text-foreground md:text-4xl">
-            Pengembang Media Simulasi Komputer
+            {t("heading")}
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
-            Tim ini berfokus pada pengembangan media pembelajaran berbasis
-            STEM-ESD untuk memperkuat literasi lingkungan dan pengambilan
-            keputusan berkelanjutan melalui simulasi interaktif.
+            {t("description")}
           </p>
         </div>
       </section>
@@ -69,15 +73,14 @@ export default function ProfilePengembangPage() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-foreground">
-              Kolaborasi & Pengembangan
+              {t("collabTitle")}
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Terbuka untuk kolaborasi riset, uji coba pembelajaran, dan
-              pengembangan modul berbasis simulasi.
+              {t("collabDesc")}
             </p>
           </div>
           <div className="inline-flex items-center gap-2 rounded-full border bg-secondary/40 px-4 py-2 text-xs font-semibold text-secondary-foreground">
-            STEM-ESD • Simulasi • Lingkungan
+            {t("collabBadge")}
           </div>
         </div>
       </section>
