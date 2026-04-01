@@ -23,9 +23,19 @@ const YEAR_LEVELS = {
 } as const
 
 type YearKey = keyof typeof YEAR_LEVELS
+type OrientationLockValue =
+  | "any"
+  | "natural"
+  | "landscape"
+  | "portrait"
+  | "portrait-primary"
+  | "portrait-secondary"
+  | "landscape-primary"
+  | "landscape-secondary"
+
 type OrientationController = ScreenOrientation &
   Partial<{
-    lock: (orientation: OrientationLockType) => Promise<void>
+    lock: (orientation: OrientationLockValue) => Promise<void>
     unlock: () => void | Promise<void>
   }>
 
