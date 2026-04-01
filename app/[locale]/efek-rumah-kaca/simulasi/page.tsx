@@ -16,6 +16,19 @@ import { Calendar, Pause, Play, SlidersVertical } from "lucide-react"
 import { PageShell } from "@/components/page-shell"
 import { Slider } from "@/components/ui/slider"
 
+const YEAR_LEVELS = {
+  "1990": 25,
+  "2025": 60,
+  "2050": 85,
+} as const
+
+type YearKey = keyof typeof YEAR_LEVELS
+type OrientationController = ScreenOrientation &
+  Partial<{
+    lock: (orientation: OrientationLockType) => Promise<void>
+    unlock: () => void | Promise<void>
+  }>
+
 export default function EfekRumahKacaSimulasiPage() {
   const t = useTranslations("EfekRumahKacaSimulasi")
   const containerRef = React.useRef<HTMLDivElement | null>(null)
@@ -25,20 +38,13 @@ export default function EfekRumahKacaSimulasiPage() {
   const [ghgLevel, setGhgLevel] = React.useState(50)
   const [showCloud, setShowCloud] = React.useState(false)
   const [ghgMode, setGhgMode] = React.useState<"slider" | "calendar">("slider")
-  const [yearSelected, setYearSelected] = React.useState<
-    "1990" | "2025" | "2050"
-  >("2025")
+  const [yearSelected, setYearSelected] = React.useState<YearKey>("2025")
   const [isPlaying, setIsPlaying] = React.useState(false)
-  const yearLevels: Record<"1990" | "2025" | "2050", number> = {
-    "1990": 25,
-    "2025": 60,
-    "2050": 85,
-  }
 
   // Sync ghgLevel with year when in calendar mode
   React.useEffect(() => {
     if (ghgMode === "calendar") {
-      setGhgLevel(yearLevels[yearSelected])
+      setGhgLevel(YEAR_LEVELS[yearSelected])
     }
   }, [ghgMode, yearSelected])
 
@@ -77,8 +83,9 @@ export default function EfekRumahKacaSimulasiPage() {
     if (document.fullscreenElement) {
       await document.exitFullscreen()
       if (isCompactDevice) {
+        const orientation = screen.orientation as OrientationController
         try {
-          await (screen.orientation as any).unlock()
+          await orientation.unlock?.()
         } catch {
           // Ignore orientation unlock failures on unsupported browsers.
         }
@@ -87,8 +94,9 @@ export default function EfekRumahKacaSimulasiPage() {
     }
     await containerRef.current.requestFullscreen()
     if (isCompactDevice) {
+      const orientation = screen.orientation as OrientationController
       try {
-        await (screen.orientation as any).lock("landscape")
+        await orientation.lock?.("landscape")
       } catch {
         // Ignore orientation lock failures on unsupported browsers.
       }
@@ -97,11 +105,11 @@ export default function EfekRumahKacaSimulasiPage() {
 
   const shouldRotateFullscreenMobile =
     isFullscreen && isCompactDevice && isPortrait
-  const simulationGroundPx = isFullscreen ? 190 : 100
+  const simulationGroundPx = isFullscreen ? 170 : 80
   const simulationGroundRatio = isCompactDevice
     ? isFullscreen
-      ? 0.86
-      : 0.86
+      ? 0.89
+      : 0.89
     : undefined
 
   return (
@@ -243,7 +251,7 @@ export default function EfekRumahKacaSimulasiPage() {
                           <div
                             className="absolute left-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black"
                             style={{
-                              top: `${100 - yearLevels[yearSelected]}%`,
+                              top: `${100 - YEAR_LEVELS[yearSelected]}%`,
                             }}
                           />
                         </div>
