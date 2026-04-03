@@ -69,7 +69,9 @@ export default function SmartTownPage() {
     },
   ]
 
-  const checklistOptions = storyPages.find((page) => page.checklist)?.checklist ?? []
+  const checklistPageIndex = storyPages.findIndex((page) => page.checklist)
+  const resultPageIndex = storyPages.length - 1
+  const checklistOptions = storyPages[checklistPageIndex]?.checklist ?? []
 
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   const [isCompactDevice, setIsCompactDevice] = React.useState(false)
@@ -82,9 +84,10 @@ export default function SmartTownPage() {
   const [showSubmitConfirm, setShowSubmitConfirm] = React.useState(false)
   const [submitted, setSubmitted] = React.useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
-  const currentPage = storyPages[pageIndex]
-  const isLastPage = pageIndex === storyPages.length - 1
-  const isChecklistPage = pageIndex === 5
+  const currentPage = storyPages[pageIndex] ?? storyPages[0]
+  const isLastPage = pageIndex === resultPageIndex
+  const isChecklistPage = pageIndex === checklistPageIndex
+  const isResultPage = pageIndex === resultPageIndex
   const totalCoins = 50
   const selectedCost = React.useMemo(() => {
     return selectedActions.reduce((sum, item) => {
@@ -191,7 +194,7 @@ export default function SmartTownPage() {
   const confirmSubmit = () => {
     setShowSubmitConfirm(false)
     setSubmitted(true)
-    setPageIndex(6)
+    setPageIndex(resultPageIndex)
   }
 
   const sidebarPanelClass = isFullscreen
@@ -566,7 +569,7 @@ export default function SmartTownPage() {
             </div>
           </div>
 
-          {pageIndex === 6 ? (
+          {isResultPage && submitted ? (
             <div className="absolute right-6 top-20 z-[15]">
               <div className="flex flex-col items-center gap-3 rounded-xl bg-white/90 px-4 py-4 text-center shadow-lg">
                 <div className="flex h-28 w-10 flex-col overflow-hidden rounded-full border border-emerald-200 bg-white">
