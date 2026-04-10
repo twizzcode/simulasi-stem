@@ -11,7 +11,13 @@ import { useEffect, useRef } from "react"
  *   - Infrared hits GHG layer → some escape, some bounce back ↘
  * Slower, more educational pace than the full simulation.
  */
-export default function BumiRays({ isPlaying = true }: { isPlaying?: boolean }) {
+export default function BumiRays({
+  isPlaying = true,
+  showRays = true,
+}: {
+  isPlaying?: boolean
+  showRays?: boolean
+}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const rafRef = useRef(0)
   const playRef = useRef(isPlaying)
@@ -292,16 +298,27 @@ export default function BumiRays({ isPlaying = true }: { isPlaying?: boolean }) 
     }
 
     function drawGHGBand() {
-      const y = ghgY()
-      const bh = 14
+      const y = ghgY() + H * 0.06
+      const bh = 12
+      const curveDepth = H * 0.05
+      const startX = -W * 0.06
+      const endX = W * 1.06
       ctx.save()
-      const g = ctx.createLinearGradient(0, y - bh / 2, 0, y + bh / 2)
-      g.addColorStop(0, "rgba(120,210,240,0)")
-      g.addColorStop(0.35, "rgba(140,220,250,0.15)")
-      g.addColorStop(0.65, "rgba(140,220,250,0.15)")
-      g.addColorStop(1, "rgba(120,210,240,0)")
-      ctx.fillStyle = g
-      ctx.fillRect(0, y - bh / 2, W, bh)
+      ctx.lineCap = "round"
+
+      ctx.beginPath()
+      ctx.moveTo(startX, y)
+      ctx.quadraticCurveTo(W * 0.5, y - curveDepth, endX, y)
+      ctx.lineWidth = bh * 1.8
+      ctx.strokeStyle = "rgba(70, 80, 98, 0.10)"
+      ctx.stroke()
+
+      ctx.beginPath()
+      ctx.moveTo(startX, y)
+      ctx.quadraticCurveTo(W * 0.5, y - curveDepth, endX, y)
+      ctx.lineWidth = bh
+      ctx.strokeStyle = "rgba(110, 122, 145, 0.28)"
+      ctx.stroke()
       ctx.restore()
     }
 
@@ -312,7 +329,7 @@ export default function BumiRays({ isPlaying = true }: { isPlaying?: boolean }) 
       last = now
       ctx.clearRect(0, 0, W, H)
 
-      if (playRef.current) {
+      if (showRays && playRef.current) {
         timer += dt
         if (timer >= INTERVAL) {
           timer = 0
@@ -325,7 +342,9 @@ export default function BumiRays({ isPlaying = true }: { isPlaying?: boolean }) 
       }
 
       drawGHGBand()
-      for (const r of rays) draw(r)
+      if (showRays) {
+        for (const r of rays) draw(r)
+      }
 
       rafRef.current = requestAnimationFrame(tick)
     }
