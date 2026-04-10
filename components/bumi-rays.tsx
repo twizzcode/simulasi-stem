@@ -310,7 +310,7 @@ export default function BumiRays({
         ctx.fillStyle = g
         ctx.fillRect(0, y - bh / 2, W, bh)
       } else {
-        const adjustedY = y + H * 0.06
+        const adjustedY = y + H * 0.16
         const curveDepth = H * 0.05
         const startX = -W * 0.06
         const endX = W * 1.06
@@ -319,15 +319,15 @@ export default function BumiRays({
         ctx.beginPath()
         ctx.moveTo(startX, adjustedY)
         ctx.quadraticCurveTo(W * 0.5, adjustedY - curveDepth, endX, adjustedY)
-        ctx.lineWidth = bh * 1.3
-        ctx.strokeStyle = "rgba(70, 80, 98, 0.10)"
+        ctx.lineWidth = bh * 0.9
+        ctx.strokeStyle = "rgba(128, 144, 166, 0.10)"
         ctx.stroke()
 
         ctx.beginPath()
         ctx.moveTo(startX, adjustedY)
         ctx.quadraticCurveTo(W * 0.5, adjustedY - curveDepth, endX, adjustedY)
-        ctx.lineWidth = bh * 0.85
-        ctx.strokeStyle = "rgba(110, 122, 145, 0.28)"
+        ctx.lineWidth = bh * 0.55
+        ctx.strokeStyle = "rgba(162, 178, 198, 0.24)"
         ctx.stroke()
       }
       ctx.restore()
