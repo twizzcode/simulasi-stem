@@ -264,7 +264,13 @@ export default function EfekRumahKacaMateriPage() {
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               )}
-              {index <= 4 ? <BumiRays isPlaying showRays={index === 4} /> : null}
+              {index <= 4 ? (
+                <BumiRays
+                  key={index === 4 ? "step-5-rays" : "step-1-4-band"}
+                  isPlaying
+                  showRays={index === 4}
+                />
+              ) : null}
               {current.overlayVideo ? (
                 <video
                   src={current.overlayVideo}

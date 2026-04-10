@@ -298,27 +298,38 @@ export default function BumiRays({
     }
 
     function drawGHGBand() {
-      const y = ghgY() + H * 0.06
-      const bh = 12
-      const curveDepth = H * 0.05
-      const startX = -W * 0.06
-      const endX = W * 1.06
+      const y = ghgY()
+      const bh = 14
       ctx.save()
-      ctx.lineCap = "round"
+      if (showRays) {
+        const g = ctx.createLinearGradient(0, y - bh / 2, 0, y + bh / 2)
+        g.addColorStop(0, "rgba(120,210,240,0)")
+        g.addColorStop(0.35, "rgba(140,220,250,0.15)")
+        g.addColorStop(0.65, "rgba(140,220,250,0.15)")
+        g.addColorStop(1, "rgba(120,210,240,0)")
+        ctx.fillStyle = g
+        ctx.fillRect(0, y - bh / 2, W, bh)
+      } else {
+        const adjustedY = y + H * 0.06
+        const curveDepth = H * 0.05
+        const startX = -W * 0.06
+        const endX = W * 1.06
+        ctx.lineCap = "round"
 
-      ctx.beginPath()
-      ctx.moveTo(startX, y)
-      ctx.quadraticCurveTo(W * 0.5, y - curveDepth, endX, y)
-      ctx.lineWidth = bh * 1.8
-      ctx.strokeStyle = "rgba(70, 80, 98, 0.10)"
-      ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(startX, adjustedY)
+        ctx.quadraticCurveTo(W * 0.5, adjustedY - curveDepth, endX, adjustedY)
+        ctx.lineWidth = bh * 1.3
+        ctx.strokeStyle = "rgba(70, 80, 98, 0.10)"
+        ctx.stroke()
 
-      ctx.beginPath()
-      ctx.moveTo(startX, y)
-      ctx.quadraticCurveTo(W * 0.5, y - curveDepth, endX, y)
-      ctx.lineWidth = bh
-      ctx.strokeStyle = "rgba(110, 122, 145, 0.28)"
-      ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(startX, adjustedY)
+        ctx.quadraticCurveTo(W * 0.5, adjustedY - curveDepth, endX, adjustedY)
+        ctx.lineWidth = bh * 0.85
+        ctx.strokeStyle = "rgba(110, 122, 145, 0.28)"
+        ctx.stroke()
+      }
       ctx.restore()
     }
 
