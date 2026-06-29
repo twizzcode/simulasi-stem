@@ -84,6 +84,21 @@ export default function ProfilePengembangPage() {
           </div>
         </div>
       </section>
+
+      <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
+        <h3 className="text-lg font-semibold text-foreground">Profil Pengembang</h3>
+        <p className="mt-3 text-sm text-muted-foreground md:text-base">
+          Kontak pengembang (
+          <a
+            href="mailto:tiaradwiwulandari1@students.unnes.ac.id"
+            className="font-medium text-primary underline underline-offset-4"
+          >
+            tiaradwiwulandari1@students.unnes.ac.id
+          </a>
+          {" "}
+          untuk mengetahui informasi mengenai pengembang media simulasi komputer berbasis STEM-ESD).
+        </p>
+      </section>
     </PageShell>
   )
 }

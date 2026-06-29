@@ -1,14 +1,87 @@
 "use client"
 
+import * as React from "react"
 import Image from "next/image"
+import { BookOpenTextIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { PageShell } from "@/components/page-shell"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+
+const GUIDE_STORAGE_KEY = "aktivitas-siswa-guide-dismissed"
 
 export default function AktivitasSiswaPage() {
   const t = useTranslations("AktivitasSiswa")
+  const [openGuide, setOpenGuide] = React.useState(false)
+
+  React.useEffect(() => {
+    const dismissed = window.localStorage.getItem(GUIDE_STORAGE_KEY)
+    if (dismissed !== "true") {
+      setOpenGuide(true)
+    }
+  }, [])
+
+  const handleGuideChange = (nextOpen: boolean) => {
+    setOpenGuide(nextOpen)
+    if (!nextOpen) {
+      window.localStorage.setItem(GUIDE_STORAGE_KEY, "true")
+    }
+  }
 
   return (
-    <PageShell title={t("title")}>
+    <>
+      <Dialog open={openGuide} onOpenChange={handleGuideChange}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader className="items-center gap-3 text-center">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <BookOpenTextIcon className="size-6" />
+            </div>
+            <div className="text-center">
+              <DialogTitle>{t("guideTitle")}</DialogTitle>
+              <DialogDescription className="mt-2">
+                {t("guideDescription")}
+              </DialogDescription>
+            </div>
+          </DialogHeader>
+          <ul className="grid gap-3 text-sm text-muted-foreground">
+            {[
+              t("guideItem1"),
+              t("guideItem2"),
+              t("guideItem3"),
+              t("guideItem4"),
+              t("guideItem5"),
+            ].map((item, index) => (
+              <li
+                key={item}
+                className="flex items-start gap-3"
+              >
+                <span className="shrink-0 text-sm font-semibold text-primary">
+                  {index + 1}.
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <DialogFooter showCloseButton />
+        </DialogContent>
+      </Dialog>
+
+      <button
+        type="button"
+        onClick={() => setOpenGuide(true)}
+        className="fixed bottom-6 right-6 z-40 flex size-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-lg transition hover:bg-primary/90"
+        aria-label={t("guideTitle")}
+      >
+        ?
+      </button>
+
+      <PageShell title={t("title")}>
       <section className="relative overflow-hidden rounded-2xl border bg-card p-5 pt-20 shadow-sm sm:p-6 sm:pt-24 md:p-8 md:pt-28">
         <div className="pointer-events-none absolute inset-x-0 top-3 flex items-start justify-between px-4 sm:px-5 md:px-6">
           <Image
@@ -167,6 +240,7 @@ export default function AktivitasSiswaPage() {
           </table>
         </div>
       </section>
-    </PageShell>
+      </PageShell>
+    </>
   )
 }

@@ -34,7 +34,14 @@
     "feature2Title": "STEM Integrated",
     "feature2Desc": "Connecting science, technology, engineering, and mathematics to build comprehensive understanding.",
     "feature3Title": "ESD Based",
-    "feature3Desc": "Fostering awareness and real action on climate change and sustainability issues."
+    "feature3Desc": "Fostering awareness and real action on climate change and sustainability issues.",
+    "guideTitle": "Usage Guide",
+    "guideItem1": "Run the STEM-ESD computer simulation media on a computer, laptop, or smartphone.",
+    "guideItem2": "Wait until the Home page appears.",
+    "guideItem3": "Read each instruction before running the simulation.",
+    "guideItem4": "Actively explore by trying all available features to study environmental issues material.",
+    "guideItem5": "Work on the STEM-ESD project collaboratively and creatively.",
+    "guideItem6": "Use the simulation results as a basis for analyzing environmental problems and designing sustainable solutions."
   },
   "CpTp": {
     "title": "CP & TP",
@@ -62,7 +69,11 @@
     "detail3Title": "Environmental policy scenario evaluation",
     "detail3Desc": "Students evaluate renewable energy, reforestation, and emission reduction based on simulation results.",
     "detail4Title": "STEM-based climate change mitigation strategy design",
-    "detail4Desc": "Students design mitigation strategies using simulation results as a basis for sustainable decisions."
+    "detail4Desc": "Students design mitigation strategies using simulation results as a basis for sustainable decisions.",
+    "guideTitle": "Usage Guide",
+    "guideDescription": "Read these instructions before starting the lesson.",
+    "guideItem1": "Read the learning outcomes and learning objectives for the Environmental Issues material.",
+    "guideItem2": "Understand the competencies to be achieved before starting the lesson."
   },
   "AktivitasSiswa": {
     "title": "Student Activities",
@@ -75,6 +86,13 @@
     "goal3": "Compare various alternative solutions for climate change mitigation.",
     "goal4": "Design solutions based on Science, Technology, Engineering, and Mathematics (STEM).",
     "goal5": "Demonstrate environmental responsibility in accordance with Education for Sustainable Development (ESD) principles.",
+    "guideTitle": "Usage Guide",
+    "guideDescription": "Read these instructions before starting the STEM-ESD project.",
+    "guideItem1": "Read the project flow and available instructions so each stage can be carried out properly.",
+    "guideItem2": "Identify the environmental problem to be solved based on the issue most relevant to your surroundings.",
+    "guideItem3": "Design a solution by integrating Science, Technology, Engineering, Mathematics (STEM), and Education for Sustainable Development (ESD) principles.",
+    "guideItem4": "Create a prototype or solution model that matches your design and project goals.",
+    "guideItem5": "Test, evaluate, and present the project results according to the instructions so the solution can be justified.",
     "presentationTitle": "Project Results Presentation",
     "presentationDesc": "After the prototype is completed and tested, each group prepares presentation materials to present the process, results, and impact of solutions developed using the STEM-ESD approach.",
     "tagPPT": "PowerPoint (PPT)",
@@ -133,7 +151,13 @@
     "shortDesc": "Global warming due to increased greenhouse gases in the atmosphere.",
     "longDesc": "The greenhouse effect is defined as the process of rising Earth's temperature caused by changes in atmospheric composition, causing sunlight to remain on Earth and not be perfectly reflected back out of the atmosphere. The greenhouse effect occurs due to human activities that produce exhaust gases such as carbon dioxide (CO₂), dinitrogen oxide (N₂O), water vapor (H₂O), and methane (CH₄). These gases accumulate in the atmosphere, causing solar energy to be trapped on Earth and unable to be reflected back into space. If the amount of greenhouse gases continues to increase, more heat becomes trapped. As a result, Earth's temperature rises, known as global warming, which impacts climate change.",
     "deepenMaterial": "Deepen Material",
-    "simulation": "Simulation"
+    "simulation": "Simulation",
+    "guideTitle": "Usage Guide",
+    "guideDescription": "Read these instructions before starting the lesson.",
+    "guideItem1": "Observe the animation and simulation that show the greenhouse effect process.",
+    "guideItem2": "Follow the instructions available on the screen.",
+    "guideItem3": "Explore by operating the simulation features.",
+    "guideItem4": "Strengthen your understanding by opening the deepen material menu."
   },
   "EfekRumahKacaMateri": {
     "title": "Greenhouse Effect Material",
@@ -179,7 +203,12 @@
     "running": "Running",
     "stopped": "Stopped",
     "pause": "Pause",
-    "startSimulation": "Start Simulation"
+    "startSimulation": "Start Simulation",
+    "guideTitle": "Usage Guide",
+    "guideDescription": "Read these instructions before starting the simulation.",
+    "guideItem1": "Observe the animation and simulation that show the greenhouse effect process.",
+    "guideItem3": "Explore by operating the simulation features.",
+    "guideItem4": "Strengthen your understanding by opening the deepen material menu on the main menu."
   },
   "PemanasanGlobal": {
     "title": "Global Warming & Climate Change",
@@ -245,6 +274,12 @@
     "yesFinish": "Yes, Complete",
     "missionComplete": "Mission Complete!",
     "progressSavedMsg": "Island progress has been saved.",
+    "guideTitle": "Usage Guide",
+    "guideDescription": "Read these instructions before starting your virtual island exploration.",
+    "guideItem1": "Explore each available virtual island to discover various climate change events.",
+    "guideItem2": "Observe the environmental phenomena shown on each island during the exploration.",
+    "guideItem3": "Identify the causes, impacts, and links between human activities and climate change from each island's story.",
+    "guideItem4": "Study the information at each exploration location before continuing to the next island.",
     "islandA": "Island A",
     "islandB": "Island B",
     "islandC": "Island C",
@@ -281,7 +316,14 @@
     "shortDesc": "Encourage students to take real action through directed activities relevant to global warming and climate change issues.",
     "longDesc": "Climate Action is a section that invites students to take real action in facing global warming and climate change. This section contains two main activities. The first activity is designing a Smart Town—designing a smart, environmentally-friendly city that can overcome the impacts of global warming and climate change through the use of technology and sustainability principles. The second activity is a reflection quiz, aimed at helping students review their understanding, evaluate choices made, and foster awareness and commitment as agents of climate change.",
     "goToSmartTown": "Continue to Smart Town",
-    "goToQuiz": "Continue to Quiz"
+    "goToQuiz": "Continue to Quiz",
+    "guideTitle": "Usage Guide",
+    "guideDescription": "Read these instructions before starting the Climate Action activity.",
+    "guideItem1": "Take the role of a city manager who must design a sustainable city through the Smart Town menu.",
+    "guideItem2": "Choose the right policies, such as renewable energy, greening, waste management, eco-friendly transportation, and carbon emission reduction.",
+    "guideItem3": "Observe how the city and environmental conditions change after each decision or action is selected.",
+    "guideItem4": "Evaluate how effective your chosen policies are in supporting climate change mitigation.",
+    "guideItem5": "Continue to the Quiz menu to reflect on your choices and build attitudes toward climate change mitigation."
   },
   "SmartTown": {
     "title": "Smart Town",

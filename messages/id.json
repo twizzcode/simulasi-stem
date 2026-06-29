@@ -34,7 +34,14 @@
     "feature2Title": "Terintegrasi STEM",
     "feature2Desc": "Menghubungkan sains, teknologi, engineering, dan matematika untuk membangun pemahaman yang utuh.",
     "feature3Title": "Berbasis ESD",
-    "feature3Desc": "Menumbuhkan kepedulian dan aksi nyata terhadap isu perubahan iklim dan keberlanjutan."
+    "feature3Desc": "Menumbuhkan kepedulian dan aksi nyata terhadap isu perubahan iklim dan keberlanjutan.",
+    "guideTitle": "Petunjuk Penggunaan",
+    "guideItem1": "Jalankan media simulasi komputer berbasis STEM-ESD pada perangkat komputer, laptop, atau smartphone.",
+    "guideItem2": "Tunggu hingga halaman Beranda muncul.",
+    "guideItem3": "Bacalah setiap petunjuk sebelum menjalankan simulasi.",
+    "guideItem4": "Lakukan eksplorasi secara aktif dengan mencoba seluruh fitur yang tersedia untuk mempelajari materi isu-isu lingkungan.",
+    "guideItem5": "Kerjakan proyek STEM-ESD secara kolaboratif dan kreatif.",
+    "guideItem6": "Gunakan hasil simulasi sebagai dasar dalam menganalisis permasalahan lingkungan dan merancang solusi yang berkelanjutan."
   },
   "CpTp": {
     "title": "CP & TP",
@@ -62,7 +69,11 @@
     "detail3Title": "Evaluasi skenario kebijakan lingkungan",
     "detail3Desc": "Siswa mengevaluasi energi terbarukan, reboisasi, dan pengurangan emisi berdasarkan hasil simulasi.",
     "detail4Title": "Perancangan strategi mitigasi perubahan iklim berbasis STEM",
-    "detail4Desc": "Siswa merancang strategi mitigasi dengan memanfaatkan hasil simulasi sebagai dasar keputusan berkelanjutan."
+    "detail4Desc": "Siswa merancang strategi mitigasi dengan memanfaatkan hasil simulasi sebagai dasar keputusan berkelanjutan.",
+    "guideTitle": "Petunjuk Penggunaan",
+    "guideDescription": "Baca petunjuk berikut sebelum memulai pembelajaran.",
+    "guideItem1": "Bacalah capaian pembelajaran dan tujuan pembelajaran materi Isu-Isu Lingkungan.",
+    "guideItem2": "Pahami kompetensi yang akan dicapai sebelum memulai pembelajaran."
   },
   "AktivitasSiswa": {
     "title": "Aktivitas Siswa",
@@ -75,6 +86,13 @@
     "goal3": "Membandingkan berbagai alternatif solusi mitigasi perubahan iklim.",
     "goal4": "Merancang solusi berbasis Sains, Teknologi, Engineering, dan Matematika (STEM).",
     "goal5": "Menunjukkan sikap tanggung jawab terhadap lingkungan sesuai prinsip Education for Sustainable Development (ESD).",
+    "guideTitle": "Petunjuk Penggunaan",
+    "guideDescription": "Baca petunjuk berikut sebelum memulai proyek STEM-ESD.",
+    "guideItem1": "Bacalah alur dan petunjuk proyek yang tersedia agar setiap tahap kegiatan dapat dilakukan dengan tepat.",
+    "guideItem2": "Identifikasi permasalahan lingkungan yang akan diselesaikan berdasarkan isu yang paling relevan di sekitarmu.",
+    "guideItem3": "Rancang solusi dengan mengintegrasikan aspek Science, Technology, Engineering, Mathematics (STEM), serta prinsip Education for Sustainable Development (ESD).",
+    "guideItem4": "Buat prototipe atau model solusi yang sesuai dengan rancangan dan tujuan proyek.",
+    "guideItem5": "Uji, evaluasi, dan presentasikan hasil proyek sesuai petunjuk agar solusi yang dibuat dapat dipertanggungjawabkan.",
     "presentationTitle": "Presentasi Hasil Proyek",
     "presentationDesc": "Setelah prototype selesai dibuat dan diuji, setiap kelompok menyiapkan bahan presentasi untuk memaparkan proses, hasil, dan dampak solusi yang dikembangkan dengan pendekatan STEM-ESD.",
     "tagPPT": "PowerPoint (PPT)",
@@ -133,7 +151,13 @@
     "shortDesc": "Pemanasan global akibat peningkatan gas rumah kaca di atmosfer.",
     "longDesc": "Efek rumah kaca diartikan sebagai proses naiknya suhu bumi yang disebabkan perubahan komposisi atmosfer dan menyebabkan sinar matahari tetap berada di bumi serta tidak dapat dipantukan secara sempurna keluar atmosfer. Efek rumah kaca terjadi akibat aktivitas manusia yang menghasilkan gas buangan seperti karbon dioksida (CO₂), dinitrogen oksida (N₂O), uap air (H₂O), dan metana (CH₄). Gas-gas ini terakumulasi di atmosfer yang menyebabkan energi Matahari terperangkap di Bumi dan tidak dapat dipantulkan ke luar angkasa lagi. Jika jumlah gas rumah kaca tersebut semakin meningkat maka panas yang terperangkap semakin banyak. Akibatnya, suhu Bumi naik atau disebut pemanasan global yang berdampak pada perubahan iklim.",
     "deepenMaterial": "Perdalam Materi",
-    "simulation": "Simulasi"
+    "simulation": "Simulasi",
+    "guideTitle": "Petunjuk Penggunaan",
+    "guideDescription": "Baca petunjuk berikut sebelum memulai pembelajaran.",
+    "guideItem1": "Amati animasi dan simulasi yang menunjukkan proses terjadinya efek rumah kaca.",
+    "guideItem2": "Ikuti petunjuk yang tersedia pada layar.",
+    "guideItem3": "Lakukan eksplorasi dengan mengoperasikan fitur-fitur simulasi.",
+    "guideItem4": "Perkuat konsep dengan menekan menu pendalaman materi."
   },
   "EfekRumahKacaMateri": {
     "title": "Materi Efek Rumah Kaca",
@@ -179,7 +203,12 @@
     "running": "Berjalan",
     "stopped": "Berhenti",
     "pause": "Pause",
-    "startSimulation": "Mulai Simulasi"
+    "startSimulation": "Mulai Simulasi",
+    "guideTitle": "Petunjuk Penggunaan",
+    "guideDescription": "Baca petunjuk berikut sebelum memulai simulasi.",
+    "guideItem1": "Amati animasi dan simulasi yang menunjukkan proses terjadinya efek rumah kaca.",
+    "guideItem3": "Lakukan eksplorasi dengan mengoperasikan fitur-fitur simulasi.",
+    "guideItem4": "Perkuat konsep dengan menekan menu pendalaman materi pada menu utama."
   },
   "PemanasanGlobal": {
     "title": "Pemanasan Global & Perubahan Iklim",
@@ -245,6 +274,12 @@
     "yesFinish": "Ya, Selesaikan",
     "missionComplete": "Misi Selesai!",
     "progressSavedMsg": "Progress pulau sudah tersimpan.",
+    "guideTitle": "Petunjuk Penggunaan",
+    "guideDescription": "Baca petunjuk berikut sebelum memulai penjelajahan pulau virtual.",
+    "guideItem1": "Jelajahi setiap pulau virtual yang tersedia untuk menemukan beragam peristiwa perubahan iklim.",
+    "guideItem2": "Amati fenomena lingkungan yang muncul pada setiap pulau selama penjelajahan.",
+    "guideItem3": "Identifikasi penyebab, dampak, dan kaitan aktivitas manusia dengan perubahan iklim dari cerita di tiap pulau.",
+    "guideItem4": "Pelajari informasi pada setiap lokasi eksplorasi sebelum melanjutkan ke pulau berikutnya.",
     "islandA": "Pulau A",
     "islandB": "Pulau B",
     "islandC": "Pulau C",
@@ -281,7 +316,14 @@
     "shortDesc": "Ajak siswa bertindak nyata melalui aktivitas terarah yang relevan dengan isu pemanasan global dan perubahan iklim.",
     "longDesc": "Climate Action merupakan bagian yang mengajak siswa untuk bertindak nyata dalam menghadapi pemanasan global dan perubahan iklim. Pada bagian ini terdapat dua aktivitas utama. Aktivitas pertama adalah merancang Smart Town, yaitu merancang kota cerdas yang ramah lingkungan dan mampu menanggulangi dampak pemanasan global serta perubahan iklim melalui pemanfaatan teknologi dan prinsip keberlanjutan. Aktivitas kedua adalah kuis refleksi, yang bertujuan membantu siswa meninjau kembali pemahaman mereka, mengevaluasi pilihan yang telah dibuat, serta menumbuhkan kesadaran dan komitmen sebagai agen perubahan iklim.",
     "goToSmartTown": "Lanjut ke Smart Town",
-    "goToQuiz": "Lanjut ke Kuis"
+    "goToQuiz": "Lanjut ke Kuis",
+    "guideTitle": "Petunjuk Penggunaan",
+    "guideDescription": "Baca petunjuk berikut sebelum memulai aktivitas Climate Action.",
+    "guideItem1": "Berperanlah sebagai pengelola kota yang bertugas merancang kota berkelanjutan melalui menu Smart Town.",
+    "guideItem2": "Tentukan kebijakan yang tepat, seperti energi terbarukan, penghijauan, pengelolaan limbah, transportasi ramah lingkungan, dan pengurangan emisi karbon.",
+    "guideItem3": "Amati perubahan kondisi kota dan lingkungan setelah setiap keputusan atau aksi dipilih.",
+    "guideItem4": "Evaluasi seberapa efektif kebijakan yang kamu pilih dalam mendukung mitigasi perubahan iklim.",
+    "guideItem5": "Lanjutkan ke menu Kuis untuk merefleksikan pilihanmu dan membentuk sikap dalam mitigasi perubahan iklim."
   },
   "SmartTown": {
     "title": "Smart Town",

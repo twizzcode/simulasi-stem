@@ -11,9 +11,17 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 
-import { Calendar, Pause, Play, SlidersVertical } from "lucide-react"
+import { BookOpenTextIcon, Calendar, Pause, Play, SlidersVertical } from "lucide-react"
 
 import { PageShell } from "@/components/page-shell"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Slider } from "@/components/ui/slider"
 
 const YEAR_LEVELS = {
@@ -21,6 +29,8 @@ const YEAR_LEVELS = {
   "2025": 60,
   "2050": 85,
 } as const
+
+const GUIDE_STORAGE_KEY = "greenhouse-simulation-guide-dismissed"
 
 type YearKey = keyof typeof YEAR_LEVELS
 type OrientationLockValue =
@@ -50,6 +60,21 @@ export default function EfekRumahKacaSimulasiPage() {
   const [ghgMode, setGhgMode] = React.useState<"slider" | "calendar">("slider")
   const [yearSelected, setYearSelected] = React.useState<YearKey>("2025")
   const [isPlaying, setIsPlaying] = React.useState(false)
+  const [openGuide, setOpenGuide] = React.useState(false)
+
+  React.useEffect(() => {
+    const dismissed = window.localStorage.getItem(GUIDE_STORAGE_KEY)
+    if (dismissed !== "true") {
+      setOpenGuide(true)
+    }
+  }, [])
+
+  const handleGuideChange = (nextOpen: boolean) => {
+    setOpenGuide(nextOpen)
+    if (!nextOpen) {
+      window.localStorage.setItem(GUIDE_STORAGE_KEY, "true")
+    }
+  }
 
   // Sync ghgLevel with year when in calendar mode
   React.useEffect(() => {
@@ -123,7 +148,49 @@ export default function EfekRumahKacaSimulasiPage() {
     : undefined
 
   return (
-    <PageShell title={t("title")}>
+    <>
+      <Dialog open={openGuide} onOpenChange={handleGuideChange}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader className="items-center gap-3 text-center">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <BookOpenTextIcon className="size-6" />
+            </div>
+            <div className="text-center">
+              <DialogTitle>{t("guideTitle")}</DialogTitle>
+              <DialogDescription className="mt-2">
+                {t("guideDescription")}
+              </DialogDescription>
+            </div>
+          </DialogHeader>
+          <ul className="grid gap-3 text-sm text-muted-foreground">
+            {[t("guideItem1"), t("guideItem3"), t("guideItem4")].map(
+              (item, index) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-3"
+                >
+                  <span className="shrink-0 text-sm font-semibold text-primary">
+                    {index + 1}.
+                  </span>
+                  <span>{item}</span>
+                </li>
+              )
+            )}
+          </ul>
+          <DialogFooter showCloseButton />
+        </DialogContent>
+      </Dialog>
+
+      <button
+        type="button"
+        onClick={() => setOpenGuide(true)}
+        className="fixed bottom-6 right-6 z-40 flex size-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-lg transition hover:bg-primary/90"
+        aria-label={t("guideTitle")}
+      >
+        ?
+      </button>
+
+      <PageShell title={t("title")}>
       <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -341,6 +408,7 @@ export default function EfekRumahKacaSimulasiPage() {
           </div>
         </div>
       </div>
-    </PageShell>
+      </PageShell>
+    </>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Play } from "lucide-react"
+import { BookOpenTextIcon, Play } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 
@@ -53,6 +53,29 @@ export default function Home() {
             </span>
           </div>
         </div>
+      </section>
+
+      <section className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
+        <div className="flex items-center gap-3">
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <BookOpenTextIcon className="size-6" />
+          </div>
+          <h2 className="text-xl font-semibold text-foreground">
+            {t("guideTitle")}
+          </h2>
+        </div>
+        <ol className="mt-6 list-decimal space-y-3 pl-5 text-sm leading-relaxed text-muted-foreground marker:font-semibold marker:text-foreground">
+          {[
+            t("guideItem1"),
+            t("guideItem2"),
+            t("guideItem3"),
+            t("guideItem4"),
+            t("guideItem5"),
+            t("guideItem6"),
+          ].map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ol>
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
